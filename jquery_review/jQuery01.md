@@ -1,8 +1,8 @@
 ## 1. 즉시실행함수 - IIFE(immediately-invoked function expression)
 
-* 다른 코드와 충돌 방지 : document, location등은 함수 안에서만 유효한 scope를 가진다.
+다른 코드와 충돌 방지 : document, location등은 함수 안에서만 유효한 scope를 가진다.
 
-jquery.1.9.1
+##### jquery.1.9.1
 
 ```javascript
 (function( window, undefined ) {
@@ -13,7 +13,7 @@ var
 })( window );
 ```
 
-jquery.2.1.1 상위 버전
+##### jquery.2.1.1 상위 버전
 
 ```javascript
 (function( global, factory ) {
@@ -45,7 +45,7 @@ jquery.2.1.1 상위 버전
 }());
 ```
 
-※ `(function(){}());`, `(function(){})();` 둘 다 유효하나 **jsLint** 는 전자를 좋아한다.
+> `(function(){}());`, `(function(){})();` 둘 다 유효하나 **jsLint** 는 전자를 좋아한다.
 
 #### 1-2. Arguments 
 
@@ -122,18 +122,31 @@ Node.js같은 브라우저가 항상 전역객체가 아닌 환경까지 고려�
 * IIFE를 호출할때 인자로 window 전역객체 참조와 익명함수를 전달한다.
 * 인자로 전달하는 익명함수가 jQuery의 실질적인 함수 객체이다.
 * 익명함수를 factory라는 이름의 매개변수로 받는다.
-* 샐행할 함수는 호출문과 넘겨진 매개변수 뒤쪽에 있다 (=인자)
+* 실행할 함수는 호출문과 넘겨진 매개변수 뒤쪽에 있다.(=인자)
 
 [참조 : What(function(window, document, undefined){})(window, document); really means](https://medium.com/@jungseobshin/%EB%B2%88%EC%97%AD-what-function-window-document-undefined-window-document-really-means-b92b0b40304a)  
 [참조 : jQuery 소스 구조분석 1. IIFE(즉시 함수 호출 표현식)](http://boycoding.tistory.com/46)
 
-## 2. 
+## 2. jQuery라는 function 객체 생성
+
+##### jquery.1.9.1
+
 ```javascript
 // Define a local copy of jQuery
-var	jQuery = function( selector, context ) {
-		// The jQuery object is actually just the init constructor 'enhanced'
-		return new jQuery.fn.init( selector, context, rootjQuery );
-	}
+var jQuery = function( selector, context ) {
+  // The jQuery object is actually just the init constructor 'enhanced'
+    return new jQuery.fn.init( selector, context, rootjQuery );
+}
+```
+
+##### jquery.2.1.1 상위 버전
+
+```javascript
+var jQuery = function( selector, context ) {
+  // The jQuery object is actually just the init constructor 'enhanced'
+  // Need init if jQuery is called (just allow error to be thrown if not included)
+  return new jQuery.fn.init( selector, context );
+},
 ```
 
 
