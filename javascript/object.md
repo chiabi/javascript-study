@@ -1,4 +1,4 @@
-## 객체(Object)
+## 1. 객체(Object)
 
 * 객체기반의 스크립트 언어, _자바스크립트를 이루는 거의 모든것은 객체_ 이다.  
 기본자료형(Primitives)을 제외한 나머지 값들(함수, 배열, 정규표현식 등)은 모두 객체
@@ -23,7 +23,8 @@
 * 자바 : 클래스를 사전에 정의, 필요한 시점에 new 연산자를 사용하여 인스턴스를 생성
 * 자바스크립트 : 클래스라는 개념이 없음 별도의 객체 생성 방법이 존재
 
-> ECMAScript 6에 새롭게 [클래스](http://poiemaweb.com/es6-class)가 도입되었다. 새로운 객체지향 모델을 제공하는 것은 아니며 Class도 사실 함수이고 기존 _prototype_ 기반 패턴의 _syntactic sugar_이다.
+> ECMAScript 6에 새롭게 [클래스](http://poiemaweb.com/es6-class)가 도입되었다. 새로운 객체지향 모델을 제공하는 것은 아니며  
+Class도 사실 함수이고 기존 _prototype_ 기반 패턴의 _syntactic sugar_이다.
 
 > **syntactic sugar**  
 사람이 이해하고 표현하기 쉽게 디자인 된 프로그래밍 언어 문법  
@@ -135,7 +136,12 @@ person2.syaHello();
 ```
 
 * 생성자 함수 이름은 일반적으로 대문자로 시작. (혼란을 방지하기 위해)
+<<<<<<< HEAD
 * 속성 또는 메서드명 앞 `this`는 생성자 함수로 생성될 **인스턴스(instance)** 를 가리킴, this에 연결되어 있는 속성과 메서드는 _public_ㅋㅋ이다.
+=======
+* 속성 또는 메서드명 앞 `this`는 생성자 함수로 생성될 **인스턴스(instance)** 를 가리킴,  
+this에 연결되어 있는 속성과 메서드는 _public_ 이다.
+>>>>>>> 1adf641aab3540ba5027928e9fe70eda77dc8ced
 * 생성자 함수 내 선언된 일반 변수는 _private_ 이다.  
 (함수 내부에서는 자유롭게 접근이 가능하나 외부에서 접근할 수 없다.)
 
@@ -159,3 +165,129 @@ console.log(person.married); // undefined
 ```
 
 > new 연산자와 함께 함수를 호출하면 `this` 바인딩이 다르게 동작한다. [(생성자호출패턴 참조)](http://poiemaweb.com/js-this#constructor-invocation-pattern)
+
+## 3. 객체 속성 접근
+
+### 3.1 속성명
+
+* 문자열(빈 문자열 포함), 숫자가 올 수 있다. 
+* 속성값은 undefined을 제외한 모든 값과 표현식이 올 수 있다.
+* 속성값이 함수인 경우를 _메서드_ 라고 한다.
+* 따옴표('',"")는 자바스크립트에서 사용할 수 있는 유효한 이름이고 예약어가 아닌 경우 생략 가능하다. (유효한 이름이 아닌 경우 반드시 따옴표 사용)
+* 예약어를 속성명으로 사용시 예상치 못한 에러가 발생할 수도 있다.
+
+```javascript
+var person = {
+    'first-name': 'chichi', 
+    // '-'연산자가 있는 표현식은 자바스크립트에서 사용가능한 유효한 이름이 아님
+    'last-name': 'Park',
+    gender: 'male',
+    function: 1 // 당장이 에러는 없지만, 예약어는 사용하지 말아야 한다.
+};
+
+console.log(person.function);
+```
+
+### 3.2 속성값 읽기 - 객체의 속성에 접근
+
+* 마침표(.) 표기법
+* 대괄호([]) 표기법 : 대괄호 내 들어가는 속성명은 반드시 문자열이어야 한다.
+
+속성명이 유효한 자바스크립트 이름이 아니거나 예약어인 경우는 대괄호 표기법을 사용
+
+객체에 존재하지 않는 속성을 참조하면 `undefined`를 반환
+
+```javascript
+var person = {
+    'first-name': 'chichi',
+    'last-name': 'Park',
+    gender: 'male'
+};
+
+console.log(person);
+
+console.log(person.first-name); // NaN : undefined
+console.log(person[first-name]); // Uncaught ReferenceError: first is not defined
+console.log(person['first-name']); // 'chichi'
+
+console.log(person.gender); // 'male'
+console.log(person[gende]); // Uncaught ReferenceError: gender is not defined
+console.log(person['gender']); // 'male'
+
+console.log(person.age); // undefined
+```
+
+### 3.3 속성값 갱신
+
+객체가 소유하고 있는 속성에 새로운 값을 할당 >  속성값을 갱신
+
+```javascript
+var person = {
+    'first-name': 'chichi',
+    'last-name': 'Park',
+    gender: 'male'
+};
+
+person['first-name'] = 'Kim';
+console.log(person['first-name']); // 'Kim'
+```
+### 3.4 속성 동적 생성
+
+객체가 소유하고 있지 않은 속성에 값을 할당 > 속성을 객체에 추가
+
+```javascript
+var person = {
+    'first-name': 'chichi',
+    'last-name': 'Park',
+    gender: 'male'
+};
+
+person.age = 20;
+console.log(person.age); // 20
+```
+
+### 3.5 속성 삭제
+
+`delete` 연산자를 사용
+
+```javascript
+var person = {
+    'first-name': 'chichi',
+    'last-name': 'Park',
+    gender: 'male'
+};
+
+delete person.gender;
+console.log(person.gender); // undefined
+
+delete person;
+console.log(person); // Object {first-name: 'chichi', last-name: 'Park'}
+```
+
+### 3.6 for in 문
+
+for in 문을 사용해 객체에 포함된 모든 속성에 대해 루프를 수행
+
+```javascript
+var person = {
+    'first-name': 'chichi',
+    'last-name': 'Park',
+    gender: 'male'
+};
+
+var prop;
+
+for(prop in person) {
+    console.log(prop + ': ' + person[prop]);
+}
+// first-name: chichi
+// last-namel: Park
+// gender: male
+```
+
+
+## 4. Pass-by-reference
+
+## 5. Pass-by-value
+
+## 6. 객체의 분류

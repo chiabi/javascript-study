@@ -12,7 +12,7 @@ _HTML 문서 탐색 & 조작, 이벤트 처리, 애니메이션 및 Ajax_ 를 �
 
 ### jQuery 보기
 
-#### DOM 탐색 및 조작
+#### 1. DOM 탐색 및 조작
 
 'continue' 클래스를 가지는 `<button>` 요소를 가져와서 HTML을 'Next Step...'으로 변경
 
@@ -20,7 +20,7 @@ _HTML 문서 탐색 & 조작, 이벤트 처리, 애니메이션 및 Ajax_ 를 �
 $('button.continue').html('Next Step...');
 ```
 
-#### 이벤트 핸들링
+#### 2. 이벤트 핸들링
 
 `#button-container`안의 버튼을 클릭하면 CSS의 `display: hidden`으로 숨겨진 `#banner-message`요소를 표시함
 
@@ -31,9 +31,9 @@ $('#button-container button').on('click', function(event) {
 });
 ```
 
-#### Ajax
+#### 3. Ajax
 
-쿼리 매개변수 `zipcode=97201`을 사용하여 서버 `/api/getWeather`에서 로컬 스크립트를 호출하고 요소 `#weather-temp`의 html을 반환 된 텍스트로 수정함
+쿼리 매개변수 `zipcode=97201`을 사용하여 서버 `/api/getWeather`에서 로컬 스크립트를   호출하고 요소 `#weather-temp`의 html을 반환 된 텍스트로 수정함
 
 ```javascript
 $.ajax({
