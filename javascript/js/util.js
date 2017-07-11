@@ -73,3 +73,37 @@ function validateError(data, kind, error_massage){
 }
 
 
+
+/**
+ * 전달된 숫자보다 하나 작은 수 까지의 난수를 반환하는 유틸리티 함수
+ * 
+ * @global
+ * @func randomNumber
+ * @param {number} n  - 난수의 최댓값보다 하나 더 큰 값
+ * @default {number}  - 2
+ * @returns {number}  - 난수
+ */
+function radomNumber(n) {
+    n = n || 2; // 0, 1
+    validateEerror(n, '!number', '숫자 값을 전달해주세요.');
+    return Math.floor( Math.random() * n);
+}
+
+
+
+/**
+ * 전달된 최소값, 최대값 사이의 난수를 반환하는 유틸리티 함수
+ * 
+ * @global
+ * @func radomMinMax
+ * @param {number} min - 최소값
+ * @param {number} max - 최대값
+ * @returns {number}   - 난수 
+ */
+function radomMinMax(min, max) {
+    validateError(min, '!number', '첫번째 인자 최소값을 전달해주세요.');
+    validateError(max, '!number', '두번째 인자 최대값을 전달해주세요.');
+    max = max - min;
+    return Math.round( Math.random() * max ) + min;
+}
+
