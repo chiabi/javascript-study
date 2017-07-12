@@ -11,6 +11,8 @@ webpack, Browserify 등
 
 # webpack
 
+모듈 번들러.  
+
 JS가 점점 중요해지면서 JS자체만으로도 엄청난 의존관계가 생겼다.  
 ES2015 모듈, ReguireJS, CommonJS, UMD 같은 JS 모듈 시스템들이 나오고 JS파일도 다른 프로그래밍처럼 모듈 개념이 생겼다.
 
@@ -27,6 +29,7 @@ webpack은 의존성 모듈들을 상황에 맞게 묶어서 정적 자원으로
 * [JavaScript 표준을 위한 움직임: CommonJS와 AMD](http://d2.naver.com/helloworld/12864)
 * [모듈시스템](https://www.zerocho.com/category/EcmaScript/post/579dca4054bae71500727ab9)
 * [웹팩3(Webpack) 설정하기](https://www.zerocho.com/category/Webpack/post/58aa916d745ca90018e5301d)
+* [webpack2 입문 가이드](https://hyunseob.github.io/2017/03/21/webpack2-beginners-guide/)
 
 webpack은 CommonJS와 AMD(Asynchronous Module Definition) 두 그룹 명세(모듈 명세)를 모두 지원하는 **JavaScript 모듈화 도구**
 
@@ -232,7 +235,7 @@ e.g, 압축, 핫리로딩, 파일을 복사하는 등의 부수적인 작업
     }),
     // 요즘은 위의 DefinePlugin보다 이렇게 하는 추세이다.
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-  ]
+  ],
 }
 ```
 

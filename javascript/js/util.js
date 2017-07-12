@@ -30,7 +30,6 @@ function type(data) {
 // Object.prototype.toString.call(<string>).slicd(8,-1)            --- String
 // Object.prototype.toString.call(data).slice(8,-1).toLowerCase(); --- string
 
-
 /**
  * Javascript 데이터 유형을 검증하여 참/거짓을 반환하는 유틸리티 함수
  * 
@@ -46,7 +45,6 @@ function isType(data, kind) {
     validateError(kind, '!string', '2번째 전달인자는 문자열이어야 합니다');
     return type(data) === kind;
 }
-
 
 /**
  * 오류 조건을 발생시키는 문장을 만들어 내는 유틸리티 함수
@@ -72,8 +70,6 @@ function validateError(data, kind, error_massage){
     } return '오류는 발생하지 않았습니다.';
 }
 
-
-
 /**
  * 전달된 숫자보다 하나 작은 수 까지의 난수를 반환하는 유틸리티 함수
  * 
@@ -83,27 +79,110 @@ function validateError(data, kind, error_massage){
  * @default {number}  - 2
  * @returns {number}  - 난수
  */
-function radomNumber(n) {
+function randomNumber(n) {
     n = n || 2; // 0, 1
-    validateEerror(n, '!number', '숫자 값을 전달해주세요.');
+    validateError(n, '!number', '숫자 값을 전달해주세요.');
     return Math.floor( Math.random() * n);
 }
-
-
 
 /**
  * 전달된 최소값, 최대값 사이의 난수를 반환하는 유틸리티 함수
  * 
  * @global
- * @func radomMinMax
+ * @func randomMinMax
  * @param {number} min - 최소값
  * @param {number} max - 최대값
  * @returns {number}   - 난수 
  */
-function radomMinMax(min, max) {
+function randomMinMax(min, max) {
     validateError(min, '!number', '첫번째 인자 최소값을 전달해주세요.');
     validateError(max, '!number', '두번째 인자 최대값을 전달해주세요.');
     max = max - min;
     return Math.round( Math.random() * max ) + min;
 }
 
+/**
+ * 전달된 인자에서 최소값, 최대값을 구분한 후, 그 사이의 나나수를 반환하는 유틸리티 함수
+ * 
+ * @global
+ * @func randomRange
+ * @param {number} n1 - 수 (최대 혹은 최소값)
+ * @param {number} n2 - 수 (최대 혹은 최소값)
+ * @param {number}    - 난수
+ */
+function randomRange(n1, n2) {
+    var min, max;
+    min = Math.min(n1, n2);
+    max = Math.max(n1, n2);
+    return randomMinMax(min, max);
+}
+
+
+/**
+ * 숫자 유형의 데이터인지 감별하는 유틸리티 함수
+ *
+ * @global
+ * @func isNumber
+ * @param {any} data  - JavaScript의 모든 데이터 유형
+ * @returns {boolean} - 숫자 유형인지 아닌지 유무 true | false
+ */
+function isNumber(data){
+    return isType(data, 'number') && !Number.isNaN(data);
+}
+
+/**
+ * 문자 유형의 데이터인지 감별하는 유틸리티 함수
+ * 
+ * @global
+ * @func isString
+ * @param {any} data  - JavaScript의 모든 데이터 유형
+ * @returns {boolean} - 문자 유형인지 아닌지 유무 true | false 
+ */
+function isString() {
+    return isType(data, 'string');
+}
+
+/**
+ * 불리언 유형의 데이터인지 감별하는 유틸리티 함수
+ * 
+ * @global
+ * @func isBoolean
+ * @param {any} data  - JavaScript의 모든 데이터 유형
+ * @returns {boolean} - 불리언 유형인지 아닌지 유무 true | false 
+ */
+function isBoolean() {
+    return isType(data, 'bloolean');
+}
+
+/**
+ * 함수 유형의 데이터인지 감별하는 유틸리티 함수
+ * @global
+ * @func isFunction
+ * @param {any} data  - JavaScript의 모든 데이터 유형
+ * @returns {boolean} - 함수 유형인지 아닌지 유무 true | false
+ */
+function isFunction(data) {
+    return isType(data, 'function');
+}
+
+/**
+ * 배열 유형의 데이터인지 감별하는 유틸리티 함수
+ * @global
+ * @func isArray
+ * @param {any} data  - JavaScript의 모든 데이터 유형
+ * @returns {boolean} - 배열 유형인지 아닌지 유무 true | false
+ */
+function isArray(data) {
+    return isType(data, 'array');
+}
+
+/**
+ * 객체(Object) 유형의 데이터인지 감별하는 유틸리티 함수
+ * @global
+ * @func isObject
+ * @param {any} data  - JavaScript의 모든 데이터 유형
+ * @returns {boolean} - 객체(Object) 유형인지 아닌지 유무 true | false
+ */
+function isObject(data) {
+    return isType(data, 'object');
+}
