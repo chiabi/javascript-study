@@ -10,8 +10,8 @@ _객체, 배열_ 등으로 자료를 구조화하는 것이다.
 [참조. FDS](https://github.com/owl423/FDS04_Summary/blob/master/README/0529.md)  
 [참조. poiemaweb](http://poiemaweb.com/js-data-type-variable)  
 
-애플리케이션에서 값(Value)을 유지할 필요가 있을 때 변수를 사용한다.  
-자바스크립트는 동적 타이핑(Dynamic Typing) 언어로 변수의 Type annotation이 필요없이 값이 할당되는 과정에서 자동으로 자료형이 결정(Type Inference)된다.  
+애플리케이션에서 값<sup>Value</sup>을 유지할 필요가 있을 때 변수를 사용한다.  
+자바스크립트는 동적 타이핑<sup>Dynamic Typing</sup> 언어로 변수의 Type annotation이 필요없이 값이 할당되는 과정에서 자동으로 자료형이 결정<sup>Type Inference</sup>된다.  
 (같은 변수에 여러 자료형의 값을 대입할 수 있다.)
 
 ## 1.1. 변수 (Variable) 선언과 값 할당
@@ -37,7 +37,7 @@ var dinner = runch; // 다른 변수에 할당된 값을 선언하는 변수에 
 
 ## 1.2. 변수 이름 작성 규칙
 
-변수명은 식별자(identifier)로 불리기도 한다.  
+변수명은 식별자<sup>identifier</sup>로 불리기도 한다.  
 
 알아보기 쉽게, 이해하기 쉽게, 명시적으로, 직관적으로
 
@@ -46,7 +46,7 @@ var dinner = runch; // 다른 변수에 할당된 값을 선언하는 변수에 
 + 사용할 수 있는 특수문자는 '_', '$' 뿐이다.
 + 자바스크립트는 대소문자를 구분하며 이름 짓는 관례가 있다.
   - 변수 이름은 '_'을 사용해 이름을 구분한다.
-  - 함수 이름은 카멜 케이스(camelCase) 표기법을 사용한다.
+  - 함수 이름은 카멜 케이스<sup>camelCase</sup> 표기법을 사용한다.
   - 함수 이름의 첫글자가 대문자인 경우는 특별한 함수(생성자 함수같은)일 가능성이 높다.
 ```javascript
 var my name = 'chi'; // [x]
@@ -66,12 +66,12 @@ var my_name, is_visible, has_children, remote_control;
 ```
 
 ## 1.3. 변수 범위(Scope)
-+ 전역 변수(Global Variable)
-  - 클라이언트 환경(Front-End)
-  - 전역 객체(Global Object) : Window 객체
-  - 전역 변수는 전역 객체의 프로퍼티다. 모든 구역(Block)에서 접근이 가능한 변수이다.
-+ 지역 변수(Local Variable)
-  - 특정한 구역(Block)에서만 접근이 가능한 변수
++ 전역 변수<sup>Global Variable</sup>
+  - 클라이언트 환경<sup>Front-End</sup>
+  - 전역 객체<sup>Global Object</sup> : Window 객체
+  - 전역 변수는 전역 객체의 프로퍼티다. 모든 구역<sup>Block</sup>에서 접근이 가능한 변수이다.
++ 지역 변수<sup>Local Variable</sup>
+  - 특정한 구역<sup>Block</sup>에서만 접근이 가능한 변수
 ```javascript
 var my_name = 'chi';
 console.log('전역변수: ', my_name); // 'chi'
@@ -111,7 +111,7 @@ console.log(foo); // 3. 456
 > **호이스팅** : var 선언문 이나 function 선언문을 해당 Scope 선두로 옮기는 것  자바스크립트는 코드를 실행하기 전에 호이스팅을 한다.
 
 > [변수 선언 단계]
-> + **선언 단계(Declaration phase)** : 스코프(Variable Object)에 변수를 등록한다.
+> + **선언 단계(Declaration phase)** : 스코프<sup>Variable Object</sup>에 변수를 등록한다.
 > + **초기화 단계(Initailization phase)** : 스코프에 있는 변수를 메모리에 할당한다. 이 단계에서 변수는 undefined로 초기화 된다.
 > + **할당 단계(Assignment phase)** : undefined로 초기화된 변수에 실제값을 할당한다.  
 >
@@ -148,7 +148,7 @@ if(flag) {
 } // flag가 true일 경우에 한해서 잠재적으로 side effect가 있다.
 ```
 
-**상수** 는 변수와 유사하나, 읽기 전용(Read Only)이다.  (변하지 않는 값)
+**상수** 는 변수와 유사하나, 읽기 전용<sup>Read Only</sup>이다.  (변하지 않는 값)
 
 ### 1.5.1 선언과 초기화
 
@@ -218,7 +218,7 @@ const를 사용한다 하더라도 객체의 내용을 변경할 수 있으며 �
 자바스크립트의 값은 대부분 객체(primitive형 변수를 제외한 모든 값은 객체)이므로  
 결국 대부분의 경우 const를 사용하게 된다.
 
-> primitives(기본자료형)을 제외한 나머지 값들(함수, 배열, 정규표현식 등)은 모두 객체이다.
+> primitives<sup>기본자료형</sup>을 제외한 나머지 값들(함수, 배열, 정규표현식 등)은 모두 객체이다.
 
 ## 1.6. let
 
