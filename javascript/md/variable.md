@@ -10,11 +10,11 @@ _객체, 배열_ 등으로 자료를 구조화하는 것이다.
 [참조. FDS](https://github.com/owl423/FDS04_Summary/blob/master/README/0529.md)  
 [참조. poiemaweb](http://poiemaweb.com/js-data-type-variable)  
 
-애플리케이션에서 값(Vavlue)을 유지할 필요가 있을 때 변수를 사용한다.  
+애플리케이션에서 값(Value)을 유지할 필요가 있을 때 변수를 사용한다.  
 자바스크립트는 동적 타이핑(Dynamic Typing) 언어로 변수의 Type annotation이 필요없이 값이 할당되는 과정에서 자동으로 자료형이 결정(Type Inference)된다.  
 (같은 변수에 여러 자료형의 값을 대입할 수 있다.)
 
-## 1.1. 자바스크립트 변수 (Variable) 선언과 값 할당
+## 1.1. 변수 (Variable) 선언과 값 할당
 
 변수 선언, 초기 값은 할당 되지 않았다.
 변수 선언시 `var` 키워드를 사용한다.
@@ -22,7 +22,7 @@ _객체, 배열_ 등으로 자료를 구조화하는 것이다.
 var runch; // undefined로 초기값을 갖게 된다.
 ```
 
-선언된 변수에 값을 할당하는데 이때 대입(할당) 연산자로 값을 할당한다.  
+선언된 변수에 값을 할당하는데 이때 대입(할당) 연산자(=)로 값을 할당한다.  
 선언된 변수가 없으면 _참조 오류(ReferrenceError)_ 가 발생한다.  
 ```javascript
 runch = 김밥; // Uncaught ReferenceError: 김밥 is not defined
@@ -43,7 +43,7 @@ var dinner = runch; // 다른 변수에 할당된 값을 선언하는 변수에 
 
 + 공백으로 이름이 구분되게 지어서는 안된다.
 + 첫 글자가 숫자여서는 안된다.
-+ 사용할 수 있는 특수문자는 '_, $' 뿐이다.
++ 사용할 수 있는 특수문자는 '_', '$' 뿐이다.
 + 자바스크립트는 대소문자를 구분하며 이름 짓는 관례가 있다.
   - 변수 이름은 '_'을 사용해 이름을 구분한다.
   - 함수 이름은 카멜 케이스(camelCase) 표기법을 사용한다.
@@ -104,22 +104,24 @@ console.log(foo); // 2. 123
 console.log(foo); // 3. 456
 ```
 
-`1.` 에서 `Uncaught ReferenceError: foo is not defined` 에러를 기대했지만 콘솔에서는 undefined가 출력된다.
+`1.` 에서 `Uncaught ReferenceError: foo is not defined` 에러를 기대했지만 콘솔에서는 `undefined`가 출력된다.
 
-이는 자바스크립트의 특징으로 모든 선언문은 **호이스팅(Hosting)되기 때문**이다.
+이는 자바스크립트의 특징으로 **모든 선언문은 호이스팅(Hosting)되기 때문**이다.
 
-> **호이스팅** : _var 선언문_ 이나 _function 선언문_ 을 해당 Scope 선두로 옮기는 것, 자바스크립트는 코드를 실행하기 전에 호이스팅을 한다.
+> **호이스팅** : var 선언문 이나 function 선언문을 해당 Scope 선두로 옮기는 것  자바스크립트는 코드를 실행하기 전에 호이스팅을 한다.
 
-> 변수 선언 단계
+> [변수 선언 단계]
 > + **선언 단계(Declaration phase)** : 스코프(Variable Object)에 변수를 등록한다.
 > + **초기화 단계(Initailization phase)** : 스코프에 있는 변수를 메모리에 할당한다. 이 단계에서 변수는 undefined로 초기화 된다.
 > + **할당 단계(Assignment phase)** : undefined로 초기화된 변수에 실제값을 할당한다.  
 >
 > [참고: Execution Context(실행 컨텍스트)](http://poiemaweb.com/js-execution-context)
 
-`1.` 실행되기 전에 호이스팅 되어 `1.` 구문 앞에 `var foo;` 가 옮겨지며 변수 선언과 초기화가 이루어진다. `2.` 에서야 변수에 값이 할당되어 123이 출력된다.
+`1.`이 실행되기 전에 호이스팅 되어 `1.` 구문 앞에 `var foo;` 가 옮겨지며 변수 선언과 초기화가 이루어진다. `2.` 에서야 변수에 값이 할당되어 123이 출력된다.
 
 ## 1.5. 상수(Constant)
+
+[참조: let, const](http://poiemaweb.com/es6-block-scope)
 
 ※ **ES6** 은 `var`의 단점을 보완하기 위해 `let`과 `const` 키워드를 도입했다.
 
@@ -146,14 +148,12 @@ if(flag) {
 } // flag가 true일 경우에 한해서 잠재적으로 side effect가 있다.
 ```
 
-[참고: let, const](http://poiemaweb.com/es6-block-scope)
-
-변수와 유사하나, 읽기 전용(Read Only)이다.  (변하지 않는 값)
+**상수** 는 변수와 유사하나, 읽기 전용(Read Only)이다.  (변하지 않는 값)
 
 ### 1.5.1 선언과 초기화
 
 한번 선언된 상수는 재선언될 수 없고 다른 값을 할당하는 것도 불가능하다.  
-_관례적으로_ 대문자로만 구성된 이름을 사용하여 변수와 구분 짓는다.
+관례적으로 대문자로만 구성된 이름을 사용하여 변수와 구분 짓는다.(강제성 x)
 
 const는 반드시 선언과 동시에 초기화가 이루어져야 한다. (아니면 SyntaxError 발생)
 ```javascript
@@ -199,8 +199,8 @@ const obj = {foo: 123};
 obj = {bar: 456} // Uncaught TypeError: Assignment to constant variable.
 ```
 
-객체에 대한 참조의 변경을 금지하지만 **객체의 프로퍼티는 보호되지 않아**  
-재할당은 불가능하지만 할당된 객체의 내용은 변경할 수 있다.
+객체에 대한 참조의 변경을 금지하지만 **객체의 프로퍼티는 보호되지 않는다.**  
+따라서 재할당은 불가능하지만 할당된 객체의 내용은 변경할 수 있다.
 ```javascript
 const user = {
   name: 'chi',
@@ -213,9 +213,10 @@ user.name = 'park';
 console.log(user); // {name: "park", address: { city: 'Seoul'}}
 ```
 
-const를 사용한다 하더라도 객체의 내용을 변경할 수 있으며 변수에 할당된 주소값은 변경되지 않으므로 _객체 타입 변수 선언에 const를 사용하는 것이 좋다._
+const를 사용한다 하더라도 객체의 내용을 변경할 수 있으며 변수에 할당된 주소값은 변경되지 않으므로 **객체 타입 변수 선언에 const를 사용하는 것이 좋다.**
 
-자바스크립트의 값은 대부분 객체(primitive형 변수를 제외한 모든 값은 객체)이므로 결국 대부분의 경우 const를 사용하게 된다.
+자바스크립트의 값은 대부분 객체(primitive형 변수를 제외한 모든 값은 객체)이므로  
+결국 대부분의 경우 const를 사용하게 된다.
 
 > primitives(기본자료형)을 제외한 나머지 값들(함수, 배열, 정규표현식 등)은 모두 객체이다.
 
@@ -245,7 +246,7 @@ console.log(bar); // Uncaught ReferenceError: bar is not defined
 
 `var`와 달리 `let` 키워드로 선언된 변수는 선언문 이전에 참조하면 ReferenceError가 발생한다.
 
-`let`키워드로 선언된 변수는 스코프의 시작에서 변수의 선언까지 **일시적 사각지대(TDZ; Temporal Dead Zone)**에 빠진다.
+`let`키워드로 선언된 변수는 스코프의 시작에서 변수의 선언까지 **일시적 사각지대(TDZ; Temporal Dead Zone)** 에 빠진다.
 ```javascript
 console.log(foo); // undefined
 var foo;
@@ -256,13 +257,13 @@ let bar;
 
 `let`키워드로 선언된 변수는 선언단계와 초기화 단계가 분리되어 진행된다.  
 스코프에 변수가 등록되지만 초기화는 변수 선언문에 도달했을 때 이루어진다.  
-초기화 이전 변수에 접근하려고 하면 ReferenceError가 발생한다.
+초기화 이전 변수에 접근하려고 하면 `ReferenceError`가 발생한다.
 
 ### 1.6.3 클로저
 
 let은 var보다 직관적이다.
 
-Function-level scope로 인해 for loop의 초기화식에 사용된 변수가 전역 스코프를 갖게 되어 문제 발생
++ Function-level scope로 인해 for loop의 초기화식에 사용된 변수가 전역 스코프를 갖게 되어 문제가 발생
 ```javascript
 var funcs = [];
 
@@ -281,9 +282,9 @@ for (var j = 0; j < 3; j++) {
 ```
 
  
-기존 자바스크립트에서는 **클로저** 를 활용하여 위와 같은 문제를 회피한다.
++ 기존 자바스크립트에서는 **클로저** 를 활용하여 위와 같은 문제를 회피한다.
 
-> **클로저** : 자바스크립트의 고유 개념이 아니라 함수를 일급객체호 취급하는 함수형 언어에서 사용되는 중요한 특성이다.  
+> **클로저** : 자바스크립트의 고유 개념이 아니라 함수를 일급객체로 취급하는 함수형 언어에서 사용되는 중요한 특성이다.  
 내부함수를 위한 외부함수의 지역변수가 외부함수에 의해 내부함수가 반환된 이후에도 life-cycle이 유지되는 것
 
 ```javascript
@@ -304,7 +305,7 @@ for (var j = 0; j < 3; j++) {
 // ※ 결과 :  0, 1, 2가 실행된다.
 ```
 
-ES6 let 키워드를 사용하는 방법
++ ES6 let 키워드를 사용하는 방법
 ```javascript
 var funcs = [];
 
@@ -332,7 +333,7 @@ for (var j = 0; j < 3; j++) {
 
 `var` 키워드로 선언된 변수를 전역 변수로 사용하면 _전역 객체의 프로퍼티가 된다._  
 `let` 키워드로 선언된 변수를 전역 변수로 사용하는 경우, let 전역변수는 _전역객체의 프로퍼티가 아니다._  
-즉, window.foo와 같이 접근할 수 없다. 보이지 않는 개념적인 블럭 내에 존재하게 된다.
+즉, `window.foo`와 같이 접근할 수 없다. 보이지 않는 개념적인 블럭 내에 존재하게 된다.
 ```javascript
 var foo = 123; // 전역변수
 console.log(window.foo); // 123
@@ -345,5 +346,5 @@ console.log(window.bar); // undefined
 
 권장 사항
 + ES6를 사용한다면 `var`키워드는 사용하지 않는다.
-+ 변경이 발행하지 않는 (재할당이 필요없는) primitive형 변수와 객체형 변수에는 `const`를 사용한다.
++ 변경이 발생하지 않는 (재할당이 필요없는) primitive형 변수와 객체형 변수에는 `const`를 사용한다.
 + 재할당이 필요한 primitive형 변수에는 `let`를 사용한다.
