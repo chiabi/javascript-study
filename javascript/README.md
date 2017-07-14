@@ -4,10 +4,11 @@
 > + [기본 구문](md/syntaxBasic.md)
 > + [변수, const, let(ES6)](md/variable.md)
 > + [자료형, symbol(ES6)](md/dataType.md)
-> + [_실행 컨텍스트]()
-> + [_클로저]()
+> + [_자바스크립트 동작원리 : 실행 컨텍스트](md/excutionContext.md)
 > + [_객체](md/object.md)
-> + [_프로토타입](prototype.md)
+> + _함수
+> + [_프로토타입](md/prototype.md)
+> + [_클로저](md/clousure.md)
 > + [_이벤트](md/event.md)
 
 > + [Object.prototype](md/object.prototype.md)

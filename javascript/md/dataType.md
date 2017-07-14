@@ -170,6 +170,12 @@ console.log(obj[key]); // value
 + 날짜(Date)
 + 정규식(RegExp)
 
+```javascript
+var glass = {};                // Object
+var watchGlass = function(){}; // new Function()
+var glasses = [];              // new Array();
+```
+
 > **객체**  
 데이터와 그 데이터에 관련된 동작(절차, 방법, 기능)을 모두 포함할 수 있는 개념적 존재이다.  
 이름과 값을 가지는 데이터를 의미하는 속성<sup>property</sup>과 동작을 의미하는 메서드<sup>method</sup>를 포함하고 있는 독립적 주체이다.
