@@ -1,6 +1,6 @@
 # JavaScript 스터디
 
-> + [자바스크립트 소개](intro.md)
+> + [자바스크립트 소개](md/intro.md)
 > + [기본 구문](md/syntaxBasic.md)
 > + [변수](md/variable.md)
 > + [자료형](md/dataType.md)

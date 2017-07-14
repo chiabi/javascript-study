@@ -10,6 +10,11 @@ _객체, 배열_ 등으로 자료를 구조화하는 것이다.
 [참조. FDS](https://github.com/owl423/FDS04_Summary/blob/master/README/0529.md)  
 [참조. poiemaweb](http://poiemaweb.com/js-data-type-variable)  
 
+변수는 위치(주소)를 기억하는 저장소이다.  
+> 위치란 메모리상의 주소(address)를 의미한다.
+
+즉, 변수란 메모리주소<sup>Memory address</sup>에 접근하기 위해 사람이 이해할 수 있는 언어로 지정한 식별자<sup>identifier</sup>이다.
+
 애플리케이션에서 값<sup>Value</sup>을 유지할 필요가 있을 때 변수를 사용한다.  
 자바스크립트는 동적 타이핑<sup>Dynamic Typing</sup> 언어로 변수의 Type annotation이 필요없이 값이 할당되는 과정에서 자동으로 자료형이 결정<sup>Type Inference</sup>된다.  
 (같은 변수에 여러 자료형의 값을 대입할 수 있다.)
@@ -119,7 +124,7 @@ console.log(foo); // 3. 456
 
 `1.`이 실행되기 전에 호이스팅 되어 `1.` 구문 앞에 `var foo;` 가 옮겨지며 변수 선언과 초기화가 이루어진다. `2.` 에서야 변수에 값이 할당되어 123이 출력된다.
 
-## 1.5. 상수(Constant)
+## 1.5. 상수(Constant)<sup>ES6*</sup>
 
 [참조: let, const](http://poiemaweb.com/es6-block-scope)
 
@@ -220,7 +225,7 @@ const를 사용한다 하더라도 객체의 내용을 변경할 수 있으며 �
 
 > primitives<sup>기본자료형</sup>을 제외한 나머지 값들(함수, 배열, 정규표현식 등)은 모두 객체이다.
 
-## 1.6. let
+## 1.6. let<sup>ES6*</sup>
 
 ### 1.6.1. Block-level scope
 
