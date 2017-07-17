@@ -338,7 +338,7 @@ console.log(baz === bar);      // true
 기본자료형은 값이 한 번정해지면 변경할 수 없지만(immnutable)  
 객체는 변경가능한 프로퍼티들의 집합이라 할 수 있다.
 
-> 객체와 변경불가성(http://poiemaweb.com/js-immutability)
+> [객체와 변경불가성](http://poiemaweb.com/js-immutability)
 
 ```javascript
 // Pass-by-value
@@ -361,5 +361,3 @@ console.log(a === b); // false
     + BOM (Browser Object Model)
     + DOM (Document Object Model)
 + **Host Object(사용자 정의 객체)** : `constructor` 혹은 객체리터럴을 통해 사용자가 객체를 정의하고 확장시킨 것들로 Built-in Object가 구성된 이후에 구성된다. 
-
-

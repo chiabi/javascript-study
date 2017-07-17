@@ -4,6 +4,7 @@
 > + [기본 구문](md/syntaxBasic.md)
 > + [변수, const, let(ES6)](md/variable.md)
 > + [자료형, symbol(ES6)](md/dataType.md)
+> + [_데이터유형 검증, 암묵적 강제 형 변환](md/dataType_check.md)
 > + [_자바스크립트 동작원리 : 실행 컨텍스트](md/excutionContext.md)
 > + [객체](md/object.md)
 > + [함수](md/function.md)
