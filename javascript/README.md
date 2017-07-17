@@ -6,8 +6,11 @@
 > + [자료형, symbol(ES6)](md/dataType.md)
 > + [_자바스크립트 동작원리 : 실행 컨텍스트](md/excutionContext.md)
 > + [_객체](md/object.md)
-> + _함수
+> + [_함수](md/function.md)
 > + [_프로토타입](md/prototype.md)
+> + _scope
+> + _this
+> + _비동기식 처리 모델
 > + [_클로저](md/clousure.md)
 > + [_이벤트](md/event.md)
 

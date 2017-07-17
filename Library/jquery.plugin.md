@@ -70,3 +70,24 @@ $('a').greenify(); // Makes all the links green.
 다른 방법으로 `.css()`를 사용하려면 `$(this)`가 아닌 `this`를 사용한다. 이것은 `greenify` 함수가 `.css()`와 같은 객체의 일부이기 때문이다.
 
 > `this`는 greenify 메서드를 호출한 객체 `$('a')`에 바인딩된다. greenify 메서드를 호출한 객체는 언제나 jQuery 객체이므로 `$(this)`를 사용할 필요가 없다.
+
+[함수 호출 패턴에 따라 결정되는 this](http://poiemaweb.com/js-this#method-invocation-pattern)
+
+> `each()`, `append()` 메서드 등의 callback 함수 내에서 사용된 `this`는 DOM요소를 의미한다. 따라서 callback 함수 내에서 DOM 요소에 대해 jQuery 메서드를 사용하기 위해서는 `this`를 jQuery 객체화해야 한다. 
+
+```javascript
+(function($) {
+  $.fn.showLinkLocation = function() {
+    this.filter('a').each(function() {
+      var link = $(this);
+      link.append('('+ link.attr('href') +')');
+    });
+    return this;
+  };
+}(jQuery));
+
+// Usage example:
+$('a').showLinkLocation();
+```
+
+## 3. 체이닝(Chaining)
