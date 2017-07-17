@@ -8,7 +8,7 @@
 + 일반적 기능(코드의 재사용)외에 객체 생성, 객체의 행위 지정(메서드), 정보의 구성 및 은닉, 클로저, 모듈화 등의 기능 수행
 + 구문<sup>statment</sup>의 집합으로 모듈화의 근간이 된다.
 + 함수도 객체, 다른 객체와 달리 호출할 수 있다.
-+ 함수도 객체(일급객체<sup>First-class object</sup>이므로 다른 값들처럼 사용할 수 있다.  
++ 함수도 객체([일급객체<sup>First-class object</sup>](https://ko.wikipedia.org/wiki/%EC%9D%BC%EA%B8%89_%EA%B0%9D%EC%B2%B4))이므로 다른 값들처럼 사용할 수 있다.  
   - 변수나 객체, 배열 등에 저장될 수 있다.
   - 다른 함수에 전달되는 인수로 사용될 수 있다.
   - 함수의 반환값이 될 수 있다.
@@ -26,9 +26,11 @@
 + **함수명**  
 함수 선언식에서 생략할 수 없다. 함수 몸체에서 자신을 재귀적<sup>recursive</sup> 호출하거나 자바스크립트 디버거가 해당 함수를 구분할 수 있는 식별자 역할을 한다.
 + **매개변수 목록**  
-0개 이상의 목록. 괄호로 감싸고 콤마로 분리한다. 매개변수의 자료형을 기술하지 않는다.(다른 언어와 차이점, 이 때문에 함수 몸체 내에서 매개변수의 자료형 체크가 필요할 수 있다.)
+0개 이상의 목록. 괄호로 감싸고 콤마로 분리한다.  
+다른 언어와 달리 매개변수의 자료형을 기술하지 않으므로 함수 몸체 내에서 매개변수의 자료형 체크가 필요할 수 있다.
 + **함수 몸체**  
-실제 함수가 호출되었을 때 실행되는 구문 집합. 중괄호({})로 구문들을 감싸고 `return`문으로 결과값을 반환할 수 있다.(반환값<sup>return value</sup>)
+실제 함수가 호출되었을 때 실행되는 구문 집합.  
+중괄호({})로 구문들을 감싸고 `return`문으로 결과값을 반환할 수 있다.(반환값<sup>return value</sup>)
 ```javascript
 function square(number) {
   return number * number
@@ -105,14 +107,16 @@ var square = function square(number) {
 };
 ```
 
-**함수 선언식과 함수 표현식은** 모두 함수 리터럴 방식으로 함수를 정의한다. 이는 결국 **내장함수 Function() 생성자 함수로 함수를 생성하는 것을 단순화 시킨 것이다.**
+**함수 선언식과 함수 표현식은** 모두 함수 리터럴 방식으로 함수를 정의한다. 이는 결국 **내장함수 `Function()` 생성자 함수로 함수를 생성하는 것을 단순화 시킨 것이다.**
 
-### 1.3. Function() 생성자 함수
+### 1.3. `Function()` 생성자 함수
 
-Function.prototype.constructor 프로퍼티로 접근할 수 있다.
+`Function.prototype.constructor` 프로퍼티로 접근할 수 있다.
 
-Function() 생성자 함수로 함수를 생성하는 방식은 일반적으로 사용하지 않는다.
+`Function()` 생성자 함수로 함수를 생성하는 방식은 일반적으로 사용하지 않는다.
+
 > new Function(arg1, arg2, ... argN, functionBody)
+
 ```javascript
 var square = new Function('number', 'return number * number');
 console.log(square(10)); // 100
@@ -152,7 +156,7 @@ var square = function(number) {
 
 > **변수 호이스팅**  
 변수 생성과 할당이 분리되어 진행된다. 변수 선언만 호이스팅되고 값의 초기화는 변수 선언문에서 이루어 진다.  
-호이스팅 된 변수에는 undefined가 우성 할당되고 실제값의 할당은 할당문에서 이루어진다.
+호이스팅 된 변수에는 undefined가 우선 할당되고 실제값의 할당은 할당문에서 이루어진다.
 
 > 함수 표현식만을 사용할 것을 권고한다. 함수 호이스팅이 함수 호출 전 반드시 함수를 선언하여야 한다는 규칙을 무시하므로 코드의 구조를 엉성하게 만들 수 있고, 사용하기에는 쉽지만 대규모 애플리케이션을 개발하는 경우 인터프리터가 너무 많은 코드를 VO에 저장하므로 애플리케이션의 응답속도가 현저히 떨어질 수 있다.
 
@@ -160,12 +164,12 @@ var square = function(number) {
 
 생성, 대입, 연산, 인자 또는 반환값으로서의 전달 등 프로그래밍 언어의 기본적 조작을 제한없이 사용할 수 있는 대상을 의미한다.
 
-**자바스크립트의 함수는 일급객체이다**  
+**자바스크립트의 함수는 일급객체이다.**  
 변수와 같이 사용할 수 있으며 코드의 어디에서든지 정의할 수 있다.  
 **함수와 다른 객체를 구분 짖는 특징은 호출할 수 있다는 것이다.**
 
 ```javascript
-// 1. 무명의 리터럴로 표현이 가능하낟.
+// 1. 무명의 리터럴로 표현이 가능하다.
 // 2. 변수나 데이터 구조안에 담을 수 있다.
 var increase = function(num) {
   return num + 1;
@@ -213,9 +217,9 @@ console.log(cal('minus')(2, 1)); // 1
 함수 내에서 변수와 동일하게 동작한다.
 
 매개변수 처리에 관해 자바스크립트는 상당히 유연하다.
-+ 자바 스크립트 함수 정의는 매개 변수에 대한 데이터 유형을 지정하지 않는다.
-+ 자바 스크립트 함수는 전달된 인수에 유형 검사를 수행하지 않는다.
-+ 자바 스크립트 함수는 수신 된 인수의 수를 확인하지 않는다.
++ 자바스크립트 함수 정의는 매개 변수에 대한 데이터 유형을 지정하지 않는다.
++ 자바스크립트 함수는 전달된 인수에 유형 검사를 수행하지 않는다.
++ 자바스크립트 함수는 수신 된 인수의 수를 확인하지 않는다.
 
 ### 4.1. 매개변수<sup>Parameter, 인자</sup> vs 인수<sup>argument</sup>
 
@@ -228,11 +232,11 @@ console.log(cal('minus')(2, 1)); // 1
 
 ### 4.2. Call-by-value / Call-by-reference
 
-| Call-by-value<sup>값에 의한 호출</sup> | Call-by-reference<sup>참조에 의한 호출</sup> |
+| Call-by-value(값에 의한 호출) | Call-by-reference(참조에 의한 호출) |
 | ---- | ---- |
-| Primitives<sup>기본자료형</sup> 인수는 **Call-by-value** 로 동작한다. | 객체타입(참조 타입) 인수는 **Call-by-reference** 로 동작한다. |
-| 함수 호출 시 기본자료형 인수를 함수에 매개변수로 전달할 때 매개변수에 _값을 복사하여 함수로 전달하는 방식_ 이다. | 함수 호출 시 기본자료형 인수를 함수에 매개변수로 전달할 때 매개변수에 _값이 복사되지 않고 객체의 참조값이 매개변수에 저장되어 함수로 전달되는 방식_ 이다. |
-| 함수 내에서 매개변수를 통해 값이 변경되어도 _전달이 완료된 기본 자료형 값은 변경되지 않는다._ | 함수 내에서 매개변수의 참조값을 이용하여 객체의 값을 변경했을 때 _전달되어진 참조형의 인수 값도 같이 변경된다._ |
+| Primitives(기본자료형) 인수는 **Call-by-value** 로 동작한다. | 객체타입(참조 타입) 인수는 **Call-by-reference** 로 동작한다. |
+| 함수 호출 시 기본자료형 인수를 함수에 매개변수로 전달할 때 **매개변수에 값을 복사하여 함수로 전달하는 방식** 이다. | 함수 호출 시 기본자료형 인수를 함수에 매개변수로 전달할 때 **매개변수에 값이 복사되지 않고 객체의 참조값이 매개변수에 저장되어 함수로 전달되는 방식** 이다. |
+| 함수 내에서 매개변수를 통해 값이 변경되어도 **전달이 완료된 기본 자료형 값은 변경되지 않는다.** | 함수 내에서 매개변수의 참조값을 이용하여 객체의 값을 변경했을 때 **전달되어진 참조형의 인수 값도 같이 변경된다.** |
 
 ```javascript
 // Primitives, Call-by-value
@@ -244,7 +248,7 @@ function foo(primitive) {
 var x = 0;
 
 console.log(foo(x));  // 1
-console.log(x);       // 0
+console.log(x);       // 0 (값이 변경되지 않는다.)
 ```
 ```javascript
 // 객체타입(참조 타입) 인수, Call-by-reference
@@ -266,7 +270,7 @@ console.log(obj); // {name: "seon", gender: "male"}
 changeVal(num, obj);
 
 console.log(num); // 100
-console.log(obj); // {name: "chi", gender: "female"}
+console.log(obj); // {name: "chi", gender: "female"} (참조형의 인수 값도 같이 변경된다.)
 ```
 
 ## 5. 반환값<sup>return value</sup>
@@ -275,7 +279,8 @@ console.log(obj); // {name: "chi", gender: "female"}
 + `return` 키워드는 함수를 호출한 코드에 값을 반환할 때 사용한다.
 + 배열 등을 이용해 한번에 여러 개의 값을 리턴 할 수 있다.
 + 반환을 생략할 수 있다. (암묵적으로 undefined를 반환한다.)
-+ 자바스크립트 해석기는 `return` 키워드를 만나면 함수의 실행을 중단 후, 함수를 호출한 코드로 되돌아간다. (`return`키워드 이후에 존재하는 다른 구문은 실행되지 않는다.)
++ 자바스크립트 해석기는 `return` 키워드를 만나면 함수의 실행을 중단 후, 함수를 호출한 코드로 되돌아간다.  
+(`return`키워드 이후에 존재하는 다른 구문은 실행되지 않는다.)
 
 ```javascript
 function calculateArea(width, height) {
@@ -316,8 +321,7 @@ console.log(square.x, square.y); // 10, 20
 
 함수는 일반 객체와는 다른 함수만의 표준 프로퍼티를 갖는다.
 
-※ 개발자도구에서 확인할 수 있는 여러가지 프로퍼티 중 `length`, `prototype` 프로퍼티는 ECAMSciprt spec에서 정한 표준 프로퍼티이다.  
-나머지 프로퍼티는 ECMAScript 표준 spec은 아니다.
+※ 개발자도구에서 확인할 수 있는 여러가지 프로퍼티 중 `length`, `prototype` 프로퍼티는 ECAMSciprt spec에서 정한 표준 프로퍼티이다. 나머지 프로퍼티는 ECMAScript 표준 spec은 아니다.
 ```javascript
 function square(number) {
   return number * number;
@@ -335,7 +339,7 @@ console.dir(square);
 
 ### 6.1 arguments 프로퍼티
 
-자바스크립트의 모든 함수는 `arguments`라는 특별한 변수가 있다.
+자바스크립트의 모든 함수는 `arguments`라는 특별한 객체가 있다.
 
 **arguments 객체** 는 함수 호출 시 전달된 인수<sup>argument</sup>들의 정보를 담고 있는 순회가능한<sup>iterable</sup> 유사배열객체<sup>array-like object</sup>이다.  
 
@@ -345,7 +349,8 @@ arguments[0]
 arguments[1]
 arguments[2]
 ```
-함수 객체의 `arguments` 프로퍼티는 `arguemnts` 객체를 값으로 가지며 함수 내부에서 지역변수처럼 사용된다. (외부에서는 사용할 수 없다.)
+함수 객체의 `arguments` 프로퍼티는 `arguemnts` 객체를 값으로 가지며 함수 내부에서 지역변수처럼 사용된다.  
+(외부에서는 사용할 수 없다.)
 
 자바스크립트는 함수 호출 시 함수 정의에 따라 인수를 전달하지 않아도 에러가 발생한다.
 ```javascript
@@ -359,7 +364,7 @@ console.log(multiply(1, 2));    // 2    {0: 1, 1: 2}
 console.log(multiply(1, 2, 3)); // 2    {0: 1, 1: 2, 2: 3}
 ```
 
-매개변수parameter는 인수argument로 초기화된다.
+매개변수<sup>parameter</sup>는 인수<sup>argument</sup>로 초기화된다.
 + 매개변수의 갯수보다 인수를 적게 전달했을 때, 인수가 전달되지 않은 매개변수는 undefined로 초기화된다.
 + 매개변수의 갯수보다 인수를 더 많이 전달할 경우, 초과된 인수는 무시된다.
 
@@ -404,7 +409,7 @@ console.log(sum(1, 2, 3, 4, 5));
 `slice()` 메서드는 어떤 배열의 begin부터 end까지(end는 포함하지 않는다.)에 대한 shallow copy를 새로운 배열 객체로 반환한다. (원본을 대체하지 않는다)
 
 > [Array.prototype.reduce()](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)  
-`reduce()` 메서드는 accumulator(누산기) 및 배열의 각 값(좌에서 우로)에 대해 (누산된) 한 값으로 줄도록 함수를 적용한다.
+`reduce()` 메서드는 accumulator(누산기) 및 배열의 각 값(좌에서 우로)에 대해 (누산된) 한 값으로 감소되도록 함수를 적용한다.
 
 ### 6.2 caller 프로퍼티
 
@@ -429,7 +434,7 @@ console.log(bar());    // The function was calles from the top!
 ### 6.3 length 프로퍼티
 
 함수 정의 시 작성된 매개변수 갯수를 의미한다.  
-※ `arguments.length`(함수 호출 시 인자의 갯수)의 값과 다를 수 있으므로 주의해야한다.
+※ `arguments.length`(함수 호출 시 인수의 갯수)의 값과 다를 수 있으므로 주의해야한다.
 ```javascript
 function foo() {}
 console.log(foo.length); // 0
@@ -520,7 +525,7 @@ console.log(sqaure.__proto__.constructor === square.prototype.constructor); // f
 
 ### 7.1. 즉시호출함수표현식<sup>IIFE, Immediately Invoke Function Expression</sup>
 
-[IIFE](http://benalman.com/news/2010/11/immediately-invoked-function-expression/#iife)
++ [IIFE](http://benalman.com/news/2010/11/immediately-invoked-function-expression/#iife)
 
 함수의 정의와 동시에 실행되는 함수로 최초 한번만 호출되며 다시 호출할 수 없다.  
 초기화 처리 등에 사용할 수 있다.
@@ -528,7 +533,8 @@ console.log(sqaure.__proto__.constructor === square.prototype.constructor); // f
 + 전역 영역<sup>Global Scope - public</sup>를 오염 시키지 않기 위해 사용한다.
 + 변수를 전역<sup>global scope</sup>으로 선언하는 것을 피하기 위해 사용한다.
 + 지역 변수를 익명 함수로 위치시켜 외부와의 충돌을 방지할 수 있다.
-+ 함수 내 정의된 변수와 함수 등은 해당 영역 내부에서 접근할 수 있지만 외부에서 접근할 수 없다. 즉, private 영역이 생성된다.
++ 함수 내 정의된 변수와 함수 등은 해당 영역 내부에서 접근할 수 있지만 외부에서 접근할 수 없다.  
+즉, private 영역이 생성된다.
 
 ```javascript
 // 기명 즉시실행 함수
@@ -731,21 +737,22 @@ Function.prototype 객체 메서드
 + `.call()`  
 + `.bind()` : 2009, ES5 (IE 9+)
 
-함수 호출 시 자바스크립트 엔진 내부에서 자동으로 각 상황에 따라 this에 바인딩 될 객체가 결정된다.  
-이러한 내부적 바인딩 이외에 _this를 특정 객체에 명시적으로 바인딩_ 하기 위해 Function.prototype.apply(),Function.prototype.call() 메서드를 사용한다.
+함수 호출 시 자바스크립트 엔진 내부에서 자동으로 각 상황에 따라 `this`에 바인딩 될 객체가 결정된다.  
+이러한 내부적 바인딩 이외에 _`this`를 특정 객체에 명시적으로 바인딩_ 하기 위해 `Function.prototype.apply()`, `Function.prototype.call()` 메서드를 사용한다.
 
-> (객체.)함수.call(컨텍스트 객체, 전달인자(각각 콤마로 구분 전달));  
+> (객체.)함수.call(컨텍스트 객체, 전달인자(각각 콤마로 구분 전달)); 
+
 > (객체.)함수.apply(컨텍스트 객체, 전달인자(배열로 묶어서 전달));
 
-※ appy()메서드를 호출하는 주체는 함수이며 apply()메서드는 this를 특정 객체에 바인딩할 뿐 본질적인 기능은 함수 호출이다.
+※ `appy()`메서드를 호출하는 주체는 함수이며 `apply()`메서드는 `this`를 특정 객체에 바인딩할 뿐 본질적인 기능은 함수 호출이다.
 
 ```javascript
 Array.prototype.slice.apply(arguments);
 ```
-"`Array.prototype.slice()`메서드를 호출하라. 단, this는 arguments 객체로 바인딩하라"는 의미가 된다.  
-결국 `Array.prototype.slice()`메서드를 arguments 객체 자신의 메서드인 것처럼 `arguments.slice()`와 같은 형태로 호출하라는 것이다.
+"`Array.prototype.slice()`메서드를 호출하라. 단, `this`는 `arguments` 객체로 바인딩하라"는 의미가 된다.  
+결국 `Array.prototype.slice()`메서드를 `arguments` 객체 자신의 메서드인 것처럼 즉, `arguments.slice()`와 같은 형태로 호출하라는 것이다.
 
-call() 메서드는 apply()와 기능은 같지만 두번째 인자에서 배열 형태가 아닌 각각 하나의 인자로 넘긴다는 차이가 있다.
+`call()` 메서드는 `apply()`와 기능은 같지만 두번째 인자에서 배열 형태가 아닌 각각 하나의 인자로 넘긴다는 차이가 있다.
 
 ```javascript
 Person.apply(foo, [1, 2, 3]);
@@ -755,5 +762,3 @@ Person.call(foo, 1, 2, 3);
 ***
 
 [참조 : MDN](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions)
-
-
