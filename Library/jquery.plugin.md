@@ -23,7 +23,7 @@ $('a').css('color', 'red');
 jQuery 객체는 `$.fn` 객체에서 이 메서드들을 가져온다. 이 객체는 모든 jQuery 객체 메서드를 포함하며, 만약 직접 메서드를 작성하고 싶다면, 이들을 모두 포함시켜야한다.
 
 >**$.fn**
-pure javascript에서 built-in object의 메서드가 prototype에 담겨있는 것과 같이 jQuery 객체의 메서드들은 jQuery 객체의 porootype인 `$.fn`에 담겨있다.
+pure javascript에서 built-in object의 메서드가 prototype에 담겨있는 것과 같이 jQuery 객체의 메서드들은 jQuery 객체의 prototype인 `$.fn`에 담겨있다.
 
 jQueyr 소스 코드의 초기 부분의 일부 발췌
 ```javascript
