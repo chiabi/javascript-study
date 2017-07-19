@@ -2,7 +2,8 @@
 
 [참조 : Advanced Plugin Concepts](https://learn.jquery.com/plugins/advanced-plugin-concepts/)
 
-## 1.  Default Plugin Settings에 대한 Public Access 제공
+## 1.  Provide Public Access to Default Plugin Settings
+Default Plugin Settings에 대한 Public Access 제공
 
 이전 코드에서 개선해야할 점은 기본 플러그인 설정을 노출하는 것이다. 
 
@@ -59,16 +60,17 @@ $("#green").hilight({
 });
 ```
 
-## 2. 적용 가능한 보조 기능에 대한 Public Access 제공
+## 2. Provide Public Access to Secondary Functions as Applicable
+적용 가능한 보조 기능에 대한 Public Access 제공
 
-다른 사용자가 플러그인을 확장할 수 있게하는 방법이다. 
+이 항목은 이전 항목과 함께 사용되고 당신의 플러그인을 확장하는 흥미로운 방법이다.  
+(다른 사용자가 플러그인을 확장할 수 있게하는 방법이다.)
 
-예를 들어, 우리의 플러그인 구현은 하이라이트 텍스트를 포맷하는 "format" 함수를 정의할 수 있다.
-플러그인은 이제 hilight 함수 아래에 정의 된 format 메서드의 기본 구현으로 다음과 같이 보일 수 있다. : 
+예를 들어, 하이라이트 텍스트를 포맷하는 "format"이라는 함수를 다른 사용자(또는 사용 시점에) 정의 할 수 있다. :  
 ```javascript
 // 플러그인 정의
 $.fn.hilight = function(options) {
-  // 일차하는 각 요소를 반복하고 다시 형식을 지정한다.
+  // 일치하는 각 요소를 반복하고 다시 형식을 지정한다.
   return this.each(function(){
     var elem = $(this);
     // ...
@@ -87,3 +89,24 @@ $.fn.hilight.format = function(txt) {
   return "<strong>" + txt + "</strong>";
 }; 
 ```
+default formatting을 덮어쓰는 콜백함수를 허용하는 옵션 객체에 다른 속성을 쉽게 지원할 수 있었다.  
+이것은 플러그인의 사용자 정의를 지원하는 또다른 훌륭한 방법이다.  
+
+이 기술은 format 함수가 다시 정의 될 수 있도록 실제로 노출시킴으로써 한 단계 더 나아갔다.   
+이 기술을 사용하면 다른 사용자가 당신의 플러그인을 커스텀해서 덮어쓸 수 있다.  
+즉 다른 사용자가 플러그인 용 플러그인을 작성할 수 있음을 의미한다.
+
+이 문서에서 작성하는 간단한 예제 플러그인을 고려할 때, 이것이 언제 유용 할 지 궁금할 것이다.  
+실 사용 예가 [Cycle Plugin](http://malsup.com/jquery/cycle/)이다.  
+Cycle Plugin은 스크롤, 슬라이드, 페이드 등 내장 된 여러 전환 효과를 지원하는 슬라이드 쇼 플러그인이다. 하지만 실제로 슬라이드 전환에 적용 할 수있는 모든 유형의 효과를 정의 할 수있는 방법은 없다
+그리고 바로 이러한 유형의 확장 성이 유용하다.
+
+'Cycle Plugin은 사용자가 자신 만의 사용자 정의 트랜지션 정의를 추가 할 수있는 "트랜지션"객체를 제공한다.  
+이는 플러그인에서 다음과 같이 정의된다.
+```javascript
+$.fn.cycle.transitons =  {
+  /* ... */
+}
+```
+
+이 기술은 다른 사람들이 Cycle Plugin에 plug-in하는 transitions 정의를 정의하고 제공 할 수 있디.

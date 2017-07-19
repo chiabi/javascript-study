@@ -676,12 +676,19 @@ doSomething();  // My name is chi
 ### 7.4  재귀함수 / 팩토리얼<sup>Factorial</sup>
 
 **재귀함수**  
-자기 자신을 재호출 하는 함수(e.g. 팩토리얼)
+자기 자신을 재호출 하는 함수(e.g. 팩토리얼)  
+루프와 유사하다. 둘 다 동일한 코드를 여러 번 실행하고, 조건(무한 루프 방지, 무한 재귀)을 요구한다.
+
 ```javascript
 function add(){
   add();
 }
 ```
+
+> **함수가 자신을 참조하는 3가지 방법**
++ 함수의 이름
++ [arguments.callee](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments/callee)
++ 함수를 참조하는 범위 내 변수
 
 **팩토리얼**  
 자기 자신의 수에 1 작은 수를 곱하고 또 1작은 수를 곱하고 해서 1작은 수가 1이 될 때까지 곱한 값
