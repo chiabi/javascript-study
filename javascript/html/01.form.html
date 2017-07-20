@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>자바스크립트 form 영역 엘리먼트 접근 방법</title>
+  <script src="../js/01.js"></script>
+</head>
+<body>
+  <form name="user_info">
+    <div>
+      <label for="user-name">이름</label>
+      <input type="text" id="user-name" name="user_name">
+    </div>
+    <div>
+      <label for="user-email">이메일</label>
+      <input type="email" id="user-email" name="user_email">
+    </div>
+    <div>
+      <label for="user-gender">성별</label>
+      <input type="radio" id="user-gender" name="user_gender" value="male" checked>남성
+      <input type="radio" name="user_gender" value="female">여성
+    </div>
+    <div>
+      <label for="user-age">나이</label>
+      <input type="number" id="user-age" name="user-age">
+    </div>
+    <button type="submit">확인</button>
+  </form>
+  <script>
+    // name="user_name"인 input 엘리먼트 접근
+    var user_name = document.user_info.user_name;
+    console.log(user_name);
+
+    // input에 입력 후
+    console.log(user_name.value);
+
+    // name="user-age"인 input 엘리먼트는 접근할 수 없다. ('-' 문자 javascript 문법에 어긋남)
+  </script> 
+</body>
+</html>
