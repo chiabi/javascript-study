@@ -2,12 +2,17 @@
 
 https://github.com/yamoo9/Modern.JS/blob/2017.06/WEEK__2/ScrollMagic/ScrollMagic.md
 
-스크롤 매직 인터랙션 자바스크립트 라이브러리.
-
 + [ScrollMagic](http://scrollmagic.io/)
 + [ScrollMagic Documentation](http://scrollmagic.io/docs/)
 + [ScrollMagic github](https://github.com/janpaepke/ScrollMagic)
 
+스크롤 매직 인터랙션 자바스크립트 라이브러리.
++ 스크롤 위치에 따른 애니메이션 적용 - 애니메이션을 trigger하거나 scrollbar 동작과 동기화 한다. (playback scrub control과 유사)
++ 특정 스크롤 위치에서 시작하는 요소를 핀으로 설정한다. - 무기한 또는 제한된 양의 스크롤 progress로 (고정 요소)
++ 스크롤 위치에 따라 엘리먼트의 CSS 클래스를 ON, OFF 토글한다.
++ 여유롭게 parallax 효과를 추가한다.
++ 무한 스크롤 페이지를 만든다(추가 콘텐츠는 ajax로 로드한다.)
++ 특정 스크롤 위치에서 콜백을 추가하거나 특정 섹션을 지나 스크롤하면서 진행 매개 변수를 전달한다.
 
 ***
 

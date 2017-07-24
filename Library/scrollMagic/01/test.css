@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+body, p, div, ul {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: none
+}
+.space {
+  font-family: aria-Black;
+  text-align: center;
+  color: rgb(238,238,238);
+  background: rgba(0,0,0,1);
+  background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(42,62,77,1) 21%, rgba(48,75,115,1) 53%, rgba(122,61,28,1) 91%, rgba(99,99,25,1) 91%, rgba(99,99,25,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(21%, rgba(42,62,77,1)), color-stop(53%, rgba(48,75,115,1)), color-stop(91%, rgba(122,61,28,1)), color-stop(91%, rgba(99,99,25,1)), color-stop(100%, rgba(99,99,25,1)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(42,62,77,1) 21%, rgba(48,75,115,1) 53%, rgba(122,61,28,1) 91%, rgba(99,99,25,1) 91%, rgba(99,99,25,1) 100%);
+  background: -o-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(42,62,77,1) 21%, rgba(48,75,115,1) 53%, rgba(122,61,28,1) 91%, rgba(99,99,25,1) 91%, rgba(99,99,25,1) 100%);
+  background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(42,62,77,1) 21%, rgba(48,75,115,1) 53%, rgba(122,61,28,1) 91%, rgba(99,99,25,1) 91%, rgba(99,99,25,1) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(42,62,77,1) 21%, rgba(48,75,115,1) 53%, rgba(122,61,28,1) 91%, rgba(99,99,25,1) 91%, rgba(99,99,25,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#636319', GradientType=0 );
+  }
+.space_con {
+  position: relative;
+  padding: 30px 0;
+  height: 800px;
+}
+.space_con p {
+  font-size: 16px;
+  line-height: 28px;
+  text-transform: uppercase
+}
+.space_con p + p {
+  margin-top: 15px;
+}
+#con1 p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+}
+.space_con > ul {
+  max-width: 1200px;
+  display: inline-block
+}
+.space_con > ul > li {
+  float: left;
+  width: 33.3%;
+  padding: 0 20px;
+  text-align: left;
+  box-sizing: border-box;
+}
+.space_con h2 {
+  font-size: 32px;
+  text-transform: uppercase
+}
+ 
+.el {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -25px;
+  z-index: 9999
+}
+.el_top,
+.el_bottom {
+  width: 50px;
+  height: 70px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  background: rgb(255,255,255);
+  border-bottom: 1px solid rgb(153,153,153)
+}
+.el_bottom {
+  transform: rotate(180deg)
+}
+.el_inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background: rgb(258,245,51);
+  z-index: -1
+}

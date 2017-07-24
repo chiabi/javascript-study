@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>scrollMagic test</title>
+  <link rel="stylesheet" href="./test.css">
+</head>
+<body>
+  <div class="space">
+    <div class="space_con" id="con1">
+      <p>Lorem ipsum dolor sit amet, <br>
+        consectetur adipisicing elit. <br>
+        Eveniet ex qui voluptatibus minima nam dolores, <br>
+        quam eius numquam, nesciunt ullam fugit consequuntur iusto aperiam, <br>
+        ducimus temporibus rem quidem nisi! <br>
+        Beatae. </p>
+    </div>
+    <div class="space_con" id="con2">
+      <h2>Illo tempora harum nemo</h2>
+      <ul>
+        <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic eaque temporibus consequuntur harum impedit sint numquam neque labore a dolorum est illum quam repellendus laboriosam maiores quas deserunt rerum aperiam reiciendis fugit,</li>
+        <li>beatae ad eligendi. Eos corrupti, accusamus a modi ducimus quos eius placeat quidem atque nihil error provident aliquid maxime quam laboriosam ipsa culpa quisquam explicabo sapiente consequuntur. Voluptatem dolorum quas blanditiis v</li>
+        <li>debitis aspernatur consequuntur laboriosam rem iusto dignissimos unde aperiam vero velit eveniet, neque necessitatibus sapiente obcaecati iure pariatur incidunt beatae maiores ad earum ipsa perspiciatis! </li>
+      </ul>
+    </div>
+    <div class="space_con" id="con3">
+      <h2>Lorem ipsum dolor sit amet. </h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A eum, saepe corporis? <br>
+        Illo tempora harum nemo labore numquam. Ab recusandae aut, <br>
+        unde minima voluptate atque sed non sunt accusamus reiciendis! </p>
+      <p>consectetur adipisicing elit. A eum, saepe corporis? Illo tempora <br>
+        harum nemo labore numquam. Ab recusandae aut, unde minima voluptate <br>
+        atque sed non sunt accusamus reiciendis! </p>
+    </div>
+    <div class="el">
+      <div class="el_top"></div>
+      <div class="el_bottom"></div>
+      <div class="el_inner"></div>
+    </div>
+  </div>
+  <!-- ScrollMagic 플러그인 -->
+  <script src="../ScrollMagic.js"></script>
+  <!-- ScrollMagic 디버깅 인디케이터 플러그인 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
+  <script>
+    var controller = new ScrollMagic.Controller();
+    var scene = new ScrollMagic.Scene({
+      'triggerElement': '#con1',
+      'duration': '100%'
+    });
+    scene
+      .setClassToggle('.space', 'rotate')
+      .addIndicators({
+        'name': '회전'
+      })
+      .addTo(controller);
+    var scene2 = new ScrollMagic.Scene({
+      'triggerElement': '#con2',
+      'duration': '100%'
+    });
+    scene2
+      .setClassToggle('.space', 'shake')
+      .addIndicators({
+        'name': '쉐이크'
+      })
+      .addTo(controller);
+    var scene3 = new ScrollMagic.Scene({
+      'triggerElement': '#con3',
+      'duration': '60%'
+    });
+    scene3
+      .setClassToggle('.space', 'open')
+      .addIndicators({
+        'name': '열림'
+      })
+      .addTo(controller);
+  </script>
+</body>
+</html>

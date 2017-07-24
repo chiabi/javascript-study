@@ -107,4 +107,54 @@ var person = {
 };
 
 console.dir(person);
+
+console.log(person.__proto__ === Object.prototype);             // true 
+console.log(Object.prototype.constructor === Object);           // true
+console.log(Object.__proto__ === Function.prototype);           // true
+console.log(Function.prototype.__proto__ === Object.prototype); // true
+```
+
+### 3.2. 생성자 함수로 생성된 객체의 프로토타입 체인
+
+함수 선언 방식 3가지 : 함수선언식, 함수표현식, Function() 생성자 함수
+
+함수 선언식과 함수 표현식은 모두 함수 리터럴 방식으로 함수를 정의하는데  
+이것은 결국 내장 함수 Function() 생성자 함수로 함수를 생성하는 것을 단순화 시킨것이다.
+
+> 내장 함수 Function() 생성자 함수도 물론 함수이기 때문에 일반객체와 달리 prototype 프로퍼티가 있다.
+
+```javascript
+function Person(name, gender) {
+    this.name = name;
+    this.gender = gender;
+    this.sayHello = function() {
+        alert('Hi! my name is ' + this.name);
+    };
+}
+
+var foo = new Person('chi', 'female');
+
+console.dir(Person);
+console.dir(foo);
+
+console.log(foo.__proto__ == Person.prototype);                 // true 
+console.log(Person.prototype.__proto__ === Object.prototype);   // true
+console.log(Person.prototype.constructor === Person);           // true
+console.log(Person.__proto__ === Function.prototype);           // true
+console.log(Function.prototype.__proto__ === Object.prototype); // true 
+```
+
+**프로토타입 체인의 종점<sup>End of prototype chain</sup>**  
+Object.prototype 객체
+
+객체 리터럴 방식이나 생성자 함수 방식이나 결국 모든 객체의 부모 객체인 Object.prototype 객체에서 프로토타입 체인이 끝나기 때문에  
+foo 객체의 프로토타입 객체 Person.prototype 객체와 Person() 생성자 함수의 프로토타입 객체인 Function.prototype의 프로토타입 객체는 Object.prototype 객체이다. 
+
+## 4. 기본자료형<sup>Primitive data type</sup> 확장
+
+기본자료형을 제외한 모든 것은 객체이다.  
+기본자료형인 문자열은 흡사 객체와 같이 동작한다.
+
+```javascript
+var str = 'test';
 ```
