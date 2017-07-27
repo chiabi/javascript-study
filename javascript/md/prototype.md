@@ -152,7 +152,7 @@ foo 객체의 프로토타입 객체 Person.prototype 객체와 Person() 생성�
 
 ### 3.3. 이미지와 예제로 보는 프로토타입 개념정리 :star:
 
-[참조 : JavaScript Prototype Explained By Examples]http://www.javascripttutorial.net/javascript-prototype/
+[참조 : JavaScript Prototype Explained By Examples](http://www.javascripttutorial.net/javascript-prototype/)
 
 JavaScript 엔진은 `Object()` 함수와 `Object.prototype`을 통해 참조 될 수 있는 익명 객체<sup>anonymous object</sup>를 제공한다.
 ```javascript
@@ -409,10 +409,10 @@ foo 객체의 gender 프로퍼티에 값을 할당하면 foo 객체에 프로퍼
 
 > `__proto__`는 웹 브라우저와의 호환성을 보장하기 위해 ES6에서 표준화되었으나, 더 나은 지원을 위해서는  `Object.getPrototypeOf()`를 대신 사용하는 것이 좋다.
 
-> **Object.getPrototypeOf() 주의**  
+> **`Object.getPrototypeOf()` 주의**  
 ES5에서, obj 매개변수가 객체가 아닌 경우 TypeError 예외가 발생한다. ES6에서, 매개변수는 Object로 강제된다.
 
 ***
-+ [Object.prototype.__proto__](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/proto)
-+ [Object.getPrototypeOf()](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf)
++ [`Object.prototype.__proto__`](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/proto)
++ [`Object.getPrototypeOf()`](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf)
 + [John Resig의 getPrototypeOf 포스트](https://johnresig.com/blog/objectgetprototypeof/)
