@@ -8,9 +8,9 @@
 > + [_자바스크립트 동작원리 : 실행 컨텍스트](md/excutionContext.md)
 > + [객체](md/object.md)
 > + [함수](md/function.md)
-> + [_프로토타입](md/prototype.md)
-> + _scope
-> + _this
+> + [프로토타입](md/prototype.md)
+> + [_scope](md/scope.md)
+> + [_this](md/this.md)
 > + _비동기식 처리 모델
 > + [_클로저](md/clousure.md)
 > + [_이벤트](md/event.md)
