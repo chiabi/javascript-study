@@ -33,6 +33,9 @@ webpack은 의존성 모듈들을 상황에 맞게 묶어서 정적 자원으로
 
 webpack은 CommonJS와 AMD(Asynchronous Module Definition) 두 그룹 명세(모듈 명세)를 모두 지원하는 **JavaScript 모듈화 도구**
 
+![bundle your styles, assets, scripts, image...](../asset/img_webpack.jpg)  
+<sup>webpack은 별도의 파일로 분리되어 있는 JavaScript 모듈들을 의존성을 통해 하나 혹은 여러개의 파일로 묶는다. 여기에 여러가지 설정을 더하면 CSS나 이미지도 JavaScript 파일로 번들링 할 수 있다.(출처 : https://webpack.js.org/)</sup>
+
 ## webpack 장점
 
 + 편리한 모듈 의존성 관리
@@ -59,7 +62,7 @@ npm i -g webpack && npm i -D webpack
 ### 2. webpack.config.js
 
 웹팩은 하나의 설정 파일로 모든 걸 해결한다.  
-package.json이 있는 위치에 다음의 파일을 만들어 준다.
+package.json이 있는 위치에 다음의 파일을 만들어 준다. (package.json이 없으면 `npm init`으로 생성한다.)
 
 ```javascript
 const webpack = require('webpack');
@@ -84,18 +87,18 @@ module.exports = {
 ```
 
 이름이 webpack.config.js여야 웹팩이 바로 인식하고  
-이름이 다를 경우 --config 플래그를 사용해 경로를 알려주면 됨  
+이름이 다를 경우 --config 플래그를 사용해 경로를 알려주면 된다.  
 (e.g, webpack --config 다른이름.js)
 
 #### 2.1. entry
 
-> **엔트리 파일**  
-서로 의존 관계에 있는 다양한 모듈을 사용하는 시작점이 되는 파일.  
-번들 파일은 브라우저에서 실행할 수 있게 모듈을 컴파일한 파일임
+웹팩이 파일을 읽어들이기 시작하는 부분이다.  
+`app`이 객체의 키로 설정되어 있는데 이 부분 이름은 자유롭게 바꾸면 된다.
+키가 `app`이면 결과물이 `app.js`로 `zero`이면 `zero.js`로 나온다.
 
-웹팩이 파일을 읽어들이기 시작하는 부분  
-app이 객체의 키로 설정되어 있는데 이 부분 이름은 자유롭게 바꾸면 된다.
-키가 app이면 결과물이 app.js로 zero이면 zeor.js로 나온다.
+> **엔트리 파일**  
+서로 의존 관계에 있는 다양한 모듈을 사용하는 시작점이 되는 파일로  
+번들 파일은 브라우저에서 실행할 수 있게 모듈을 컴파일한 파일이다.
 
 ```javascript
 // 결과물로 여러 JS를 만들고 싶을 때, app.js, zero.js 두 개가 생성됨
