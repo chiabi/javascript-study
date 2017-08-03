@@ -11,8 +11,8 @@
 > + [프로토타입](md/prototype.md)
 > + [_scope](md/scope.md)
 > + [_this](md/this.md)
-> + _비동기식 처리 모델
 > + [_클로저](md/clousure.md)
+> + _비동기식 처리 모델
 > + [_이벤트](md/event.md)
 
 > + [Object.prototype](md/object.prototype.md)

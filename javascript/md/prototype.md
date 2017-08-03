@@ -195,7 +195,7 @@ Foo.prototype.whoAmI = function() {
     return "I am " + this.name;
 }
 ```
-![`whoAmI()` 메서드가 `Foo.prototype` 객체의 메서드로 추가되었다.](../../asset/JavaScript-Prototype-Function-defined.png)  
+![`whoAmI()` 메서드가 `Foo.prototype` 객체의 메서드로 추가되었다.](../../asset/JavaScript-Prototype-Function.png)  
 <sup>`whoAmI()`가 `Foo.prototype` 객체의 메서드로 추가되었다.</sup>
 
 #### 3. `a`라는 `Foo` 객체의 새로운 instance를 생성한다.
