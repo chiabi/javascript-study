@@ -30,6 +30,7 @@ webpack은 의존성 모듈들을 상황에 맞게 묶어서 정적 자원으로
 * [모듈시스템](https://www.zerocho.com/category/EcmaScript/post/579dca4054bae71500727ab9)
 * [웹팩3(Webpack) 설정하기](https://www.zerocho.com/category/Webpack/post/58aa916d745ca90018e5301d)
 * [webpack2 입문 가이드](https://hyunseob.github.io/2017/03/21/webpack2-beginners-guide/)
+* [초보자용 Webpack 튜토리얼 파트1 - Webpack 입문](https://firejune.com/1798/%EC%B4%88%EB%B3%B4%EC%9E%90%EC%9A%A9+Webpack+%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC+%ED%8C%8C%ED%8A%B81+-+Webpack+%EC%9E%85%EB%AC%B8)
 
 webpack은 CommonJS와 AMD(Asynchronous Module Definition) 두 그룹 명세(모듈 명세)를 모두 지원하는 **JavaScript 모듈화 도구**
 
@@ -51,12 +52,21 @@ webpack은 CommonJS와 AMD(Asynchronous Module Definition) 두 그룹 명세(모
 > + 많은 라이브러리를 지원하기 때문에 활용범위가 매우 넓은 기능
 > ( e.g: React의 JSX형식을 사용할 수 있고 ECMAScript 2015를 사용할 수 있게  컴파일하는 Babel을 사용할 수 있다.)
 
+## webpack을 사용하는 이유
+
++ __하나의 파일로 js 파일 번들__ :  자바스크립트를 모듈로 작성할 수 있다. 각각의 파일에 대해 `<script>` 태그를 별도로 작성할 필요가 없다.
++ __프론트엔드 코드에 npm 패키지 사용__ : npm은 인터넷상에서 오픈소스 코드의 커다란 생태계이다. 원하는 프론트엔드 패키지를 가져다 쓸 수 있다.
++ __ES6/ES7 자바스크립트 코드를 작성할 수 있다.(Babel을 이용한다)__ : 만은 긴으이 추가되어 더 강력하고 더 쉽게 자바스크립트를 작성할 수 있다. 
++ __코드 압축/최적화__ : 배포되는 파일의 크리극 줄인다. 페이지 로딩이 빨라지는 등의 장점이 있다. 
++ __HMR(Hot Module Replacement) 을 사용할 수 있다.__ : 생산성이 향상된다. 코드를 저장할 때마다 페이지의 리프레시가 자동으로 이루어진다. 코드를 작성하는 동안 페이지의 상태를 최신으로 유지해야하는 경우 편리하다. 
++ __자바스크립트로 모든 유형의 파일을 포함할 수 있다.__ : 추가적인 빌드 도구의 수를 줄일 수 있고, 프로그램적으로 파일을 사용 및 수정할 수 있다.
+
 ## webpack 사용
 
 ### 1. 글로벌 설치, 로컬에 개발 환경으로 설치
 
 ```sh
-npm i -g webpack && npm i -D webpack
+$ npm i -g webpack && npm i -D webpack # npm install -g webpack && npm install --save-dev webpack
 ```
 
 ### 2. webpack.config.js
@@ -89,6 +99,14 @@ module.exports = {
 이름이 webpack.config.js여야 웹팩이 바로 인식하고  
 이름이 다를 경우 --config 플래그를 사용해 경로를 알려주면 된다.  
 (e.g, webpack --config 다른이름.js)
+
+##### 실행 명령
+
+```sh
+$ webpack                         # webpack 실행
+$ webpack --watch                 # webpack에서 파일 상태가 변경되면 자동으로 빌드하려는 경우
+$ webpack --config myconfig.js    # 사용자가 정의한 특정한 이름의 webapck 설정파일을 사용할 경우
+```
 
 #### 2.1. entry
 
