@@ -317,13 +317,125 @@ new 연산자와 함께 생성자 함수를 호출하면 `this` 바인딩이 메
 
 #### 2.3.1. 생성자 함수 동작 방식
 
-new 연산자와 함께 생성자 함수를 호출하면 다음과 같은 수순으로 동작한다.
+new 연산자와 함께 생성자 함수를 호출하면 다음과 같은 순서로 동작한다.
 
-1. 빈 객체 생성 및 this.바인딩
-1. 
-1.  
+1. __빈 객체 생성 및 this.바인딩__  
+생성자 함수의 코드가 실행되기 전 빈 객체가 생성된다. 이 빈 객체가 생성자 함수가 새로 생성하는 객체이다.  
+이후 생성자 함수 내에서 사용되는 this는 이 빈 객체를 가리킨다.  
+생성된 객체는 생성자 함수의 prototype 프로퍼티가 가리키는 객체를 자신의 프로토타입 객체로 설정한다.
+1. __this를 통한 프로퍼티 생성__  
+생성된 빈 객체에 this를 사용해 동적으로 프로퍼티나 메서드를 생성할 수 있다.  
+this는 새로 생성된 객체를 가리키므로 this를 통해 생성한 프로퍼티와 메서드는 새로 생성된 객체에 추가된다.
+1. __생성된 객체 반환__  
+    + __반환문이 없는 경우__ : this에 바인딩된 새로 생성한 객체가 반환된다. 명시적으로 this를 반환하여도 결과는 같다.
+    + __반환문이 this가 아닌 다른 객체를 반환하는 경우__ : this가 아닌 해당 객체가 반환된다.
 
+```javascript
+var Person = function(name) {
+  // ① 생성자 함수 코드 실행 전
+  this.name = name; // ② this를 통한 프로퍼티 생성
+  // ③ 생성된 함수(객체) 반환
+}
+
+var me  = new Person('Lee');
+console.log(me.name);
+```
+
+#### 2.3.2 객체 리터럴 방식과 생성자 함수 방식의 차이
+
+차이는 __프로토타입 객체([[Prototype]])__ 에 있다.
++ 객체 리터럴 방식의 경우, 생성된 객체의 프로토타입 객체는 Object.prototype이다.
++ 생성자 함수 방식의 경우, 생성된 객체의 프로토타입 객체는 Person.prototype이다.
+```javascript
+// 객체 리터럴 방식
+var foo = {
+  name: 'foo',
+  gender: 'male'
+}
+console.dir(foo);
+
+// 생성자 함수 방식
+var Person = function(name, gender) {
+  this.name = name;
+  this.gender = gender;
+}
+
+var me = new Person('Park', 'female');
+console.dir(me);
+
+var you = new Person('Kim', 'male');
+console.dir(you);
+```
+
+#### 2.3.3 생성자 함수에 new 연산자를 붙이지 않고 호출할 경우
+
+객체 생성 목적으로 작성한 생성자 함수를 new 없이 호출하거나 일반 함수에 new를 붙여 호출하면  
+일반함수와 생성자 함수의 호출 시 this 바인딩 방식이 다르기 때문에 오류가 발생할 수 있다.
+
++ 일반 함수 호출 시 this : 전역 객체에 바인딩  
++ 생성자 함수 호출 시 this :  생성자 함수가 새롭게 생성한 객체에 바인딩
+
+```javascript
+var Person = function(name) {
+  // 전역객체에 name 프로퍼티를 추가
+  this.name = name;
+};
+
+// 일반 함수로 호출되어 객체를 생성하여 반환하지 않음
+// 일반 함수의 this는 전역객체를 가리킴(name은 window에 바인딩 됨)
+var me = Person('Park');
+
+console.log(me);          // undefined : 암묵적으로 반환하던 this도 반환하지 않는다.
+console.log(window.name); // Park
+```
+
+##### Scope-Safe Constructor 패턴
+
+위와 같은 위험성을 회피하기 위해 대부분의 라이브러리에서 광범위하게 사용된다.  
+대부분의 빌트인 생성자(Object, Regex, Array 등)는 new 연산자와 함께 호출되었는지를 확인한 수 적절한 값을 반환한다.
+
+```javascript
+// Scope-Safe Constructor 패턴
+function A(arg) {
+  // 생성자 함수가 new 연산자와 함께 호출되면 함수의 선두에서 빈객체를 생성하고 this에 바인딩한다.
+  if(!(this instanceof arguments.callee)) {
+    return new arguments.callee(arg);
+  }
+  this.value = arg ? arg : 0;
+}
+
+var a = new A(100);
+var b = A(10);
+
+console.log(a.value);
+console.log(b.value);
+```
+
+> __[instanceof 연산자](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/instanceof)__  
+객체의 프로토타입 체인에 있는 `constructor.prototype`의 존재 여부를 테스트한다.  
+`object instanceof constructor`
+
+> __[arguments.callee](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions/arguments/callee)__  
+callee는 arguments 객체의 속성이다.   
+이 함수의 함수 본문 내에서 현재 실행중인 함수를 참조하는 데 사용할 수 있다.
+※ argument.callee 는 ES5의 `strice mode`에서는 허용되지 않는다.
+향후의 사용은 제한하는 것이 좋고, 기존 코드(레거시코드)에서 발견되는 경우에는 제거해야 한다.
+
+```javascript
+function A(arg) {
+  if(!(this instanceof A)) {
+    return new A(arg);
+  }
+  this.value = arg ? arg : 0;
+}
+
+var a = new A(100);
+var b = A(10);
+
+console.log(a.value);
+console.log(b.value);
+```
 ***
 
-+ [참조 : 15.함수 호출과 this](http://programmer-seva.tistory.com/28)
-+ [참조 : Demystifying JavaScript this Keyword with Practical Examples](http://www.javascripttutorial.net/javascript-this/)
++ [참고 : 15.함수 호출과 this](http://programmer-seva.tistory.com/28)
++ [참고 : Demystifying JavaScript this Keyword with Practical Examples](http://www.javascripttutorial.net/javascript-this/)

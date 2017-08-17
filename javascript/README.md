@@ -16,8 +16,3 @@
 > + [_이벤트](md/event.md)
 
 > + [Object.prototype](md/object.prototype.md)
-
-> + [util.js 예](md/util.js.md)
-
-
-https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps
