@@ -1,4 +1,4 @@
-var React = require('React');
+const React = require('React');
 React.createClass({
   // stuff
 });

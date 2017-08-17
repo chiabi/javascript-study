@@ -1,14 +1,14 @@
 {
-  "name": "MyDirectory",
+  "name": "example1",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "devDependencies": {
-    "css-loader": "^0.28.4",
-    "style-loader": "^0.18.2"
-  },
   "dependencies": {
     "fetch": "^1.1.0",
     "react": "^15.6.1"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.4",
+    "style-loader": "^0.18.2"
   }
 }
