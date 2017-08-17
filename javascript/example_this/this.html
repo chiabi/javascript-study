@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>함수 호출 패턴에 따라 결정되는 this</title>
+</head>
+<body>
+  <script>
+function square(number) {
+  console.log(arguments);  // 함수 호출 시 전달된 인수(argument)들의 정보를 담고 있는 순회가능한(iterable) 유사 배열 객체(array-like object)
+  console.log(this);       // window
+
+  return number * number;
+}
+var result = square(2);
+
+/**
+ * # 함수 호출 패턴
+ * 1. Method Invocation Pattern
+ * 2. Function Invocation Pattern 
+ * 3. Constructor Invocation Pattern 
+ * 4. apply Invocation Pattern
+ */
+
+// ## 메소드 호출 패턴
+  var obj1 = {
+    name: 'Park',
+    sayName: function(){
+      console.log(this.name); // this: 해당 메서드를 소유한 객체에 바인딩(해당 메서드를 호출한 객체)
+    }
+  }
+
+  var obj2 = {
+    name: 'Kim'
+  }
+
+  obj2.sayName = obj1.sayName;
+
+  obj1.sayName(); // Park
+  obj2.sayName(); // Kim
+  // ### 프로토타입 객체도 메서드를 가질 수 있다.
+  function Person(name) {
+    this.name = name;
+  }
+  Person.prototype.getName = function(){
+    return this.name; // this: 해당 메서드를 소유한 객체에 바인딩(해당 메서드를 호출한 객체)
+  }
+
+  var me = new Person('Park');
+  console.log(me.getName()); // me 객체의 name이 나옴
+
+  Person.prototype.name = 'Kim';
+  console.log(Person.prototype.getName()); // 변경된 Person 생성자함수의 name이 나옴
+
+// ## 함수 호출 패턴
+  console.log(this === window); // true : node에서는 global이 최상위 객체
+
+  var ga = 'Global variable';
+
+  console.log(ga);           // Global variable
+  console.log(window.ga);    // Global variable
+
+  // 글로벌 영역에 선언한 함수는 전역객체의 프로퍼티
+  // 접근할 수 있는 전역 변수의 메서드이다.
+  function foo1(){
+    console.log('invoked!');
+  }
+  window.foo1();      // invoked!
+
+  // 내부함수의 경우도 this는 외부함수가 아닌 전역 객체에 바인딩 된다.
+  function foo2(){
+    console.log("foo's this:", this);    // window
+    function bar(){
+      console.log("bar's this:", this);  // window
+    }
+    bar();
+  }
+  foo2();
+
+  // 메서드의 내부함수일 경우에도 this는 전역객체에 바인딩된다.
+  // 콜백함수의 경우에도 this는 전역객체에 바인딩된다.
+  var value = 1;
+  var obj = {
+    value: 100,
+    foo: function() {
+      var that = this; // 전역객체를 참조하는 것을 막기위해 obj를 that에 저장한다.
+
+      console.log("foo's this: ", this);               // obj
+      console.log("foo's this.value: ", this.value);   // 100
+
+      function bar() {
+        console.log("bar's this: ", this);             // window
+        console.log("bar's this.value: ", this.value); // 1
+
+        console.log("bar's that: ", that);             // obj
+        console.log("bar's that.value: ", that.value); // 100
+      }
+      bar();
+    },
+    foo2: function() {
+      setTimeout(function() {
+        console.log('callback\'s this: ', this);             // window
+        console.log('callback\'s this.value: ', this.value); // 1
+      }, 100);
+    }
+  };
+
+  obj.foo();
+  obj.foo2();
+// ## 생성자 호출 패턴
+
+// ## apply 호출 패턴
+
+  </script>
+</body>
+</html>
