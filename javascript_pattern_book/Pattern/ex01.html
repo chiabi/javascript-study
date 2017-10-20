@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴: 문을 객체화하기</title>
+</head>
+<body>
+    <script>
+        // 제어문을 객체화
+
+        // 원형 
+        // * 문제점 
+        //  1.확장이 어렵다(새로운 무기, 옵션을 추가할 때마다 코드가 길어지고 조건이 중첩된다.)
+        //  2.수정이 어렵다(수정 후 전체 함수의 작동의 안정성을 장담할 수 없다.)
+        // ---------------------------------------------
+        // function attack(weapon, option) {
+        //     switch(weapon) {
+        //         case 'sword': 
+        //             if(option) {
+        //                 // ...
+        //             }else {
+        //                 // ...
+        //             }
+        //             break;
+        //         case 'bow':
+        //             if(option) {
+        //                 // ...
+        //             }else {
+        //                 // ...
+        //             }
+        //             break;
+        //     }
+        // }
+
+        // 각 무기별 처리를 함수로 뺀다.
+        // ---------------------------------------------
+        function sword(opt) {
+            if(opt) {
+                // ....
+            } else {
+                // ...
+            }
+        }
+        function bow(opt) {
+            if(opt) {
+                // ...
+            } else {
+                // ...
+            }
+        }
+        // 1. ---------------------------------------------
+        // function attack(weapon, opt) {
+        //     switch(weapon) {
+        //         case 'sword' : sword(opt); break;
+        //         case 'bow' : bow(opt); break;
+        //     }
+        // }
+
+        // 2. ---------------------------------------------
+        // function attack(weapon, opt) {
+        //     weapon(opt);
+        // }
+        // // attack(sword, 3);
+
+        // switch (weaponType){
+        //     case 'sword': attack(sword, opt); break;
+        //     case 'bow': attack(bow, opt); break;
+        // }
+
+        // 3. ---------------------------------------------
+        function attack(weapon, opt) {
+            weapon(opt);
+        }
+
+        var weapons =  {
+            'sword': sword,
+            'bow': bow
+        };
+
+        weapons[weaponType](opt);
+    </script>
+</body>
+</html>
