@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Object</title>
+</head>
+<body>
+    <script>
+        // ----------------
+        // Object.hasOwnProperty(속성명);
+        // ----------------
+        var obj =  {
+            example: 'yes',
+        };
+        // obj.example;
+        // obj.hasOwnProperty('example');
+        // obj.toString;
+        // obj.hasOwnProperty('toString');
+
+        // ----------------
+        // Object.isPrototypeOf(대상);
+        // ----------------
+        var GrandParent = function() { };
+        var Parent = function() { };
+        Parent.prototype = new GrandParent();
+        var Child = function() { };
+        Child.prototype = new Parent();
+        var child = new Child();
+        // Parent.prototype.isPrototypeOf(child);
+        // GrandParent.prototype.isPrototypeOf(child);
+
+        // ----------------
+        // Object.getPrototypeOf(객체);
+        // Object.setPrototypeOf(객체, prototype);
+        // ----------------
+        // Object.getPrototypeOf(child);
+        // Object.getPrototypeOf(new GrandParent());
+        // Object.setPrototypeOf(child, new Parent());
+
+        // ----------------
+        // instanceof
+        // ----------------
+        // child instanceof Parent;
+        // child instanceof GrandParent;
+
+        // ----------------
+        // Object.propertyEnumerable(속성)
+        // ----------------
+        var a = [false, 1, '2'];
+        // a.propertyIsEnumerable(0); // true
+        // a.propertyIsEnumerable('length'); // false
+        for(var value in a) {
+            console.log(value);
+        }
+
+        // ----------------
+        // Object.toString : 객체의 종류를 알려줌
+        // ----------------
+        var obj = {a: 'hi', b: 'zero'};
+        obj.toString();
+        Math.toString();
+        // obj.toString = function() {
+        //     return this.a + ' ' + this.b;
+        // };
+        // obj.toString();
+        // obj + ' cho';
+
+    </script>
+</body>
+</html>

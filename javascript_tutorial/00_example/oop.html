@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OOP, Obejct Oriented Programming</title>
+</head>
+<body>
+    <script>
+        function Person(name, gender) {
+            this.name = name;
+            this.gender = gender;
+        }
+        Person.prototype.sayHello = function(){
+            alert(this.name + ' said "hello"');
+        }
+        /*
+         * `this.sayHello` 보다 `Person.prototype.sayHello`가 더 효율적이다.
+         * prototype은 모든 객체가 공유하고 있어 한 번만 만들어진다.
+         * this에 넣은 것은 객체 하나를 만들때마다 메소드도 하나씩 만들어져 불필요한 메모리 낭비가 발생한다.
+         */
+
+        function Vehicle(name, speed) {
+            this.name = name;
+            this.speed = speed;
+        }
+        Vehicle.prototype.drive = function() {
+            console.log(this.name + ' runs at ' + this.speed);
+        };
+
+        // boost 기능을 추가하고 싶은데 Vehicle안에는 트럭, SUV, 스포츠카, 세단 등 종류가 많을 것인데 트럭이 BOOST하는 건 이상함
+        // 상속(, 확장(extend))을 하기로 함
+        var tico = new Vehicle('tico', 50);
+        tico.drive(); // 'tico runs at 50';
+
+        // Sedan: 최고 속도로 부스트 기능 추가
+        function Sedan(name, speed, maxSpeed) {
+            Vehicle.apply(this, arguments)
+            this.maxSpeed = maxSpeed;
+        }
+        Sedan.prototype = Object.create(Vehicle.prototype);
+        Sedan.prototype.constructor = Sedan;
+        Sedan.prototype.boost = function() {
+            console.log(this.name + ' boost its speed at ' + this.maxSpeed);
+        };
+        var sonata = new Sedan('sonata', 100, 200);
+        sonata.drive(); // 'sonata runs at 100'
+        sonata.boost(); // 'sonata boost its speed at 200'
+
+        // Truck: 적재량을 넘으면 에러 발생
+        function Truck(name, speed, capacity) {
+            Vehicle.apply(this, arguments);
+            this.capacity = capacity;
+        }
+        Truck.prototype = Object.create(Vehicle.prototype);
+        Truck.prototype.constructor = Truck;
+        Truck.prototype.load = function(weight) {
+            if(weight > this.capacity) {
+                return console.error('아이고 무거워!');
+            } else {
+                return console.log('짐을 실었습니다!');
+            }
+        };
+        var boongboong = new Truck('boongboong', 40, 100);
+        boongboong.drive(); // 'boongboong runs at 40'
+        boongboong.load(120); // '아이고 무거워!;
+    </script>
+</body>
+</html>
