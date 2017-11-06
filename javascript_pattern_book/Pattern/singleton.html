@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>싱글턴 패턴, 모듈, 생성자</title>
+</head>
+<body>
+    <script>
+        // 싱글턴 패턴
+        // 필요에 의해 단 하나의 객체만을 만들 때 사용
+
+        // 객체리터럴이 싱글턴 패턴의 대표적 예이나, 모든 속성이 공개되어 있다는 단점이 있다.
+        var obj = {
+            a: 'hello',
+            b: function() {
+                alert(this.a);
+            }
+        };
+
+        // 비공개 처리한 싱글턴 패턴
+        var singleton = (function(){
+            var instance;
+            var a = 'hello'; // 비공개 변수
+            function initiate() { // 함수 안이 실제 객체의 내용
+                return {
+                    a: a, 
+                    b: function() {
+                        alert(a);
+                    }
+                };
+            }
+            return { // IIFE로 즉시 반환되는 부분
+                getInstance: function() {
+                    if(!instance) {
+                        instance = initiate();
+                    }
+                    return instance; 
+                }
+            }
+        })(); // IIFE로 비공개 변수를 가지도록 만든다.
+
+        var first = singleton.getInstance();
+        var second = singleton.getInstance();
+        console.log(first === second); // true
+        // 아무리 호출해도 기존에 있던 객체는 복사되는 것도 아니고 그냥 그대로 반환
+        // 모듈 패턴을 변형한 디자인 패턴
+        // 처음 네임스페이스를 만들 때 사용 
+        // e.g. 게임 내의 모든 것을 감싸고 있는 객체(게임을 실행했을 때 한 번만 켜져야하므로)
+
+
+        // 생성자 패턴
+        // 상속이 필요할 때 제일 많이 쓰인다.
+        function Vehicle(name, speed) {
+            this.name = name; 
+            this.speed = speed;
+        }
+        Vehicle.prototype.drive = function() {
+            console.log(this.name + ' runs at ' + this.speed);
+        };
+
+        // 위의 코드를 모듈 패턴과 생성자 패턴을 조합해서
+        // function 부분과 prototype 부분으로 따로 떨어져 있는 코드를 하나로 묶어준다.
+
+        var Vehicle = (function(){
+            function Vehicle(name, speed) {
+                this.name = name;
+                this.speed = speed;
+            }
+            Vehicle.prototype.drive = function() {
+                console.log(this.name + 'runs at ' + this.speed);
+            };
+            return Vehicle;
+        })(); // IIFEF라서 변수 Vehicle에 생성자 Vehicle이 덮어씌워진다.
+    </script>
+</body>
+</html>

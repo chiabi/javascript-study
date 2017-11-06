@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>함수 프로그래밍</title>
+</head>
+<body>
+    <script>
+        // 객체지향 프로그래밍
+
+        // 함수형 프로그래밍
+        // 원칙 - 입출력이 순수해야함(순수함수), 부작용(부산물)이 없어야함, 함수와 데이터를 중점으로 생각함
+
+        // 입출력이 순수하다 (순수함수)
+        // == 반드시 하나 이상의 인자를 받고, 받은 인자를 처리하여 반드시 결과물을 돌려주어햐한다. 
+        // == 부작용(부산물)이 없다.
+        // == 프로그래머가 바꾸고자하는 변수 외에는 바뀌어서는 안된다.
+        // == 원본 데이터는 불변해야함
+
+        // 대표적인 함수형 프로그래밍 함수들 map, filter, reduce
+
+        // map 메소드
+        var arr = [1,2,3,4,5];
+        var map = arr.map(function(x) {
+            return x * 2;
+        }); // [2,4,6,8,10]
+
+        // Array.prototype.map()
+        // var new_array = arr.map(function callback(currentValue, index, array) { // return element for new_array}
+        // 제공된 콜백 함수의 결과로 새로운 배열을 만든다.
+
+        // 배열(arr)을 넣어(입력), 결과(map)를 얻어냈다.(출력)
+        // arr도 사용되었지만 값은 변하지 않았고 map이라는 결과를 얻어내고도 부작용이 없다. 
+
+
+        var arr = [1,2,3,4,5];
+        var condition = function(x) {
+            return x % 2 === 0;
+        };
+        var ex = function(array) {
+            return array.filter(condition);
+        };
+        ex(arr); // [2,4]
+
+        // ex는 인자로 받지 않은 변수(condition)을 사용해서 순수함수가 아니다.
+        // 순수함수로 바꾸려면
+        // condition 변수 또한 인자로 받으면 된다. 쉽게 에러를 추적할 수 있다.
+        var arr = [1,2,3,4,5];
+        var condition = function(x) {
+            return x % 2 === 0;
+        };
+        var ex = function(array, cond) { // 
+            return array.filter(cond); 
+        };
+        ex(arr, condition); // [2, 4]
+
+        // 함수형 프로그래밍 반복문
+        // 1부터 10까지 더할 때
+        var sum = 0;
+        for(var i = 1; i <= 10; i++) {
+            sum += i;
+        } // 55
+
+        // 위 코드를 함수형 프로그래밍으로 하면
+        var sum = 0;
+        function add(sum, count) {
+            sum += count;
+            if(count > 0) {
+                return add(sum, count - 1); //  add 안에서 add를 호출한다.
+            }else {
+                return sum;
+            }
+        }
+        add(0, 10); // 55
+
+        // 장점 : 코드의 재사용성이 매우 높아진다.
+
+        // reduce 메소드 사용
+        // Array.prototype.reduce()
+        // arr.reduce(callback[, initialValue])
+        // 왼쪽에서 오른쪽으로 이동하며 배열의 각 요소마다 누적 계산값과 함께 함수를 적용해 하나의 값으로 줄인다.
+        var arr = [1,2,3,4,5,6,7,8,9,10];
+        arr.reduce(function(prev, cur){
+            return prev + cur;
+        }); // 55 
+    </script>
+</body>
+</html>

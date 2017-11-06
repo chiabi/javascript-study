@@ -136,6 +136,81 @@
                 }
             }
         }
+        
+        /////////// ----- 다른 방식으로 상속하기
+        // Object.create(proto[, propertiesObject]);
+        // proto는 새로 만든 객체의 프로토타입이어야 할 객체.
+        // 프로토타입이 null인 객체를 생성
+        function Character(name, hp, att) {
+            this.name = name;
+            this.hp = hp;
+            this.att = att;
+        }
+        // 프로토타입 객체가 없으므로 null
+        Character.prototype = Object.create(null, {
+            constructor: {
+                value: Character
+            },
+            attacked: {
+                value: function() {
+                    this.hp -= damage;
+                    logMessage(this.name + '의 체력이 ' + this.hp + '가 되었습니다');
+                    if(this.hp <= 0) {
+                        battle = false;
+                    }
+                }
+            }
+        });
+        // ..................
+        Hero.prototype = Object.create(Character.prototype, {
+            constructor: {
+                value: Hero
+            },
+            attacked: {
+                value: function(){
+                    this.hp -= damage;
+                    logMessage(this.name + '님의 체력이 ' + this.hp + '남았습니다');
+                    if(this.hp <= 0) {
+                        logMessage('죽었습니다. 레벨 ' + this.lev + '에서 모험이 끝납니다. F5를 눌러 다시 시작하세요', 'red');
+                        battle = false;
+                        gameover = true;
+                    }
+                }
+            }
+        });
+        // .................
+        var hero = new Hero(prompt('이름을 입력'), 100, 10);
+
+
+        //////// ES6의 class로 풀어내기
+        class Character {
+            constructor(name, hp, att) {
+                this.name = name;
+                this.hp = hp;
+                this.att = att;
+            }
+            attacked() {
+                this.hp -= damage;
+                logMessage(this.name + '의 체력이 ' + this.hp + '가 되었습니다');
+                if(this.hp <= 0) {
+                    battle = false;
+                }
+            }
+        }
+
+        class Hero extends Character {
+            attacked() {
+                this.hp -= damage;
+                logMessage(this.name + '님의 체력이 ' + this.hp + '남았습니다');
+                if(this.hp <= 0) {
+                    logMessage('죽었습니다. 레벨 ' + this.lev + '에서 모험이 끝납니다. F5를 눌러 다시 시작하세요', 'red');
+                    battle = false;
+                    gameover = true;
+                }
+            }
+        }
+
+        var hero = new Hero(prompt('이름을 입력'), 100, 10);
     </script>
 </body>
 </html>

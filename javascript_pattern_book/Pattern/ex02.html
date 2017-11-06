@@ -4,13 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>2단 참조</title>
+    <title>클로저, JSON</title>
 </head>
 <body>
     <script>
-        var interfaceTest = {
-            run:  null
+        // --------------- 클로저 ------------------
+        var makeClosure = function() {
+            var name = 'chi';
+            return function() {
+                console.log(name);
+            }
         };
+        var clousre = makeClosure();
+        closure(); // chi // 렉시컬 스코핑에 따라 makeClosure의 name변수에 접근할 수 있다.
+
+
+        //// 카운터 예제
+        var counter = function() {
+            var count = 0;
+            function chageCount(number) {
+                count += number;
+            }
+            return {
+                increase: function() {
+                    changeCount(1);
+                },
+                decrease: function() {
+                    changeCount(-1);
+                },
+                show: function() {
+                    alert(count);
+                }
+            }
+        };
+
+        var counterClosure = counter(); 
+        // 호출 시 return을 통해 counterClosure컨텍스트에 비공개 변수인 count에 접근할 수 있는 scope chain을 반환한다.
+        // counterClosure는 계속 count로 접근할 수 있다.
+        counterClosure.increase();
+        counterClosure.show(); // 1
+        counterClosure.decrease();
+        counterClosure.show(); // 0
     </script>
+    <script>
+        // --------------- JSON ------------------
+        var example = {
+            "stringifyMe": "please",
+            "andParseMe": "thankYou"
+        };
+        var string = JSON.stringify(example); // '{"stringfyMe": "please", "andParseMe":"thankYou"};
+        var parsed = JSON.parse(string); // 원상태로
+
+        var obj = {test: 'yes'};
+        var obj2 = JSON.parse(JSON.stringify(obj));
+        obj2.test = 'no';
+        obj.test; // yes
+    </script>
+
 </body>
 </html>
