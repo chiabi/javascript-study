@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>재귀(Recursion) &amp; 메모제이션(Memoization)</title>
+</head>
+<body>
+    <script>
+        // 재귀 : 함수가 자기 자신을 호출
+        var factorial = function(number) {
+            var result = 1;
+            for(var i = 1; i <= number; i++) {
+                result *= i;
+            }
+            return result;
+        };
+        factorial(3); // 6
+        factorial(4); // 24
+
+        // 확장가능성이 없음
+        var factorial  = function(number) {
+            if(number > 0) {
+                return number * factorial(number - 1); //factorial 함수를 호출
+            } else {
+                return 1;
+            }
+        };
+        factorial(3); // 6
+        factorial(4); // 24 ( 4 * factorial(3))
+
+        // 재귀를 사용하는 것은 컴퓨터에 부담을 준다.
+        // 가독성은 높이지만 성능은 떨어짐
+
+
+        // 메모이제이션 : 프로그래밍 할 때 반복되는 결과를 메모리에 저장
+        // 다음에 같은 결과가 나올 때 빨리 실행
+
+        // 클로저를 사용해 계속 유지되는 저장공간을 만든다.
+        var factorial = (function() {
+            var save = {};
+            var fact = function(number) {
+                if ( number > 0 ) {
+                    var saved = save[number - 1] || fact(number - 1); // 저장
+                    var result  = number * saved;
+                    save[number] = result;
+                    console.log(saved, result);
+                    return result;
+                } else {
+                    return 1;
+                }
+            };
+            return fact;
+        })();
+        factorial(7);
+        factorial(7);
+
+
+        // 피보나치 수열
+        var fibonacci = function(number) {
+            if (number < 2) {
+                return number;
+            } else {
+                return fibonacci(number - 1) + fibonacci(number - 2); // 2번의 재귀호출을 한다.
+            }
+        };
+        fibonacci(5);
+
+        // 피보나치수열을 클로저를 사용해 메모이제이션
+        var fibonacci = (function(){
+            var save = {};
+            var fibo = function(number) {
+                if(number < 2) {
+                    return number;
+                } else {
+                    var saved1 = save[number - 1] || fibo(number - 1);
+                    var saved2 = save[number - 2] || fibo(number - 2);
+                    var result = saved1 + saved2;
+                    save[number] = result;
+                    console.log(saved1, saved2, result);
+                    return result;
+                }
+            };
+            return fibo;
+        })();
+        fibonacci(5);
+        fibonacci(5);
+    </script>
+</body>
+</html>
