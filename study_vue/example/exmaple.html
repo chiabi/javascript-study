@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.js 네이게이션 메뉴</title>
+    <style>
+
+	*{
+		margin:0;
+		padding:0;
+	}
+
+	body{
+		font:15px/1.3 'Open Sans', sans-serif;
+		color: #5e5b64;
+		text-align:center;
+	}
+
+	a, a:visited {
+		outline:none;
+		color:#389dc1;
+	}
+
+	a:hover{
+		text-decoration:none;
+	}
+
+	section, footer, header, aside, nav{
+		display: block;
+	}
+
+	/*-------------------------
+		The menu
+	--------------------------*/
+
+	nav{
+		display:inline-block;
+		margin:60px auto 45px;
+		background-color:#5597b4;
+		box-shadow:0 1px 1px #ccc;
+		border-radius:2px;
+	}
+
+	nav a{
+		display:inline-block;
+		padding: 18px 30px;
+		color:#fff !important;
+		font-weight:bold;
+		font-size:16px;
+		text-decoration:none !important;
+		line-height:1;
+		text-transform: uppercase;
+		background-color:transparent;
+
+		-webkit-transition:background-color 0.25s;
+		-moz-transition:background-color 0.25s;
+		transition:background-color 0.25s;
+	}
+
+	nav a:first-child{
+		border-radius:2px 0 0 2px;
+	}
+
+	nav a:last-child{
+		border-radius:0 2px 2px 0;
+	}
+
+	nav.home .home,
+	nav.projects .projects,
+	nav.services .services,
+	nav.contact .contact{
+		background-color:#e35885;
+	}
+
+	p{
+		font-size:22px;
+		font-weight:bold;
+		color:#7d9098;
+	}
+
+	p b{
+		color:#ffffff;
+		display:inline-block;
+		padding:5px 10px;
+		background-color:#c4d7e0;
+		border-radius:2px;
+		text-transform:uppercase;
+		font-size:18px;
+	}
+
+    </style>
+</head>
+<body>
+
+<div id="main">
+    <!-- 네비게이션 메뉴는 'active' 변수의 값을 클래스로 가져온다.
+    링크가 클릭되었을 때 페이지가 점프하는 것을 막기 위해 "prevent"수정자를 사용한다. (preventDefault의 약자) -->
+    <nav v-bind:class="active" v-on:click.prevent>
+        <!-- 메뉴 링크를 클릭시 `makeActive` 메서드(자바스크립트 Vue 인스턴스로 정의한)를 호출한다. -->
+        <a href="#" class="home" v-on:click="makeActive('home')">Home</a>
+        <a href="#" class="projects" v-on:click="makeActive('projects')">Projects</a>
+        <a href="#" class="services" v-on:click="makeActive('services')">Services</a>
+        <a href="#" class="contact" v-on:click="makeActive('contact')">Contact</a>
+    </nav>
+    <!-- 콧수염표현(mustache expression, {{}})은 'active' 값으로 대체될 것이다.
+    변경 사항을 반영하도록 자동으로 업데이트 된다. -->
+    <p>You chose <b>{{active}}</b></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.min.js"></script>
+<script>
+// 새로운 Vue 인스턴스 생성 및 옵션 객체 전달
+var demo = new Vue({
+    // view model을 마운트(mount) 할 DOM 요소.
+    // 마운트(mount): 컴포넌트가 페이지의 DOM트리에 실제로 추가될 때
+    // 언마운트(unmount) : 컴포넌트가 페이지의 DOM트리에 삭제될 때
+    el: '#main',
+    // 속성을 정의하고 초기 값을 지정
+    data: {
+        active: 'home'
+    },
+    // 사용할 함수
+    methods: {
+        // model이 변경되면, view가 자동적으로 업데이트 된다.
+        makeActive: function(item){
+            this.active = item;
+        }
+    }
+});
+</script>
+
+</body>
+</html>

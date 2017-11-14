@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 추상 팩토리, abstract factory</title>
+</head>
+<body>
+    <script>
+        // 네로황제 집권 후 네로의 황정에 불만을 품은 자들이 반란의 기회를 노린다.
+        // 총독(갈바, 오토, 빈덱스, 비텔리우스, 루푸스, 코르불로)
+        // 68 ~ 69사이 네로를 포함한 5명의 황제가 등장한다.
+        // 당시의 로마의 시스템을 객체로 만든다.
+        // 황제, 총독, 장군, 원로원 정치인들....
+        // 모든 유형의 사람은 서로를 공격할 수 있어야 한다.
+        
+        // ***추상 팩토리 패턴 : 따로 만들기엔 중복되는 코드가 많을 것 같을 때 유용하다.
+        // 유형을 먼저 등록받고, 알아서 구현하도록 한다.
+        // 공장에서 찍어내듯이 객체를 생성할 수 있다.
+
+        var abstractCharacterFactory = (function(){
+            var jobs = {};
+            return {
+                // 다양한 유형의 직업을 받을 수 있다.
+                addJob: function(job, Character) {
+                    if(Character.prototype.attack) { // attack 메소드가 있어야만 등록 가능
+                        jobs[job] = Character;
+                        // var jobs = {'emperor': Emperor}
+                    }
+                    // console.log(jobs);
+                },
+                // 실제 객체를 생성한다.
+                create: function(job, options) { // 등록한 직업을 바탕으로 실제 객체 생성
+                    var Character = jobs[job];
+                    // Character = Emperor;
+                    // console.log(Character);
+                    return (Character ? new Character(options) : null);
+                    // Emperor가 있으면 new Emperor({options}) 를 리턴
+                }
+            };
+        })();
+
+        // 직업을 만든다.
+        // 황제(Emperor)
+        var Emperor = (function() {
+            function Emperor(options) { // 황제 생성자 함수
+                this.name = options.name;
+            }
+            Emperor.prototype.attack = function(target) {
+                console.log(this.name + '가 ' + target + '을 공격한다.');
+            };
+            Emperor.prototype.proclaim = function() {
+                console.log(this.name + '가 스스로를 황제라고 칭했다.');
+            };
+            return Emperor; // 황제 생성자 함수를 리턴
+        })();
+
+        // 총독(Governor)
+        var Governor = (function(){
+            function Governor(options) {
+                this.name = options.name;
+            }
+            Governor.prototype.attack = function(target) {
+                console.log(this.name + '가 ' + target + '을 공격한다.');
+            };
+            Governor.prototype.betray = function(){
+                console.log(this.name + '가 황제를 배신한다.');
+            };
+            return Governor;
+        })();
+
+        // 만든 직업을 추상 팩토리에 등록하고, 실제 객체를 만든다.
+        // ※ 실제로 코딩을 할 때는 반대순서로 만드는 것이 좋다. 먼저 결과를 생각하고 역순으로 구현한다.
+        // 직업 등록
+        abstractCharacterFactory.addJob('emperor', Emperor);
+        abstractCharacterFactory.addJob('governor', Governor);
+        // addJob 메소드만 호출하면, general, senator등의 직업을 더 추가할 수 있다.
+
+        // 실제 객체
+        var nero = abstractCharacterFactory.create('emperor', { name: 'Nero' });
+        // var nero = new Charater({name: 'Nero'});
+        var vindex = abstractCharacterFactory.create('governor', {name: 'Vindex'});
+        var galba = abstractCharacterFactory.create('governor', {name: 'Galba'});
+        var otho = abstractCharacterFactory.create('governor', {name: 'Otho'});
+        var vitellius = abstractCharacterFactory.create('governor', {name: 'Vitellius'});
+        var rufus = abstractCharacterFactory.create('governor', {name: 'Rufus'});
+
+        // 빈덱스, 갈바, 오토, 비텔리우스 총독이 반란을 일으킨다.
+        vindex.betray(); // Vindex가 황제를 배신한다.
+        galba.betray();
+        otho.betray();
+        vitellius.betray();
+
+        // nero.proclaim();
+
+        // ***추상 팩토리 패턴
+        // 하나의 팩토리로 여러 종류의 팩토리(황제, 총독)를 동시에 운영할 수 있다.
+    </script>
+</body>
+</html>

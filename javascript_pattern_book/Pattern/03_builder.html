@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 빌더, Builder</title>
+</head>
+<body>
+    <script>   
+    // ***빌더 패턴 : 옵션이 많을 때 사용
+    // 큰 유형은 같지만 세부적인 사항이 다를 때 유용하다.
+
+    // 갈바, 오토, 빈덱스, 비텔리우스는 갈바를 중심으로 연합을 맺는다.(군단을 꾸려 로마로 진격한다.)
+    // 네로는 루푸스 총독을 앞세워 반란군을 막기위한 군단을 출격시킨다.
+    // *군단에는 리더, 부관, 병력이 있고 어떤 군단은 부관이 없을 수도 있다.
+    
+    // (3) 군단에 메소드를 추가, 다른 군단을 공격한다는 등의 메소드를 추가하고 싶다.
+    var Legion = (function(){
+        function Legion(leader, adjutants, number) {
+            this.leader = leader;
+            this.adjutans = adjutants || null;
+            this.number = number || 0;
+        }
+        Legion.prototype.attack = function(target) {
+            console.log(this.leader + '가 ' + target.leader + '를 공격한다.');
+        };
+        return Legion;
+    })();
+
+    // (2) 내부구현, makeLegion 코딩
+    var makeLegion = function(leader){
+        var leader = leader;
+        // init
+        var adjutants = null;
+        // var army = 0; (3)수정
+        var army = null;
+
+        return {
+            setAdjutant: function(list) {
+                adjutants = list;
+                // console.log(this); // makeLegion()을 다시 리턴하는 것
+                // 메소드 체이닝을 가능하게 함
+                return this;
+            },
+            setArmy: function(number) {
+                army = number;
+                return this;
+            },
+            build: function(number) {
+                // return {
+                //     leader: leader,
+                //     adjutants: adjutants,
+                //     army: army
+                // };
+                // (3) 수정
+                return new Legion(leader, adjutants, number);
+            }
+        };
+    };
+
+    // (1) 역순으로 결과부터 코딩한다.
+    // Adjutant: 보좌관, 부관
+    var galbaLegion = makeLegion('galba').setAdjutant(['otho', 'vindex', 'vitellius']).setArmy(8000).build();
+    var rufusLegion = makeLegion('rufus').setArmy(10000).build();
+
+    console.log(galbaLegion); // {leader: "galba", adjutants: Array(3), army: 8000}
+    console.log(rufusLegion); // {leader: "rufus", adjutants: null, army: 10000}
+
+    rufusLegion.attack(galbaLegion); // rufus가 galba를 공격한다.
+    // Legion 생성자 객체를 만들어 prototype을 사용할 수 있게 되었다.
+
+    // ***빌더 패턴을 사용하면 손쉽게 옵션을 바꿔가며 객체를 만들 수 있다.
+    </script>
+</body>
+</html>

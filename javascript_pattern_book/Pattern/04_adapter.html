@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 적응자, Adapter</title>
+</head>
+<body>
+    <script>
+    // ***적응자 패턴 : 기존에 있던 구조를 새 구조로 유연하게 전환하거나 새 구조에서 기존의 구조로 '전환'하는데 사용하는 패턴
+    // ※ 추상팩토리나 빌더 패턴처럼 객체를 생성하는 패턴이 아니다.
+    
+    // 원로 정치인들이 네로 대신에 루푸스 총독을 황제로 추대하려고 한다.
+    // 원로원 현 황제 추대 시스템(투표) : 현재의 황제를 자동적으로 지지함
+    // 목표 : 현재 시스템을 바꿔 루프스 총독을 추대하고 다시 원래의 현재 황제를 지지하는 시스템으로 변경
+
+    // (2) 내부 코드 구현
+    var SenateSystem = (function(){
+        function SenateSystem(adapter) {
+            this.adapter = adapter;
+        }
+        SenateSystem.prototype.vote = function(){
+            this.adapter.vote(); // 인자의 메소드를 사용한다.
+        };
+        return SenateSystem;
+    })();
+
+    var currentAdapter = {
+        vote: function(){
+            console.log('현 황제를 계속 지지한다.');
+        }
+    };
+    var rufusAdapter = {
+        vote: function() {
+            console.log('루푸스를 황제로 추대하자.');
+        }
+    }
+    // 새 시스템과 이전 시스템의 메소드는 같을수록 좋다.
+
+    // (1) 뒤의 인자만 바꾸면 시스템을 전환할 수 있게 만들고 싶다.
+    // var senateSystem = new SenateSystem(currentAdapter); // 현재 시스템 : 현 황제를 자동적으로 지지한다,
+    // var senateSystem = new SenateSystem(rufusAdapter); // 신규 시스템 : 새황제(루푸스)를 추대한다.
+    // senate: 상원, 원로원, 의회
+    // (2) 시스템을 바꿔가며 투표해보자.
+    var senateSystem = new SenateSystem(currentAdapter);
+    senateSystem.vote(); // 현 황제를 계속 지지한다.
+    senateSystem = new SenateSystem(rufusAdapter);
+    senateSystem.vote(); // 루푸스를 황제로 추대하자.
+
+    // 시스템을 바꿔놓고 루푸스가 오기만을 기다리는데 루푸스가 황제 추대를 사용한다.
+    // 원로원은 다급히 시스템을 바꿔 갈바를 황제로 추대한다.
+    var galbaAdapter = {
+        vote: function() {
+            console.log('갈바를 황제로 추대하자.');
+        }
+    };
+    senateSystem = new SenateSystem(galbaAdapter);
+    senateSystem.vote();
+
+    // ***적응자 패턴 : 두가지 이상의 구조에서 유연하게 전환하고 싶을 때 유용하다.
+    // 뒤의 인자만 바꾸면 구조가 교체되기 때문에 간단하다.
+
+
+    // 비고
+    // 적응자 패턴과 Fn.apply, call과의 차이점
+    // call : 일회성으로 남의 메소드를 빌려올 때 주로 사용
+    // 적응자 패턴 : 자주 남의 메소드를 사용할 때 사용
+    </script>
+</body>
+</html>
