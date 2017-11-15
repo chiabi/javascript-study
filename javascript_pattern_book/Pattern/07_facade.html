@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 퍼사드, Facade</title>
+</head>
+<body>
+    <script>
+    // ***퍼사드패턴 : 복잡한 것들, 세부적인 것들은 감추고, 간단한 것만 보여주는 패턴 
+    // 일부만 노출하는 패턴
+    // 퍼사드 : 외관
+
+    // 갈바아래 3개의 군단, 아래 30개의 대대 아래, 180개 중대, 1800개 분대
+    // 각각의 군단장들이 명령을 받고 다시 그 명령을 대대장들이 받고...아래로 내려가는 식
+    // 사용자의 간단한 명령을 받아 내부적으로 복잡한 것들은 알아서 처리
+
+    // 프로그래밍을 잘 모르는 사용자에게는 최소한의 API만 공개하는 것이 좋음
+    var Galba = (function() {
+        function Galba() {
+            this.legions = [];
+            this.legions.push(new Legions(1));
+            this.legions.push(new Legions(2));
+            this.legions.push(new Legions(3));
+        }
+        Galba.prototype.march = function() {
+            this.legions.forEach(function(legion) {
+                legion.supply();
+                legion.makeFormation();
+                legion.goForward();
+            });
+        };
+        Galba.prototype.attack = function() {
+            this.legions.forEach(function(legion) {
+                legion.makeFormation();
+                legion.pullOutSword();
+                legino.runToEnemy();
+            });
+        };
+        Galba.prototype.halt = function() {
+            this.legions.forEach(function(legion) {
+                legion.halt();
+            });
+        };
+        Galba.prototype.retreat = function() {
+            this.legions.forEach(function(legion) {
+                legion.retreat();
+            });
+        }
+        return Galba;
+    })();
+    // Galba의 march(진군), attack(공격), halt(정지), retreat(후퇴) 메소드를 호출하면
+    // 내부적으로 하위시스템(Legion)이 알아서 처리함
+    // 갈바의 공격하라는 명령에 군단장들이 정해진 전술전략(알고리즘)에 따라 알아서 함
+    var Legion = (function() {
+        function Legion(number) {
+            this.number = number;
+        }
+    Legion.prototype.supply = function() { /* .. 중략... */ };
+        Legion.prototype.makeFormation = function() { /* .. 중략... */ };
+        Legion.prototype.goForward = function() { /* .. 중략... */ };
+        Legion.prototype.pullOutSword = function() { /* .. 중략... */ };
+        Legion.prototype.runToEnemy = function() { /* .. 중략... */ };
+        Legion.prototype.halt = function() { /* .. 중략... */ };
+        Legion.prototype.retreat = function() { /* .. 중략... */ };
+        return Legion;
+    })();
+    
+    var galba = new Galba();
+    galba.march();
+    galba.attack();
+    </script>
+</body>
+</html>
