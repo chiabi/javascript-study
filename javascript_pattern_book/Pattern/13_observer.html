@@ -76,11 +76,11 @@
     var vespasianus = new Vespasianus();
     var mucianus = new Mucianus();
     // 관찰대상을 subscribe(구독)
-    mucianus.subscribe(Vespasianus);
+    mucianus.subscribe(vespasianus);
     // 관찰대상이 특정행동을 할 때 자신의 행동을 publish -> subscribe한 사람들에게 전달(fire, 콜백)
     vespasianus.publish();
     // 베스파시아누스의 행동으로 무키아누스의 리스트에 1점이 올라감
-    mucianus.list; // 
+    mucianus.list; // Vespasianus {subscribers: Array(1)}subscribers: [Mucianus]__proto__: Object Vespasianus {subscribers: Array(1)} true
     </script>
 </body>
 </html>
