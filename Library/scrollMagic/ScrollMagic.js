@@ -14,29 +14,36 @@
  * @namespace ScrollMagic
  */
 (function (root, factory) {
+	// define의 유형이 함수이고 defind.amd가 있으면 define(factory) 호출
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
+		// AMD. 익명 모듈로 등록하라
 		define(factory);
+	// exports의 유형이 객체이면 module.exports에 factory()를 참조한다.
 	} else if (typeof exports === 'object') {
 		// CommonJS
 		module.exports = factory();
 	} else {
 		// Browser global
+		// root는 this. 즉 전역객체에 ScrollMagic을 담는것
 		root.ScrollMagic = factory();
 	}
 }(this, function () {
 	"use strict";
 
 	var ScrollMagic = function () {
+		// ScrollMaigic._util을 담고 log함수로 디버깅
 		_util.log(2, '(COMPATIBILITY NOTICE) -> As of ScrollMagic 2.0.0 you need to use \'new ScrollMagic.Controller()\' to create a new controller instance. Use \'new ScrollMagic.Scene()\' to instance a scene.');
 	};
 
 	ScrollMagic.version = "2.0.5";
 
 	// TODO: temporary workaround for chrome's scroll jitter bug
+	// Chrome의 스크롤 지터 버그에 대한 임시 해결 방법
 	window.addEventListener("mousewheel", function () {});
 
 	// global const
+	// 전역 상수
 	var PIN_SPACER_ATTRIBUTE = "data-scrollmagic-pin-spacer";
 
 	/**
@@ -104,6 +111,7 @@
 
 		/**
 		 * Internal constructor function of the ScrollMagic Controller
+		 * ScrollMagic Controller 의 내부 생성자 기능
 		 * @private
 		 */
 		var construct = function () {
@@ -266,11 +274,15 @@
 
 		/**
 		 * Send a debug message to the console.
+		 * 콘솔에 디버그 메시지 보내기
 		 * provided publicly with _log for plugins
+		 * 플러그인 _log를 공개적으로 제공함
 		 * @private
 		 *
 		 * @param {number} loglevel - The loglevel required to initiate output for the message.
+		 * 메시지에 대한 output을 시작하는 데 필요한 로그 레벨 
 		 * @param {...mixed} output - One or more variables that should be passed to the console.
+		 * 콘솔에 전달되어야하는 하나 이상의 변수
 		 */
 		var log = this._log = function (loglevel, output) {
 			if (_options.loglevel >= loglevel) {
@@ -2489,35 +2501,48 @@
 /*
  * TODO: DOCS (private for dev)
  */
-
+	// _util은 ScrollMagic._util을 참조하고 U 객체를 반환함
 	var _util = ScrollMagic._util = (function (window) {
+		// 객체 U는 반환(return)될 거임
 		var U = {},
 			i;
 
 		/**
 		 * ------------------------------
-		 * internal helpers
+		 * internal helpers (내부적으로 헬퍼 함수 정의)
 		 * ------------------------------
 		 */
 
 		// parse float and fall back to 0.
 		var floatval = function (number) {
+			// parseFloat() : 인수를 구문 분석하고 부동 소수점 숫자를 반환함, 값을 숫자로 변환할 수 없으면 NaN을 반환
 			return parseFloat(number) || 0;
+			// 값이 숫자로 변환할 수 없으면(NaN이면) 0을 반환하도록
 		};
 		// get current style IE safe (otherwise IE would return calculated values for 'auto')
+		// IE 구버전 보완
 		var _getComputedStyle = function (elem) {
+			// element.currentStyle은 이전 버전의 Microsoft Internet Explorer에서 사용할 수 있다. (IE6)
+			// 표준화된 window.getComputedStyle (IE9+) 과 유사하다.
 			return elem.currentStyle ? elem.currentStyle : window.getComputedStyle(elem);
 		};
 
 		// get element dimension (width or height)
+		// 엘리먼트 치수를 구함(넓이 또는 높이)
 		var _dimension = function (which, elem, outer, includeMargin) {
+			// element가 document면 window를 참조시키고 아니면 엘리먼트를 그래도 참조
 			elem = (elem === document) ? window : elem;
 			if (elem === window) {
+				// 만약 윈도우면 includeMargin은 false
 				includeMargin = false;
 			} else if (!_type.DomElement(elem)) {
+				// 
 				return 0;
 			}
+			// String.prototype.charAt(index) : 문자열에서 특정 인덱스의 문자를 반환함
+			// String.prototype.subStr(start[, length]) : 문자열에서 특정 위치에서 시작하는 특정 문자수만큼 문자들을 반환
 			which = which.charAt(0).toUpperCase() + which.substr(1).toLowerCase();
+			// which에 'width'가 들어온다면 'Width'를 출력해서 다시 which에 참시킨다.
 			var dimension = (outer ? elem['offset' + which] || elem['outer' + which] : elem['client' + which] || elem['inner' + which]) || 0;
 			if (outer && includeMargin) {
 				var style = _getComputedStyle(elem);
@@ -2526,6 +2551,7 @@
 			return dimension;
 		};
 		// converts 'margin-top' into 'marginTop'
+		// maring-top같은거를 카멜케이스로 전환시키는 헬퍼 함수
 		var _camelCase = function (str) {
 			return str.replace(/^[^a-z]+([a-z])/g, '$1').replace(/-([a-z])/g, function (g) {
 				return g[1].toUpperCase();
@@ -2534,11 +2560,12 @@
 
 		/**
 		 * ------------------------------
-		 * external helpers
+		 * external helpers 
 		 * ------------------------------
 		 */
 
 		// extend obj – same as jQuery.extend({}, objA, objB)
+		// 확장 객체 - jQuery.extend랑 같은 기능
 		U.extend = function (obj) {
 			obj = obj || {};
 			for (i = 1; i < arguments.length; i++) {
@@ -2623,7 +2650,10 @@
 		 * ------------------------------
 		 */
 
+		 // 타입 테스팅
+
 		var _type = U.type = function (v) {
+			// 
 			return Object.prototype.toString.call(v).replace(/^\[object (.+)\]$/, "$1").toLowerCase();
 		};
 		_type.String = function (v) {
