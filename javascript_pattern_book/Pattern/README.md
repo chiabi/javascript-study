@@ -3,3 +3,5 @@
 
 ***
 [예제 참조](https://www.zerocho.com/category/Javascript)
+
+[Learning Javascript Design Patterns Book](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#introduction)
