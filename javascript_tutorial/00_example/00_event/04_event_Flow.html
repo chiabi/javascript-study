@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event flow(이벤트 흐름)</title>
+    <style>
+    html { border:1px solid rgb(31,110,152); padding:30px; text-align: center; }
+    body { border:1px solid rgb(31,81,152); padding:30px; }
+    .top {
+      width: 300px; height: 300px;
+      background-color:  rgb(31,110,152);
+      margin: auto;
+    }
+    .middle {
+      width: 200px; height: 200px;
+      background-color: rgb(29, 29, 53);
+      position: relative; top: 34px; left: 50px;
+    }
+    .bottom {
+      width: 100px; height: 100px;
+      background-color: rgb(91, 92, 161);
+      position: relative; top: 34px; left: 50px;
+      line-height: 100px;
+    }  
+    </style>
+</head>
+<body>
+    <script>
+        // 계층적 구조에 포함되어 있는 HTML 요소에 이벤트가 발생할 경우 연쇄적 반응이 일어난다.
+
+        // 전파(Event Propagation)되는 전파 방향에 따른 이벤트 흐름
+        // + 버블링(Event Bubbling) : 자식 요소에서 발생한 이벤트가 부모요소로 전파
+        // + 캡처링(Event Capturing) : 자식 요소에서 발생한 이벤트가 부모 요소로부터 시작해 이벤트를 발생시킨 자식 요소까지 도달
+
+        // 버블링과 캡처링 둘 중 하나만 발생하는 것이 아니라
+        // 캡처링부터 시작해 버블링으로 종료한다.
+        // 이벤트 발생 시 캡처링과 버블링은 순차적으로 발생
+        
+        // addEventListener() 메소드 세번째 매개변수에 
+        // + true를 설정하면 캡처링으로 전파되는 이벤트 캐치
+        // + false를 설정하면 버블링으로 전파되는 이벤트 캐치
+    </script>
+    body
+    <div class="top">top
+        <div class="middle">middle
+            <div class="bottom">bottom</div>
+        </div>
+    </div>
+    <script>
+        // true : capturing
+        // false : bubbling
+        var useCapture = false;
+
+        var handler = function(event) {
+            var phases = ['capturing', 'target', 'bubbling'];
+            var node = this.nodeName + (this.className ? '.' + this.className : '');
+
+            // eventPhase: 이벤트 흐름 상에서 어느 phase에 있는지를 반환한다.
+            // 0: 이벤트 없음
+            // 1: 캡처링 단계
+            // 2: 타켓
+            // 3: 버블링 단계
+            console.log(node, phases[event.eventPhase - 1]);
+            alert(node + ' : ' + phases[event.eventPhase - 1]);
+        };
+
+        document.querySelector('html').addEventListener('click', handler, useCapture);
+        document.querySelector('body').addEventListener('click', handler, useCapture);
+        document.querySelector('div.top').addEventListener('click', handler, useCapture);
+        document.querySelector('div.middle').addEventListener('click', handler, useCapture);
+        document.querySelector('div.bottom').addEventListener('click', handler, useCapture);
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Binding</title>
+</head>
+<body>
+    <script>
+        /// ***이벤트 바인딩(Event Bindings)
+        // + HTML Event Handler: HTML 이벤트 어트리뷰트에 이벤트 핸들러를 대응 (사용을 지양함)
+        // + 전통적(Traditional) DOM Event Handler : 이벤트 핸들러에 하나의 함수만을 바인딩할 수 있으며 함수에 인수를 전달할 수 없음
+        // + DOM Level 2 Event Listener : `addEventListener()`사용, 대상요소에 이벤트를 바인딩하고 해당 이벤트가 발생시 실행될 콜백함수를 지정
+
+        // addEventListenter()
+        // + 하나의 이벤트에 대해 하나 이상의 핸들러 추가
+        // + 캡처링과 버블링 지원
+        // + HTML 요소뿐만아니라 모든 DOM 요소에 동작함
+        // + IE9+ (IE8이하에서는 attachEvent())사용
+        
+        // if (elem.addEventListener) {
+        //     elem.addEventListener('click', func);
+        // } else if (elem.attachEvent) {
+        //     elem.attachEvent('onclick', func);
+        // }
+
+        // addEventListener('click', function() {
+        //     alert('Clicked');
+        // });
+
+        // 대상요소(target)를 지정하지 않으면 click 이벤트는 전역객체 window에 바인딩된다.
+
+        // > EventTarget.addEventListener('eventType', functionName[, useCapture]);
+        // + EventTarget : 대상요소
+        // + eventType : 대상요소에 바인딩 될 이벤트를 나타내는 문자열
+        // + functionName : 호출될 함수명
+        // + useCapture : capture 사용여부(true: capturing / false: Bubbling(Default))
+    </script>
+    <div>
+        <label for="username">User name</label>
+        <input type="text" id="username"><br>
+        <em id="massage"></em>
+        <script>
+            // 3 추가
+            var MIN_USER_NAME_LENGTH = 2; // 이름 최소 길이
+
+            var elem = document.getElementById('username');
+            var msg = document.getElementById('massage');
+                
+            // 3 전통적 DOM Event Handler 방식은 함수에 인수를 전달할 수 없으므로 다음의 방법으로 우회하낟.
+            // elem.addEventListner('click', foo()); // 이벤트 발생 시까지 대기하지 않고 바로 실행되어 버린다.
+            function checkUserNameLength(n) {
+                if(elem.value.length < n) {
+                    msg.style.color = 'red';
+                    msg.innerHTML = '이름은 ' + n  + '자 이상이어야 한다.';
+                } else {
+                    msg.innerHTML = '';
+                }
+            }
+
+            // 1. input 요소를 blur 이벤트에 바인딩
+            // 2. 사용자 이름이 최소 2자 이상이어야 한다는 규칙 추가
+            elem.addEventListener('blur', function() {
+                // alert('blur event occurred');
+
+                // 2자 이상이라는 규칙이 바뀌면 이 규칙을 확인하는 모든 코드를 수정해야하므로
+                // 자원의 낭비와 수정에 실수가 동반되는 바람직하지 않은 방법
+                // if(this.value.length < 2) {
+                //     msg.style.color = 'red';
+                //     msg.innerHTML = '이름은 2자 이상 입력해 주세요';
+                // } else {
+                //     msg.innerHTML = '';
+                // }
+
+                // 3. '2자 이상'이라는 규칙을 상수화하고 함수의 인수로 전달하자
+                checkUserNameLength(MIN_USER_NAME_LENGTH);
+            });
+        </script>
+    </div>
+</body>
+</html>

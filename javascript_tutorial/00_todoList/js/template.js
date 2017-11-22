@@ -20,8 +20,12 @@
             '</div>' +
         '</li>';
     }
+
     // 어딘가로부터 넘겨받을 data를 템플릿에 삽입할 메소드
     Template.prototype.insert = function(data) {
+        console.log('Template.insert method execute');
+        // return 을 위한 for문 밖 임시 변수
+        // for문 밖에서 template 변수를 받아, 더해 리턴해줌
         var view = '';
         for(var i = 0; i < data.length; i++) {
             var template = this.defaultTemplate;
@@ -33,7 +37,9 @@
                 checked = 'checked';
             }
 
-            template = template.replace('{{id}}', data[i].id);
+            // Strong.prototype.replace();
+            // str.replace(regexp|substr, newSubstr|function);
+            template = template.replace('{{id}}', data[i].id); // 변경된 새로운 문자열 반환
             template = template.replace('{{title}}', data[i].title);
             template = template.replace('{{completed}}', completed);
             template = template.replace('{{checked}}', checked);

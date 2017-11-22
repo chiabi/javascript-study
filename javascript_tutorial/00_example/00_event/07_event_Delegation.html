@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Delegation (이벤트 위임)</title>
+</head>
+<body>
+    <ul id="parent-list">
+        <li id="post-1" class="post-1">Item 1</li>
+        <li id="post-2" class="post-2">Item 2</li>
+        <li id="post-3" class="post-3">Item 3</li>
+        <li id="post-4" class="post-4">Item 4</li>
+        <li id="post-5" class="post-5">Item 5</li>
+        <li id="post-6" class="post-6">Item 6</li>
+    </ul>
+    <div id="msg"></div>
+    <script>
+        // li 요소가 클릭 이벤트에 반응하는 처리 구현
+
+        // 1. li 요소가 100개면 100개의 이벤트 핸들러를 바인딩해야 하는데
+        //    실행속도 저하의 원인이며, 코드도 길어진다.
+        // 2. li 요소가 동적으로 추가되는 경우, 아직 추가되지 않은 요소는 DOM에 존재하지 않으므로 
+        //    이벤트 핸들러를 바인딩할 수 없다.
+
+        // ## 이벤트 위임(event delegation)
+        // 다수의 자식 요소에 이벤트 핸들러를 바인딩 하는 대신 하나의 부모 요소에 이벤트 핸들러를 바인딩 하는 방법
+        // 이벤트가 이벤트 흐름에 의해 이벤트를 발생시킨 요소의 부모 요소에도 영향(버블링)을 미치기 때문에 가능
+
+        var msg = document.getElementById('msg');
+        document.getElementById('parent-list').addEventListener('click', function(e) {
+            console.log('[target]: ' + e.target);
+            console.log('[target.nodeName]: ' + e.target.nodeName);
+            
+            // list item이면
+            if (e.target && e.target.nodeName == 'LI') {
+                msg.innerHTML = 'li#' + e.target.id + ' was clicked!';
+            }
+        });
+
+        // jQuery의 이벤트 위임
+        // jQuery 1.4.3+
+        // eventTargetParent.delegate(eventTarget, eventType, data, handler);
+        // jQuery 1.7+
+        // eventTargetParent.on(eventType, eventTarget, data, handler);
+
+        // jQuery 최적화를 위해 이벤트 위임을 활용하자
+
+        // 내부적으로 아마도 다음과 같은 과정을 거칠 것
+        // 이벤트 위임 없을 때
+        var li = document.querySelectorAll('li');
+
+        for ( var i = 0; i < li.length; i++ ) {
+            li[i].addEventListener('click', function(){
+                msg.innerHTML = this.className;
+            });
+        }
+
+        // 이벤트 위임할 경우
+        var ul = document.querySelector('ul');
+
+        ul.addEventListener('click', function(e){
+            if(e.target && e.target.nodeName == 'LI') {
+                msg.innerHTML = e.target.className;
+            }
+        });
+    </script>
+</body>
+</html>
