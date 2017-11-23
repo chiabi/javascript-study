@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM 탐색 연습</title>
+</head>
+<body>
+    <div>태그</div>
+    <div class="div_class">클래스가 있는 태그</div>
+    <div id="divId">아이디가 있는 태그</div>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti expedita aut cupiditate numquam perspiciatis, reprehenderit architecto a illo ea enim?</p>
+    <p>2 문장</p>>
+    <a href="http://google.com">링크</a>
+    <script>
+        var paragraphs = document.getElementsByTagName('p');
+        console.log(praragraphs[0].nodeName);
+    </script>
+</body>
+</html>

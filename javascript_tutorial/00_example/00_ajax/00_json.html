@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JSON</title>
+</head>
+<body>
+    <script>
+        // JSON(JavaScript Object Notation)
+        // 클라이언트와 서버 간 데이터 교환을 위한 규칙, 데이터 포맷
+        // XML 포맷보다 가볍고 사용하기 간편하며 가독성도 좋다.
+        // 규칙이 있는 순수한 텍스트로 구성된 데이터 구조
+        // 키는 반드시 큰따옴표(작은따옴표 사용불가)로 둘러싸야한다.
+        
+        // ***JSON.stringify 메소드
+        // 객체를 JSON 형식의 문자열로 변환
+        var o = {
+            name: 'Lee',
+            gender: 'male',
+            age: 20
+        };
+
+        // 객체 => JSON 형식의 문자열
+        var strObject = JSON.stringify(o);
+        console.log(typeof strObject, strObject) // string {"name":"Lee","gender":"male","age":20}
+
+        // 객체 => JSON 형식의 문자열 + prettify
+        var strPrettyObject = JSON.stringify(o, null, 2);
+        console.log(typeof strPrettyObject, strPrettyObject);
+        /* string {
+         *     "name": "Lee",
+         *     "gender": "male",
+         *     "age": 20
+         * }
+         */
+
+        var arr = [1, 5, 'false'];
+
+        // 배열 => 문자열
+        var strArray = JSON.stringify(arr);
+        console.log(typeof strArray, strArray); // string [1,5,"false"]
+
+
+        // replacer
+        // 모든 값을 대문자로 변환된 문자열을 반환
+        function replaceToUpper(key, value) {
+            return value.toString().toUpperCase();
+        }
+
+        // 배열 객체 => 문자열 + replacer
+        var strFilteredArray = JSON.stringify(arr, replaceToUpper);
+        console.log(typeof strFilteredArray, strFilteredArray); // string "1,5,FALSE"
+
+        // ***JSON.parse 메소드
+        // JSON 데이터를 가진 문자열을 객체로 변환한다.
+
+        // 역직렬화(Deserializing)
+        // 서버로부터 브라우저로 전송된 문자열인 JSON 데이터를 객체로서 사용하기 위해 객체화하는 것
+
+        // JSON 형식의 문장열 => 객체
+        var obj = JSON.parse(strObject);
+        console.log(typeof obj, obj);
+
+        // 문자열 => 배열 객체
+        var objArray = JSON.parse(strArray);
+        console.log(typeof objArray, objArray);
+    </script>
+</body>
+</html>
