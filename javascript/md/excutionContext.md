@@ -1,8 +1,13 @@
 # Execution Context(실행 컨텍스트), EC
 
+※ 여러글을 참조하고 직접 원문을 번역(의역)한 문서로 오류가 많을 수 있음(영어를 못함) 자세한 내용은 반드시 ECMA-262 원문이나 링크 걸린 참조 문서에서 확인 할 것
+
 [참조: 5.13 Javascript Execution Context - poiemaweb](http://poiemaweb.com/js-execution-context)  
 [참조: [번역] ECMA-262-3 in detail. Chapter 1. Execution Contexts. - 개발왕김코딩](http://wit.nts-corp.com/2013/09/10/120)  
-[참조: ECMA-262 5.1](http://www.ecma-international.org/ecma-262/5.1/#sec-10.3)
+[참조: ECMA-262, 5.1](http://www.ecma-international.org/ecma-262/5.1/#sec-10.3)  
+[참조: ECMA-262, 8th](https://www.ecma-international.org/ecma-262/8.0/index.html#prod-TryStatement)
+
+[참고: ECMA-262-5 in detail](http://dmitrysoshnikov.com/ecmascript/es5-chapter-3-2-lexical-environments-ecmascript-implementation/)
 
 (※ scope, hoisting, this, function, closure 등의 동작원리를 담고 있는 자바스크립트의 핵심원리이다.) 
 
@@ -133,8 +138,68 @@ ECMASciprt 실행 코드(Executable Code)는 다음의 세가지 유형이 있�
 
 [참고: ES5 에서의 실행 컨텍스트](http://intellegibilisverum.tistory.com/entry/ES5-%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%A4%ED%96%89-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8)
 
-> __환경 레코드(Environment Record)__  
-관련 Lexical Environment의 스코프 안에 만들어진 식별자 바인딩들을 기록한다.
+
+### 1.1 Lexical Environment 
+
+[참조: 자바스크립트 함수(3) - Lexical Environment](http://meetup.toast.com/posts/129)
+
+위 글에는 LexicalEnvironemnt와  VariableEnvironment라는 두 컴포넌트를 Lexical Environment에 대한 참조라고 한다.  
+(그리고 이 둘은 처음에는 같은 Lexical Environment를 참조한다!)
+
+```javascript
+executionContext.LexicalEnvironment = execurtionContext.VaribleEnvironment;
+```
+
+자바스크립트 코트에 따라 VariableEnvironment나 LexicalEnvironment의 참조가 바뀌기도 한다.
+
+Lexical Environment는 자바스크립트 코드에서 변수나 함수 등의 식별자를 정의하는 데 사용하는 객체로 생각하면 된다.
+
+Lexical Environment는 다음의 것들로 구성되어 있다.
++ `Environment Record` : 식별자와 참조 혹은 값을 기록한다
++ `outer`: 외부 Lexical Environment를 참조하는 포인터, 중첩된 자바스크립트 코드에서 탐색을 하기 위해 사용한다.
+
+개념적 이해를 위해 다음의 코드는 아래의 구조로 동작한다고 생각하면 된다.  
+(물론 실제와는 다르다.)
+
+```javascript
+function foo() {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    function bar() {
+        // 2. Running execution context
+    }
+}
+foo(); // 1. call
+```
+```javascript
+// Running execution context의 LexicalEnvironment
+{
+    environmentRecord: {
+        a: 1,
+        b: 2,
+        c: 3,
+        bar: `<function>` 
+    },
+    outer: foo.[[Environment]]
+}
+```
+단순히 함수 호출 하나에 하나의 Lexical Environment를 나타내고 있지만 실제로는  
+`FunctionDeclaration`, `BlockStatement`, `TryStatement`의 `catch` 절 등과 같은 ECAMScript 코드의 특정 구문 구조의 코드가 평가될 때마다 새로운 Lexicla Environment가 생성되거나 파괴된다.
+
+### 1.2 Environment Record(환경 레코드)
+
+식별자들의 바인딩을 기록하는 객체를 말한다. 즉, 변수, 함수등이 기록되는 곳이다.   
+명세에 사용되는 두가지 주요 Environment Record values는 Declarative Environment Records와 object Environment Records이다.
+
++  Declarative Environment Records : 식별자 바인딩을 ECMAScript 언어 값과 직접 연관시키는 `FunctionDeclarations`, `VariableDeclarations` 및 `Catch` 절과 같은 ECMAScript 언어 구문 요소의 영향을 정의하는 데 사용된다.  
+즉, 변수나 함수의 정보가 담겨있다.
+        + Function Environment Record: `new.target`, `this`, `super` 등에 대한 정보를 갖는다. 
+        + Module Environment Record
++ Object Environment Records : 식별자 바인딩과 객체의 속성을 연결하는 `WithStatement` 같은 ECMASciprt 요소의 효과를 정의하는 데 사용
++ Global Environment Record
+
+> ES5
 
 ## 2. 실행 컨텍스트 설정, 실행 코드의 종류
 
