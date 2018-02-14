@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>호출스택과 이벤트 루프</title>
+</head>
+<body>
+    <script>
+    // 호출 스택
+
+    // 스택(stack) : 자료구조 중 하나, 연결리스트인데 뒤로 넣고 뒤로만 뺄 수 있다.
+    // (자바스크립트 배열인데 push, pop만 있다고 생각하면 됨)
+    function  first() {
+        second();
+        console.log('첫 번째');
+    }
+    function second() {
+        third();
+        console.log('두 번째');
+    }
+    function third() {
+        console.log('세 번째');
+    }
+    first(); // 세번째, 두번째, 첫번째
+    third(); // 세번째 
+    // 순으로 콘솔 출력
+    // 호출되면 스택에 쌓이고 실행되면 쌓인 더미에서 제거된다.(LIFO)
+
+    // Uncaught RangeError: Maximum call stack size exceeded : 호출 스택이 가득 찼을 때 발생하는 에러
+    // 재귀함수 같이 함수 안에서 계속 다른 함수를 호출하면 스택이 가득차서 터져버린다. 그래서 나오는 에러
+    // 브라우저마다 호출 스택 최대치가 다르다. ( 함수를 만번 이상 중첩해서 호출하지 말 것!)
+
+    // ------------------
+    // 이벤트 루프
+
+    // 자바스크립트와 노드에서 사용되는 개념
+
+    // 자바스크립트는 보통 싱글 쓰레드라고 불린다.
+    // 메인 쓰레드인 이벤트가 싱글 쓰레드이기 때문이다.
+
+    // 다음 코드의 순서를 확인하자
+    function run() {
+        console.log('동작');
+    }
+    console.log('시작');
+    setTimeout(run, 3000);
+    console.log('끝');
+    // '시작', '끝', (3초후) '동작'
+
+    function run() {
+        console.log('동작');
+    }
+    console.log('시작');
+    setTimeout(run, 0);
+    console.log('끝');
+    // '시작', '끝', (0초인데도 불구하고) '동작' 
+    
+    // 1. 호출 스택(call stack) -  |main()(전역컨텍스트)|, |setTimeout(run, 3000)| 
+    // 2. setTimeout 실행 시 콜백 `run`은 백그라운드로 보내진다. 
+    //    백그라운드 - 타이머 `run` 3초
+    // 3. 백그라운드에서 3초 후 태스크 큐로 `run`을 보낸다.
+    //    태스트 큐 - run
+    // 4. 호출스택 실행이 끝나고 비워지면
+    // 5. 이벤트 루프가 태스크 큐의 콜백을 호출스택으로 올린다.
+    //    호출스택 - run()
+    // 6. `run`이 호출스택에서 실행되고 비워진다.
+    // 7. 이벤트 루프는 태스크 큐에 콜백이 들어올 때까지 대기한다.
+
+    // setTimeout 0초도 마찬가지로 백그라운드를 거쳐 태스크 큐로 콜백함수가 이동한다.
+    // ※ 사실 setTimeout 0도 기본적으로 4ms의 지연시간을 갖고 있다. == setTimout 4ms(노드는 1ms의 지연 시간을 갖고 있다)
+
+    // ※※ setTimeout의 초가 정확하지 않을 수 있는 이유는
+    // 호출스택에 함수들이 가득 쌓여있다면 백그라운드에서 정확하게 3초를 세어 주었어도 실행되지 않을 수 있다.
+
+    // -->>> 호출스택에 너무 많은 일을 하게 되면 태스크 큐에 쌓인 콜백함수들이 제 때 실행되지 않으므로 버거운 일은 하지 않는 것이 좋다.
+
+    // Maximum call stack size exceeded 에러 극복방법
+    // setTimeout 0을 하는 순간 호출스택에 함수가 쌓이는 것이 아니라 백그라운드를 거쳐, 태스크 큐로 넘어가므로
+    // 호출스택이 터지는 일이 발생하지 않는다.
+
+
+
+    // 백그라운드를 사용하는 작업
+    // 타이머, ajax요청, 이벤트 리스터,FileReader, 자바스크립트 기본 제공 메소드 중 콜백함수를 사용하는 것들...
+
+    // 루프의 동작을 시각적으로 보려면
+    // http://latentflip.com/loupe/ 
+
+    </script>
+</body>
+</html>

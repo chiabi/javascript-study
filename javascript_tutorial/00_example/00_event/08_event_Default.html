@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>기본 동작의 변경</title>
+    <style>
+        html, body{ height: 100%; }
+    </style>
+</head>
+<body>
+    <a class="link1" href="http://www.google.com">go</a>
+    <script>
+        // ## 기본 동작의 변경
+        // 이벤트 객체는 요소의 기본동작과 요소의 부모 요소들이 이벤트에 대응하는 방법을 변경하기 위한 메소드를 가진다.
+
+        // ### Event.prevetDefault()
+        // 폼을 subimt하거나 링크를 클릭하면 다른 페이지로 이동하게 되는 등의 요소의 기본 동작을 중단시킨다.
+        document.querySelector('.link1').addEventListener('click', function(e) {
+            console.log(e.target, e.target.nodeName);
+
+            // a 요소의 기본 동작을 중단한다.
+            e.preventDefault();
+        });
+
+        
+        </script>
+    <hr>
+    <p>mouse 오른쪽 버튼 클릭 시, 이벤트 전파를 중단함 <button>버튼</button></p>
+    <script>
+        // ### Event.stopPropagation()
+        // 이벤트가 부모요소로 전파되는 것을 중단 시키기 위한 메소드
+        var body = document.querySelector('body');
+        var para = document.querySelector('p');
+        var button = document.querySelector('button');
+
+        // 버블링
+        body.addEventListener('click', function(){
+            console.log('Handler for body.');
+        });
+
+        // 버블링
+        para.addEventListener('click', function(){
+            console.log('Handler for para.');
+        });
+
+        // 버블링
+        button.addEventListener('click', function(event){
+            console.log('Handler for button.');
+
+            // mouse 왼쪽 버튼 클릭시, 이벤트 전파를 중단함
+            if(event.which === 1) event.stopPropagation();
+
+            // MouseEvent.which : 마우스를 눌렀을 때 이벤트를 트리거 한 버튼을 나타냄(read-only)
+            // + 0: No button
+            // + 1: Left button
+            // + 2: Middle button(if present)
+            // + 3: Right button
+        });
+    </script>
+    <hr>
+    <a href="http://www.google.com" class="link2" onclick="return handleEvent()">go</a>
+    <script>
+        // ### preventDefault & stopPropagation
+        // 기본 동작의 중단과 버블링 또는 캡처링의 중단을 동시에 실시하는 방법
+        // jQuery에서의 다음과 같은 방법만 가능
+        function handleEvent() {
+            return false; // Event.preventDefault() 와 동일하게 동작
+            // jQuery에서와 동작이 다르다;
+        }
+    </script>
+    <hr>
+    <a href="http://www.google.com" class="link3">go</a>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+    <script>
+        // jQuery로 하는 방법
+        $('.link3').click(function(e) {
+            e.preventDefault(); // OK
+        });
+
+        $('.link3').click(function() {
+            return false; // OK , e.preventDefault() & e.stopPropagation().
+        });
+
+        // pure js
+        document.querySelector('.link3').addEventListener('click', function(e) {
+            return false; // NG, 작동하지 않음
+        });
+    </script>
+</body>
+</html>

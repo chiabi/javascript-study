@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>객체의 복사</title>
+</head>
+<body>
+    <script>
+        // 복사
+        // 일반 문자열, 숫자, 불린의 경우
+        var string = 'hello';
+        var copy = string;
+        console.log(copy); // 'hello'
+        copy = 'hi'; // copy를 hi로 바꿔도 
+        console.log(string); // 'hello' // 기존 string 값은 변화가 없다.
+
+        // 객체의 경우
+        // 문자열, 숫자, 불린을 제외한 객체는 다른 변수에 대입할 때 값을 복사하는 것이 아니라 참조(메모리의 주소)를 복사한다.
+        // 변수는 모두 메모리에 저장되고 이를 대입하면 변수의 이름은 저장된 메모리의 주소를 가리키게 된다.
+        // shallow copy(얕은 복사)
+        var array = ['a', 'b', 'c'];
+        var shallow = array;
+        shallow[0] = 'd';
+        console.log(array); // ['d', 'b', 'c']
+
+        // 두개를 따로 운영되도록 만들어주는 방법
+        // call 함수 사용, 다른 변수에 영향을 미치지 않는다.
+        // deep copy(깊은 복사)
+        var array = ['a','b','c'];
+        var deep = Array.prototype.slice.call(array);
+        deep[0] = 'd';
+        console.log(array); // ['a', 'b', 'c']
+        // array.slice(0) array를 자르는데 0개만큼 자르므로 결국 그대로 반환한다.
+        // `array.slice(0)` 대신 `Array.prototype.slice.call(array)`를 사용하는 이유는
+        // arguments같은 것을 복사할 때를 대비한 것
+
+        // 일반 객체의 경우 deep copy하는 방법
+        // ※상속이 없는 일반 객체만 해당
+        function copyObj(obj) {
+            var copy = {};
+            for(var attr in obj) { // obj안의 키를 순서대로 반복(숫자로 된 키가 없을 때 사용)
+                if(obj.hasOwnProperty(attr)) { // 상속되지 않은 자기의 속성만 반복되도록 제한한다.
+                    copy[attr] = copyObj(obj[attr]);
+                }
+            }
+            return copy;
+        }
+
+        var obj = {a: 1, b: 2};
+        var obj2 = copyObj(obj);
+        obj2.a = 3;
+        console.log(obj.a); // 1
+
+
+        // 함수의 경우 deep copy하는 방법
+        // bind: this를 기존 함수와 같게 하면 똑같게 함수가 복사된다.
+        var func = function() {
+            alert('hi');
+        };
+        func2 = func.bind(this);
+        func2(); // 'hi'
+    </script>
+    
+</body>
+</html>

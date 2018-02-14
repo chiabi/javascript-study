@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 :  전략, strategy</title>
+</head>
+<body>
+    <script>
+    // ***전략 패턴 : 여러가지 전술을 빠르게 변경할 수 있는 디자인 패턴
+
+    // 베스파시아누스는 여러공략 방법을 통해 로마로 진격하려 한다.
+    // 전략을 설정하는 부분 따로, 실행하는 부분 따로 설정하여 실행 전에 자유롭게 전략을 바꿀 수 있도록 하자.
+
+    // 전략 실행부
+    var Strategy = (function() {
+        function Strategy() {
+            this.strategy = null;
+        }
+        Strategy.prototype.setStrategy = function(strategy) {
+            this.strategy = strategy;
+        };
+        Strategy.prototype.execute = function() {
+            this.strategy.execute();
+        };
+        return Strategy;
+    })();
+
+    // 전략 설정부
+    // 배를 타고 간다.
+    var ShipStrategy = (function(){
+        function ShipStrategy() {}
+        ShipStrategy.prototype.execute = function(){
+            console.log('배로 이탈리아에 갑니다.');
+        };
+        return ShipStrategy;
+    })();
+    // 육로로 간다.
+    var LandStrategy = (function(){
+        function LandStrategy() {}
+        LandStrategy.prototype.execute = function(){
+            console.log('육로로 이탈리아에 갑니다.');
+        };
+        return LandStrategy;
+    })();
+
+    var strat = new Strategy();
+    var ship = new ShipStrategy();
+    var land = new LandStrategy();
+    strat.setStrategy(ship); 
+    strat.setStrategy(land); // 전략 바꿈
+    strat.execute();
+    </script>
+</body>
+</html>

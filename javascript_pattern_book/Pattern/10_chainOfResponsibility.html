@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 책임 연쇄, chain of responsibility</title>
+</head>
+<body>
+    <script>
+    // ***책임 연쇄 패턴 : 동작의 수행을 다른 객체에게 떠넘기는 패턴 (e.g. 이벤트 버블링)
+    // 동작의 처리를 자신이 할 지 다음으로 넘길 지 결정하는 패턴
+
+
+    // 비텔리우스가 오토의 군단을 격파하고 로마로 진격한다.
+    // 항복을 할 지 맞서 싸울지 결정해야한다.
+    // 결정 : 장군 -> 원로원 -> 황제 오토 (중간에서 책임을 처리하면 종료되고 아니면 다음 결정자에서 책임이 넘어간다.)
+
+    // 장군
+    var General = (function() {
+        function General() {}
+        General.prototype.canMakeDecision = function() {
+            // ... 중략(복잡한 확인 코드)
+            return false; // 결정을 내릴 수 없다.
+        };
+        General.prototype.makeDecision = function() {
+            // 결정을 내렸을 때 행동
+            console.log('맞서 싸운다');
+        };
+        return General;
+    })();
+
+    // 원로원
+    var Senator = (function() {
+        function Senator() {}
+        Senator.prototype.canMakeDecision = function() {
+            // ... 중략(복잡한 확인 코드)
+            return false;
+        };
+        Senator.prototype.makeDecision = function() {
+            console.log('눈치를 본다');
+        };
+        return Senator;
+    })();
+
+    // 황제(오토)
+    var Emperor = (function() {
+        function Emperor() {}
+        Emperor.prototype.canMakeDecision = function() {
+            // ... 중략(복잡한 확인 코드)
+            return true;
+        };
+        Emperor.prototype.makeDecision = function() {
+            console.log('항복한다');
+            console.log('자결한다');
+        };
+        return Emperor;
+    })();
+
+    // 결정의 주체를 순서대로 결정을 내릴 수 있는 지 판단하고 결정을 내릴 수 있으면 결정을 내리고 종료한다.
+    var DecisionMaker = (function() {
+        function DecisionMaker() {
+            this.decisionMakers = [];
+            this.decisionMakers.push(new General);
+            this.decisionMakers.push(new Senator);
+            this.decisionMakers.push(new Emperor);
+        }
+        DecisionMaker.prototype.makeDecision = function() {
+            for(var i = 0; i < this.decisionMakers.length; i++) {
+                if(this.decisionMakers[i].canMakeDecision()) { // canMakeDecision이 true이면 
+                    return this.decisionMakers[i].makeDecision(); // 그 결정 주체의 makeDecision() 메소드를 호출함
+                }
+            }
+        };
+        return DecisionMaker;
+    })();
+
+    var choice = new DecisionMaker();
+    choice.makeDecision();
+    // 항복한다
+    // 자결한다
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>이벤트 흐름2 : 버블링 캡처링</title>
+    <style>
+        html, body{height: 100%}
+    </style>
+</head>
+<body>
+    <p>버블링, 캡처링 이벤트 <button>버튼</button></p>
+    <script>
+        var body = document.querySelector('body');
+        var para = document.querySelector('p');
+        var button = document.querySelector('button');
+
+        // 버블링
+        // body.addEventListener('click', function() {
+        //     console.log('Handler for body.');
+        // });
+        // para.addEventListener('click', function() {
+        //     console.log('Handler for para.');
+        // });
+        // button.addEventListener('click', function() {
+        //     console.log('Handler for button.');
+        // });
+
+        // Handler for button.
+        // Handler for paragraph.
+        // Handler for body.
+
+        // 캡처링
+        // body.addEventListener('click', function() {
+        //     console.log('Handler for body.');
+        // }, true);
+        // para.addEventListener('click', function() {
+        //     console.log('Handler for para.');
+        // }, true);
+        // button.addEventListener('click', function() {
+        //     console.log('Handler for button.');
+        // }, true);
+
+        // Handler for body.
+        // Handler for paragraph.
+        // Handler for button.
+
+        // 버블링, 캡처링 혼용
+        body.addEventListener('click', function() {
+            console.log('Handler for body.');
+        });
+        para.addEventListener('click', function() {
+            console.log('Handler for para.');
+        }, true);
+        button.addEventListener('click', function() {
+            console.log('Handler for button.');
+        });
+
+        // body, button 요소는 버블링 이벤트 흐름만 캐치하고
+        // p 요소는 캡처링 이벤트 흐름만 캐치
+        // Handler for paragraph. // button에서 이벤트 발생시 먼저 캡처링이 발생 p 요소의 이벤트 핸들러 동작
+        // Handler for button. // 버블링 발생하여 button, body 요소 이벤트 핸들러 동작
+        // Handler for body.
+    </script>
+</body>
+</html>

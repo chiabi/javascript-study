@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 프록시, proxy</title>
+</head>
+<body>
+    <script>
+    // ***프록시패턴 : 중간 단계를 거쳐 원래 객체로 도달하게 만드는 패턴
+    // 중간단계에서 캐싱, 에러 처리 같은 것을 할 수 있다.
+    // 사용자의 요청을 왜곡하여 다른 동작을 하도록 하는 나쁜 프록시도 있어 양날의 검과 같다.
+    // 프록시 : 대리인, 사용자가 원하는 행동을 하기 전에 한 번 거쳐가는 단계
+    
+    // 로마를 점령한 갈바는 루푸스를 해임하면서 민심을 잃고 비텔리우스 총독이 민심을 얻는다.
+    // 또 같이 싸웠던 오토 총독은 푸대접을 받자 황제 근위대를 매수한다.
+
+    // 근위대에 프록시를 심었다, 근위대는 이제 오토에게 보고하고 갈바에게는 거짓보고를 한다.
+    // 갈바는 오토의 암살명령을 내리지만 되려 매수된 근위대에 암살당하고 만다.
+
+    // preaetorian : 법무관
+    var Praetorian = (function() {
+        function Praetorian() {};
+        Praetorian.prototype.report = function(fact) {
+            console.log('황제에게 ' + fact + '을 보고드린다.');
+        };
+        Praetorian.prototype.assassinate = function(target) {
+            console.log(target + ' 암살 명령을 받는다')
+        };
+        return Praetorian;
+    })();
+
+    var PraetorianProxy = (function() {
+        function PraetorianProxy(master) {
+            this.master = master;
+            this.praetorian = new Praetorian();
+        }
+        PraetorianProxy.prototype.report = function(fact) {
+            var lie = '거짓';
+            console.log(this.master + '에게 ' + fact + '을 보고드린다.')
+        };
+        PraetorianProxy.prototype.assassinate = function(target) {
+            console.log('더 이상 ' + target + '을/를 암살하지 않는다.');
+            this.praetorian.assassinate('Galba');
+        };
+        return PraetorianProxy;
+    })();
+
+    var praetorian = new PraetorianProxy('Otho');
+    praetorian.report('사실');
+    praetorian.assassinate('Otho');
+    </script>
+</body>
+</html>

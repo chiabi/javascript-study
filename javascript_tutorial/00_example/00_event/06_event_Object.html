@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event 객체</title>
+</head>
+<body>
+    <p>클릭하세요. 클릭한 곳의 좌표가 표시됩니다.</p>
+    <em id="message"></em>
+    <script>
+        // ## event 객체
+        // 이벤트를 발생시킨 요소와 발생한 이벤트에 대한 정보를 제공
+        // 이벤트 발생 시 event 객체는 동적으로 생성
+        // 이벤트를 처리할 수 있는 이벤트 핸들러에 인자로 전달된다.
+
+
+        // 이벤트 핸들러 showCoords()
+        // --------
+        // function showCoords(e) {
+        //     // e: event object
+        //     var msg = document.getElementById('message');
+        //     msg.innerHTML = 
+        //         'clientX value: ' + e.clientX + '</br>' + 
+        //         'clientY value: ' + e.clientY;
+        // }
+        // addEventListener('click', showCoords);
+        // ---------
+        // showCoors에 event 객체를 인자로 전달하지 않았지만
+        // event 객체는 암묵적으로 전달된다.
+        // 단, 함수 선언에는 반드시 매개변수를 선언해야한다. (이름은 상관없다)
+
+        // 이벤트 핸들러 내에서 event 객체를 사용하는 경우
+        // 이벤트 핸들러 선언 시 event 객체를 전달받을 매개변수의 첫번째로 명식적으로 선언해야 한다.
+        function showCoords(e, msg) {
+            msg.innerHTML = 
+                'clientX value: ' + e.clientX + '</br>' + 
+                'clientY value: ' + e.clientY;
+        }
+        var msg = document.getElementById('message');
+
+        addEventListener('click', function(e){
+            showCoords(e, msg);
+        });
+    </script>
+    <hr>
+    <button id="btn1">Hide me 1</button>
+    <button id="btn2">Hide me 2</button>
+    <script>
+        // ## Event Property
+        // + Event.target
+        // + Event.currentTarget
+        // + Event.type
+        // + Event.cancelable
+        // + Event.eventPhase
+
+        // ### Event.target
+        // 이벤트를 발생시킨 요소를 가리킴
+        function hide(e) {
+            console.log(this, e.target);
+            e.target.style.visibility = 'hidden';
+            // hide 함수를 특정 노드에 한정하여 사용하지 않고 범용적으로 사용하기 위해 event객체의 target 프로퍼티 사용
+        }
+        document.getElementById('btn1').addEventListener('click', hide);
+        document.getElementById('btn2').addEventListener('click', hide);
+    </script>
+    <hr>
+    <style>
+        .ex1 {height: 300px}
+    </style>
+    <div class="ex1">
+        <button>배경색 변경</button>
+    </div>
+    <script>
+        // ### Event.currentTarget
+        // addEventListener 함수를 호출한 요소를 가리킴
+
+        // 이벤트 핸들러 함수 내의 this에는 addEventListener를 호출한 요소가 바인딩 된다.
+        // -> 이벤트 핸들러 함수내에서 currentTarget과 this는 언제나 일치한다.
+        function bluify(e) {
+            console.log('this: ', this);
+            console.log('e.target: ', e.target);
+            console.log('e.currentTarget: ', e.currentTarget);
+
+            console.log(this === e.currentTarget);
+            console.log(this === e.target);
+
+            this.style.backgroundColor = '#a5d9f3'
+        }
+
+        // div 요소에 이벤트 핸들러 바인딩
+        // 자식 요소인 button이 발생시킨 이벤트가 버블링되어 div 요소에도 전파
+        document.querySelector('.ex1').addEventListener('click', bluify);
+
+        // div 요소에 이벤트 핸들러가 바인딩 되어 있으면
+        // 자식 요소인 button이 발생시킨 이벤트를 div 요소에서도 핸들링 할 수 있다.
+    </script>
+    <hr>
+    <p>키를 입력하세요</p>
+    <em id="ex2Message"></em>
+    <script>
+        // ### Event.type
+        // 발생한 이벤트의 종류를 나타내는 문자열을 반환
+
+        function getEventType(e) {
+            console.log(e);
+            document.getElementById('ex2Message').innerHTML = e.type + ' : ' + e.keyCode;
+        }
+        var body = document.querySelector('body');
+        body.addEventListener('keydown', getEventType);
+        body.addEventListener('keyup', getEventType);
+    </script>
+    <hr>
+    <a href="www.naver.com" class="link1">Go to poiemaweb.com</a>
+    <script>
+        // ### Event.cancelable
+        // 요소의 기본동작을 취소시킬 수 있는지 여부(true / false)를 나타냄
+        var elem = document.querySelector('.link1');
+        elem.addEventListener('click', function(e) {
+            console.log(e.cancelable);
+            // 기본 동작을 중단시킨다.
+            e.preventDefault();
+        });
+
+
+        // ## Event Method
+        // + Event.preventDefault() : 이벤트의 기본 동작을 취소함, 단, Event.cancelable가 true일 경우에 한함
+        // + Event.stopPropagation() : 이벤트의 전파(propagation: 버블링, 캡처링)을 중단함
+    </script>
+</body>
+</html>

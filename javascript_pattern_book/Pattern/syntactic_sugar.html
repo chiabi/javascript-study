@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Syntactic Sugar</title>
+</head>
+<body>
+    <script>
+        // syntactic sugar : 직관적이지 않지만 코드의 양을 줄여주는 것, 문법적으로 알아두면 편한 것들
+        // ES2015의 syntactic sugar : class, 객체분해(Desturcture), spread
+
+        // 01. 보호연산, 기본값 연산
+        var a;
+        if(b) {
+            a = b;
+        } else if (c) {
+            a = c;
+        } else {
+            a = b;
+        }
+        // false의 성질을 띄는 것: undefined, null, 0, '', false, NaN
+        // b가 아니면 c, c도 아니면, d까지 확인
+        // 위의 구문 축약
+        var a = b || c || d;
+
+        // ////
+        var a = b;
+        if(b) {
+            a = c;
+            if(c) {
+                a = d;
+            }
+        }
+        // b도 있고 c도 있으면 a = b, b가 있는데 c가 없으면 a = c, b가 없으면 a = b;
+        // 위의 구문 축약
+        // var a = b && c && d;
+
+        // || : 값이 false 성질을 띄지 않을 때까지 다음 것을 찾는다. 주로 기본값(default)를 정할 때 많이 쓰인다.
+        // && : 값이 true 성질을 띄지 않을 때까지 다음 것을 찾는다. 주로 필수 조건을 의미할 때 쓰인다.
+        // 또는 객체안의 속성에 안전하게 접근하기 위해 사용된다(보호연산)
+
+
+        // 기본값을 정할 때 `||` 사용
+        function setting(option) {
+            var result = option || []; // 사용자가 함수의 인자로 아무 것도 않 넣으면 기본으로 []가 설정된다.
+            return console.log(result);
+        }
+        setting([1,2,3]); // [1,2,3]
+        setting(); // []
+
+        // default를 표현하는 다른 방법
+        function setting(option) {
+            var result = option ? option : [];
+            return result;
+        }
+
+        // 필수조건을 의미할 때 `&&` 사용
+        function condition(cond) {
+            var result = cond && 'hello';
+            return console.log(result);
+        }
+        condition(true); // 'hello'
+        condition();     // undefined
+
+        // 보호연산, cannot read property of undefined 에러를 피하기 위해 사용
+        var a = object && object.inner && object.deeper;
+
+        // -----------
+        // 02. 시간 변환
+        // 빠른 시간 계산 때 유용함, 현재 시간을 밀리초 단위 숫자로 변환할 수 있다.
+        +new Date(); // 1970년 이후로 지나간 밀리초
+        // 표준같지 않다고 느껴지면 new Date().valueOf() 또는 new Date().getTime() 하면 된다.
+
+
+        // ------------
+        // 03. 불린 변환
+        // 해당 값이 true인지 false인지 체크할 수 있다.
+        var a = [];
+        var b = NaN;
+        !!a; // true
+        !!b; // false
+
+        // ------------
+        // 04. 다차원 배열 생성
+        // 재귀를 통해 다차원 배열을 쉽게 만드는 방법
+
+        // 2x3x4 배열 
+        var array = [];
+        for(var i = 0; i < 2; i++) {
+            array[i]  = [];
+            for (var j = 0; j < 3; j++) {
+                array[i][j] = [];
+                for (var k = 0; k < 4; k++) {
+                    array[i][j][k] = [];
+                }
+            }
+        }
+
+        // 위 구문을 재귀를 통해 만들기
+        function createArray(length) {
+            var arr = new Array(length || 0),
+            i = length;
+            // arguments : 함수가 인자로 받은 것을 자동으로 배열 형식으로 담긴거 (유사배열임)
+            if(arguments.length > 1) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                while(i--) arr[length-1 - i] = createArray.apply(this, args);
+            }
+            return arr;
+        }
+        var arr = createArray(2, 3, 4);
+    </script>
+</body>
+</html>

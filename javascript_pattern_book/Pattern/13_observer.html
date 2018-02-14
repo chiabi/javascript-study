@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 관찰자, 옵저버, observer</title>
+</head>
+<body>
+    <script>
+    // ***옵저버(관찰자) 패턴 :
+    // e.g.
+    // 이벤트 핸들러 : 이벤트를 등록만 해 두면, 나중에 이벤트가 발생했을 때 알려준다. 그 후, 콜백함수가 실행된다.
+    // 이 콜백함수가 실행되기 전까지의 과정이 옵저버 패턴을 활용한 예이다.
+
+    // 오토를 따르던 군단이 무키아누스를 황제로 추대하는 데, 무키아누스는 그 간 높게 평가했던 베스파시아누스를 황제로 추대한다.
+
+    // 베스파시아누스가 무키아누스에게 점수를 따게되는 행동 코드
+    var Vespasianus = (function(){
+        function Vespasianus() {
+            this.subscribers = [];
+        }
+        Vespasianus.prototype.publish = function() {
+            var self = this;
+            // Array.prpototype.every(); IE9+
+            // 배열의 모든 요소가 제공한 함수로 구현된 테스트를 통과하는 지를 테스트
+            // arr.every(callback[, Args])
+            // true, false를 반환
+            // 모든 항목이 조건을 만족하면 true
+            this.subscribers.every(function(subscriber) {
+                subscriber.fire(self);
+                return true;
+            });
+        };
+        Vespasianus.prototype.register = function(target) {
+            this.subscribers.push(target);
+        };
+        return Vespasianus;
+    })();
+    var Mucianus = (function(){
+        function Mucianus() {
+            this.list = [];
+        }
+        Mucianus.prototype.subscribe = function(target) {
+            this.list.push({
+                target: target,
+                point: 0,
+            });
+            target.register(this);
+        };
+        Mucianus.prototype.unsubscribe = function(target) {
+            // Array.prototype.filter(), IE9+
+            // 제공된 함수로 구현된 테스트를 통과하는 모든 요소가 있는 새로운 배열을 만든다.
+            // var new_array = arr.filter(callback[, Args])
+            // 특정 조건에 해당하는 배열만 걸러서 새 배열을 만든다.
+            this.list.filter(function(person) {
+                return person.target !== target;
+            });
+        };
+        Mucianus.prototype.fire = function(target) {
+            // Array.prototype.some(), IE9+
+            // 배열 내 일부 요소가 제공된 함수에 의해 구현된 테스트를 통과하는 지를 테스트
+            // arr.some(callback[, thisArg])
+            // 하나의 항목이라도 조건을 만족하면 true
+            this.list.some(function(person) {
+                console.log(person.target, target, person.target === target);
+                if (person.target === target) {
+                    ++person.point;
+                    return true;
+                }
+            });
+        };
+        return Mucianus;
+    })();
+
+    var vespasianus = new Vespasianus();
+    var mucianus = new Mucianus();
+    // 관찰대상을 subscribe(구독)
+    mucianus.subscribe(vespasianus);
+    // 관찰대상이 특정행동을 할 때 자신의 행동을 publish -> subscribe한 사람들에게 전달(fire, 콜백)
+    vespasianus.publish();
+    // 베스파시아누스의 행동으로 무키아누스의 리스트에 1점이 올라감
+    mucianus.list; // Vespasianus {subscribers: Array(1)}subscribers: [Mucianus]__proto__: Object Vespasianus {subscribers: Array(1)} true
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Function.prototype.call()</title>
+</head>
+<body>
+    <script>
+        // call과 apply 차이점 
+        // `call()`은 인수 목록인 반면에 `apply()`는 인수 배열 하나를 받는다.
+
+        // ***call() : 주어진 this 값 및 각자에게 제공된 인수를 갖는 함수를 호출한다.
+        // > fun.call(thisArg[, arg1[, arg2[, ...]]])
+        // + thisArg : fun 호출에 제공되는 this값 
+        // + arg1, arg2 : 객체를 위한 인수
+
+        // 새로운 객체를 위한 메소드를 재작성할 필요없이 다른 객체에 상속할 수 있다.
+
+        // 1.객체의 생성자 연결에 call 사용
+        // 객체의 생성자 연결(chain)에 사용할 수 있다.
+
+        // `Product`는 `name` 및 `price` 속성을 초기화하고, 
+        // 전문화 된 두 함수(`Food` 및 `Toy`)는 `category`를 정의한다.
+        var Product = (function(){
+            function Product(name, price) {
+                this.name = name;
+                this.price = price;
+    
+                if(price < 0) {
+                    throw RangeError('Cannot create product ' + this.name + ' with a negative price');
+                }
+            }
+            return Product;
+        })();
+        var Food = (function(){
+            function Food(name, price) {
+                Product.call(this, name, price);
+                this.category = 'food';
+            }
+            return Food;
+        })();
+        var Toy = (function(){
+            function Toy(name, price) {
+                Product.call(this, name, price);
+                this.category  = 'toy';
+            }
+            return Toy;
+        })();
+
+        var cheese = new Food('feta', 5);
+        var fun = new Toy('robot', 40);
+        cheese.category; // "food"
+        cheese.name; // "feta"
+        cheese.price; // 5
+        fun.category;  // "toy"
+        fun.name;  // "robot"
+        fun.price;  // 40
+
+
+        // 2. 익명함수(anonymous function) 호출에 call 사용
+        // 익명 함수를 만들고 배열 내 모든 객체에서 이를 호출하기 위해 call 사용
+        var animals = [
+            { species: 'Lion', name: 'King'},
+            { species: 'Whale', name: 'Fail'}
+        ];
+
+        for (var i = 0; i < animals.length; i++) {
+            (function(i) {
+                this.print = function() {
+                    console.log('#' + i + ' ' + this.species  + ': ' + this.name);
+                }
+                this.print();
+            }).call(animals[i], i)
+        }
+        // #0 Lion: King
+        // #1 Whale: Fail
+        
+
+        // 3. 함수 호출 및 'this'를 위한 문맥 지정에 `call` 사용
+
+        // greet를 호출하면 this 값은 객체 i에 바인딩된다.
+        function greet() {
+            var reply = [this.person, 'Is An Awesome', this.role].join(' ');
+            console.log(reply);
+        }
+        var i =  {
+            person : 'Doglas Crockford', 
+            role: 'Javascript Developer'
+        };
+
+        greet.call(i); // Doglas Crockford Is An Awesome Javascript Developer
+    </script>
+</body>
+</html>

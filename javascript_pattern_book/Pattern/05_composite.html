@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 복합체, composite</title>
+</head>
+<body>
+    <script>
+    // ***복합체 패턴 : 트리 구조에 사용되는 패턴
+
+    // jQuery가 복합체 패턴을 따른다.
+    // 하나의 태그($('#chi'))를 선택하든, 여러개의 태그($(p))를 동시에 선택하든 모두 같은 메소드(attr, css 등등)를 쓸 수 있다.
+
+    // 원로원에 의해 황제로 추대된 갈바는 다시 네로를 치려고 로마로 진격한다.
+    // 갈바의 업적 중 하나인 잘 편제된 군단(Legion)을 생성하자.
+
+    // 로마의 군단 - 10개 대대(Cohort) -> 6개의 중대(Century) -> 10개의 분대(Contuberium) -> 8명
+    // 총 군단의 수 8*10*6*10 = 4800명 (*실제로는 기병도 있고해서 더 많다)
+
+    // 각 단위(군단, 대대, 중대, 분대)는 모두 병력의 수와 리더의 이름을 알려주는 메소드를 가진다.
+    // 목표: 분대까지는 너무 많으므로 중대(10 * 8 = 80명)부터 만든다.
+
+    // 중대
+    var Century = (function() {
+        function Century(leader) {
+            this.leader = leader;
+        }
+        Century.prototype.getLeader = function() {
+            return this.leader;
+        };
+        Century.prototype.getNumber = function() {
+            return 80; // 중대는 80명
+        };
+        return Century;
+    })();
+    // 대대
+    var Cohort = (function() {
+        function Cohort(leader) {
+            this.leader = leader;
+            this.centuries = [];
+        }
+        Cohort.prototype.getLeader = function() {
+            return this.leader;
+        };
+        Cohort.prototype.getNumber = function() {
+            var sum = 0;
+            // arr.forEach(callback[, thisArg])
+            // 오름차순으로 배열에 있는 각 요소에 대해 한 번씩 제공한 callback을 실행한다.
+            // callback : 각 요소에 실행할 함수
+            // thisArg: callback을 실행할 때 this로서 사용하는 값
+            this.centuries.forEach(function(century) {
+                sum += century.getNumber();
+            });
+            return sum;
+        };
+        Cohort.prototype.addCentury = function(century) {
+            this.centuries.push(century); // 배열에 인자를 집어넣음
+            return this;
+        }
+        return Cohort;
+    })();
+    // 군단
+    var Legion = (function() {
+        function Legion(leader) {
+            this.leader = leader;
+            this.cohorts = [];
+        }
+        Legion.prototype.getLeader = function() {
+            return this.leader;
+        };
+        Legion.prototype.getNumber = function() {
+            var sum = 0;
+            this.cohorts.forEach(function(cohort) {
+                sum += cohort.getNumber();
+            });
+            return sum;
+        };
+        Legion.prototype.addCohort = function(cohort) {
+            this.cohorts.push(cohort);
+            return this;
+        };
+        return Legion;
+    })();
+    // 군단, 대대에 하부조직을 추가하는 메소드 제외하고는 메소드가 다 같다.
+    // getLeader, getNumber가 공통이다.
+    // 중대, 대대, 군단을 생성하고 
+    var century1 = new Century('Maximus');
+    var century2 = new Century('Tiberius');
+    var century3 = new Century('Lukius');
+    var century4 = new Century('Marcus');
+    var century5 = new Century('Pompeius');
+    var century6 = new Century('Zero');
+    var cohort1 = new Cohort('Vitellius');
+    var cohort2 = new Cohort('Otho');
+    var legion = new Legion('Galba');
+    // 군단 아래 두 대대와 대대 아래 세 중대를 편성한다. 
+    cohort1.addCentury(century1).addCentury(century2).addCentury(century3);
+    cohort2.addCentury(century4).addCentury(century5).addCentury(century6);
+    legion.addCohort(cohort1).addCohort(cohort2);
+    // (원래는 10개의 대대 각각 6개의 중대 이런식이나 너무 길어지므로 축소)
+    console.log(legion.getLeader()); // Galba
+    console.log(legion.getNumber()); // 480
+    console.log(cohort1.getNumber()); // 240
+    </script>
+</body>
+</html>

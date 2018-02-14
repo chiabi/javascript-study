@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>이벤트 리스너와 콜백</title>
+</head>
+<body>
+    <script>
+        // ---------------- 이벤트 리스너 -------------------------------
+        // 이벤트 리스너; 해당 이벤트에 대해 대기중
+        // 해당 이벤트가 발생했을 때 등록했던 이벤트 리스너가 실행된다.
+        window.onload = function() { // window가 load 될 때 function 실행
+            alert('I\'m loaded');
+        };
+
+        // on + '이벤트명'
+        // onblur : 객체가 focus를 잃었을 때
+        // onchange : 객체의 내용이 바뀌고 focus를 잃었을 때
+        // ondbclick, onerror, onfocus, onkeydown, onkeypress, onkeyup, 
+        // onload: 문서나 객체가 로딩되었을 때
+        // onmouseover, onmouseout
+        // onreset : reset 버튼을 눌렀을 때
+        // onresize, onscroll
+        // onsubmit : 폼이 전송될 때 ...
+        document.getElementById('clickMe').onclick = function() {
+            alert('I\'m clicked');
+        };
+
+        // addEventListener : **여러 이벤트를 등록할 수 있고,
+        // ***특정 이벤트를 제거 할 수도 있다.(removeEventLisetener)
+        function onClick() {
+            alert('I\'m clicked');
+        }
+        function onClick2() {
+            alert('또다른 이벤트');
+        }
+        document.getElementById('clickMe').addEventListener('click', onClick);
+        document.getElementById('clickMe').addEventListener('click', onClick2);
+        document.getElementById('clickMe').removeEventListener('click', onClick);
+
+        // ---------------- 콜백 -------------------------------
+        // .onclick = function() {};
+        // .addEventListener('click', [FUNCTION]); 
+        // 두 코드에서 function 부분을 부르는 게 콜백
+        // callback, 이벤트가 실행되었을 때 사용자에게 다시 알려주는 것
+
+        // 이벤트가 아니더라도 콜백을 활용할 수 있다.
+
+        // 주어진 숫자 ~ 1까지 더하는 간단한 함수
+        // setTimeout(function[, delay, param1, param2, ...])
+        var cbExample = function(number, cb) { // cb: 콜백함수를 부르는 부분
+            setTimeout(function() {
+                var sum = 0;
+                for (var i = number; i > 0; i--) {
+                    sum += i;
+                }
+                cb(sum);
+            }, 0); // 0초만에 실행하게 설정해놨어도 비동기적으로 실행
+        };
+        cbExample(10, function(result){
+            console.log(result);
+        });
+        console.log('first');
+        // first
+        // 55 // setTimeout 함수를 사용해 비동기 적으로 실행했기 때문
+        // 비동기적 실행의 필요성 : cbExample의 일이 10초가 걸린다면 다음 코드 실행때 까지 10초를 기다려야 하므로 
+        // 콜백을 등록한 후 다음 코드로 넘어가고 알아서 일이 완료된 후 알려주도록 한다. 
+        // 언제 끝날지 모르는 동작에 대해 결과를 전달받을 때 유용하다(※)
+
+    </script>
+
+    <div id="first">
+        <div id="second">
+            <div id="third"></div>
+        </div>
+    </div>
+    <script>
+        // ---------------- 이벤트 버블링 -------------------------------
+        // 버블링 : 자식의 이벤트가 부모에도 전달되는 것
+        // div#third 클릭 시, third > second > first 순으로 클릭 이벤트 발생
+
+        // 이벤트 객체
+        // DOM에 대한 이벤트에 연결한 함수는 이벤트 객체를 매개변수로 사용할 수 있다.
+        document.onclick = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        };
+        // preventDefault : 태그의 기본 동작을 하지 않게 막아준다
+        // e.g. a태그의 링크 이동, form 태그의 폼 내용 전송등
+        // stopPropagation : 태그를 클릭시 부모에게 이벤트가 전달(버블링)되지 않도록 함
+        // stopImmediatePropation : 버블링을 막음과 동시에 다른 이벤트도 발생하지 않도록 함
+        // e.g. 클릭이벤트와 마우스오버 이벤트를 동시에 연결한 경우....
+
+        // 이벤트 객체의 정보
+        // event.target :  이벤트가 발생한 태그의 정보
+        // event.pageX, event.pageY : 클릭했을 때 클릭한 좌표 정보
+        // event.key : 키보드를 쳤을 때 그 키 정보
+    </script>
+    <!-- 유지보수를 위해 다음과 같은 이벤트 리스너 연결은 지양한다 -->
+    <button onclick="showResult">클릭</button>
+    <!-- 
+        `eval`이라는 자바스크립트의 내부 메소드가 실행되는데 
+        자바스크립트의 피해야하는 것 중 하나이다.
+    -->
+    <button id="clicker">클릭</button>
+    <script>
+        document.getElementById('clicker').onclick = showResult;
+        // document.getElementById('clicker').addEventListener('click', showResult);
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ES6 Promise</title>
+</head>
+<body>
+    <script>
+        // ### ES6 function
+        var a = function() {} 
+        const A = () => {}
+        // => : this를 그대로 유지해주는 역할을 한다
+        // (forEach(){}).bind(this)를 한 것 과 같다. (바뀐 this가 필요할 때는 function(){}을 사용)
+
+        // ### ES6 function - return
+        var long = function(x) { 
+            return x + 1 
+        };
+        const short = (x) => x + 1;
+        // 별다른 처리 없이 바로 return하는 경우 간단하게 사용 가능
+
+        // ### ES6 function - default
+        var func = function(msg) { 
+            alert(msg) 
+        };
+        func(); // undefined
+        const func2 = (msg = 'hello') => { 
+            alert(msg) 
+        };
+        func2(); // 'hello'
+        
+        // ***Callback Hell
+        Users.findOne({}, (err, user) => {
+            if (err) {
+                return console.error(err);
+            }
+            user.name = 'chi';
+            user.save((err) => {
+                if (err) {
+                    return console.error(err);
+                }
+                Users.findOne({gender: 'm'}, (err, user) => {
+                    //...
+                });
+            });
+        });
+    </script>
+</body>
+</html>

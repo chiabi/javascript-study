@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jQuery</title>
+</head>
+<body>
+    <script>
+        // http://code.jquery.com/jquery-1.0.1.js
+        // jQuery는 어떻게 $를 사용하는가
+        // $(function() {내용});은 어떻게 기능하는가
+        // $(선택자)는 어떻게 기능하는가
+        // 제이쿼리 플러그인에서 사용하는 $.fn은 무슨 원리인가
+        // $(선택자).find().css()... 등 메소드 체이닝은 어떻게 기능하는가
+        
+        ////////////////////// 1 //////////////////////
+        window.undefined = window.undefined;
+        function jQuery(a,c) {
+        
+            // Shortcut for document ready (because $(document).each() is silly)
+            // 인자로 받은 a, a.constructor가 존재하고 (a의 값이 false가 아니면 a.constructor를 반환)
+            // a.coustructor가 Function이며
+            // jQuery.fn.ready가 존재하면 다음의 값을 반환한다.
+
+            // [참고 : jQuery(callback), http://api.jquery.com/jQuery/#jQuery3]
+            if ( a && a.constructor == Function && jQuery.fn.ready ) 
+                // `$(function() {내용})`을 동작했을 때 $() 안에 함수를 넣은 것으로 `a`는 함수가 된다.
+                // `a`가 함수이므로 다음이 반환되어 jQuery(document).ready(a); 가 실행된다.
+                return jQuery(document).ready(a); // (1)
+        
+            // Make sure that a selection was provided
+            // a가 함수가 아니면, $(document)처럼 $(선택자)로 사용했을 경우 
+            // a가 존재하므로 a에는 그대로 a가 담긴다.
+            a = a || jQuery.context || document;  // (2)
+        
+            // Watch for when a jQuery object is passed as the selector
+            // a가 jQuery 객체일 경우 다음값을 반환
+            if ( a.jquery )
+                return $( jQuery.merge( a, [] ) ); // (3)
+        
+            // Watch for when a jQuery object is passed at the context
+            // c가 있고 c가 jQuery 객체면 다음값을 반환
+            if ( c && c.jquery )
+                return $( c ).find(a); // (4)
+            
+            // If the context is global, return a new object
+            // this가 window면 다음을 실행해서 new jQuery로 호출하는데 
+            // new로 호출했을 때는 처음으로 반복되지만 this가 window가 아니므로 다음으로 넘어간다.
+            if ( window == this )
+                return new jQuery(a,c); // (5)
+        
+            // Handle HTML strings
+            // 문자열이 태그를 포함한 게 아니라면 넘어간다.
+            // RegExp.prototype.exec() : 어떤 문자열에서 정규표현식과 일치하는 문자열 검색을 수행한다.
+            // 결과로 배열을 리턴하거나 검색에 실패하면 null을 반환한다.
+            var m = /^[^<]*(<.+>)[^>]*$/.exec(a);
+            if ( m ) a = jQuery.clean( [ m[1] ] ); // (6)
+        
+            // Watch for when an array is passed in
+            
+            // a가 array이거나 Node이면 `jQuery.merge(a, []);` 실행 array도 아니고 Node도 아니라면 
+            // jQuery.find 작동
+            this.get( a.constructor == Array || a.length && !a.nodeType && a[0] != undefined && a[0].nodeType ?
+                // Assume that it is an array of DOM Elements
+                jQuery.merge( a, [] ) :
+        
+                // Find the matching elements and save them for later
+                jQuery.find( a, c ) ); // (7)
+        
+          // See if an extra function was provided
+            var fn = arguments[ arguments.length - 1 ]; // (8)
+            
+            // If so, execute it in context
+            if ( fn && fn.constructor == Function ) // (9)
+                this.each(fn);
+        }        
+        // Map over the $ in case of overwrite
+        if ( typeof $ != "undefined" )
+            jQuery._$ = $;
+
+        // Map the jQuery namespace to the '$' one
+        var $ = jQuery; // $를 jQuery와 동일시하는 코드
+
+        // ----------------- jQuery prototype 정의해둔 코드 -------------
+        // 제이쿼리 플러그인의 만들때 사용하는 fn이 prototype이다.
+        // prototype에 추가했기 때문에 확장함수를 모든 제이쿼리 객체가 쓸 수 있다.
+        jQuery.fn = jQuery.prototype = {
+            jquery: "$Rev: 509 $",
+            //...,
+            get: function( num ) {
+                // Watch for when an array (of elements) is passed in
+                if ( num && num.constructor == Array ) {
+                    // Use a tricky hack to make the jQuery object
+                    // look and feel like an array
+                    this.length = 0;
+                    [].push.apply( this, num );
+                    return this;
+                } else
+                    return num == undefined ?
+                    // Return a 'clean' array
+                    jQuery.map( this, function(a){ return a } ) :
+                    // Return just the object
+                    this[num];
+            },
+            //...,
+            find: function(t) {
+                return this.pushStack( jQuery.map( this, function(a){
+                    return jQuery.find(t,a); // 안에서 다시jQuery.find를 호출하고 있다.
+                }), arguments );
+            },
+            //...,
+            pushStack: function(a,args) {
+                var fn = args && args[args.length-1];
+                if ( !fn || fn.constructor != Function ) {
+                    if ( !this.stack ) this.stack = [];
+                    this.stack.push( this.get() );
+                    this.get( a );
+                } else {
+                    var old = this.get();
+                    this.get( a );
+                    if ( fn.constructor == Function )
+                        return this.each( fn );
+                    this.get( old );
+                }
+                return this;
+            }
+        }
+        // -------------------------------------------------------------
+        ////////////////////// 1 //////////////////////
+
+        ////////////////////// 2 //////////////////////
+        jQuery.extend = jQuery.fn.extend = function(obj,prop) {
+            if ( !prop ) { prop = obj; obj = this; }
+            for ( var i in prop ) obj[i] = prop[i];
+            return obj;
+        };
+
+        jQuery.extend({
+            // ...
+            find: function( t, context ) {
+                // Make sure that the context is a DOM Element
+                if ( context && context.nodeType == undefined ) // (1)
+                    context = null;
+                // Set the correct context (if none is provided)
+                context = context || jQuery.context || document; // (2)
+                if ( t.constructor != String ) return [t]; // (3)
+                if ( !t.indexOf("//") ) { // (4)
+                    context = context.documentElement;
+                    t = t.substr(2,t.length);
+                } else if ( !t.indexOf("/") ) {
+                    context = context.documentElement;
+                    t = t.substr(1,t.length);
+                    // FIX Assume the root element is right :(
+                    if ( t.indexOf("/") >= 1 ) {
+                        t = t.substr(t.indexOf("/"),t.length);
+                    }
+                }
+                var ret = [context];
+                var done = [];
+                var last = null;
+                while ( t.length > 0 && last != t ) { // (5)
+                    var r = [];
+                    last = t;
+                    t = jQuery.trim(t).replace( /^\/\//i, "" ); // (6)
+                    var foundToken = false;
+                    for ( var i = 0; i < jQuery.token.length; i += 2 ) { // (7)
+                        if ( foundToken ) continue;
+                        var re = new RegExp("^(" + jQuery.token[i] + ")");
+                        var m = re.exec(t);
+                        if ( m ) {
+                            r = ret = jQuery.map( ret, jQuery.token[i+1] );
+                            t = jQuery.trim( t.replace( re, "" ) );
+                            foundToken = true;
+                        }
+                    }
+                    if ( !foundToken ) { // (8)
+                        if ( !t.indexOf(",") || !t.indexOf("|") ) { // (9)
+                            if ( ret[0] == context ) ret.shift();
+                            done = jQuery.merge( done, ret );
+                            r = ret = [context];
+                            t = " " + t.substr(1,t.length);
+                        } else { // (10)
+                            var re2 = /^([#.]?)([a-z0-9\\*_-]*)/i;
+                            var m = re2.exec(t); // (11)
+                            if ( m[1] == "#" ) { // (12)
+                                // Ummm, should make this work in all XML docs
+                                var oid = document.getElementById(m[2]); // (13)
+                                r = ret = oid ? [oid] : [];
+                                t = t.replace( re2, "" );
+                            } else {
+                                if ( !m[2] || m[1] == "." ) m[2] = "*";
+                                for ( var i = 0; i < ret.length; i++ )
+                                r = jQuery.merge( r,
+                                    m[2] == "*" ?
+                                    jQuery.getAll(ret[i]) :
+                                    ret[i].getElementsByTagName(m[2])
+                                    );
+                                }
+                            }
+                        }
+                        if ( t ) { // (14)
+                        var val = jQuery.filter(t,r);
+                        ret = r = val.r;
+                        t = jQuery.trim(val.t);
+                    }
+                }
+                if ( ret && ret[0] == context ) ret.shift(); // (15)
+                done = jQuery.merge( done, ret ); // (16)
+                return done;
+            },
+        // ....
+        });
+        ////////////////////// 2 //////////////////////
+    </script>
+    <div id="target"></div>
+    <script>
+        ////////////////////// 1 //////////////////////
+        // (1)
+        $(function() {
+            //....
+        });
+        // $()안에 함수를 넣은 것으로 a가 함수가 되고 jQuery(document).ready(a); 가 실행된다.
+
+        // (2)
+        $(document); // $(선택자)
+        ////////////////////// 1 //////////////////////
+    </script>
+</body>
+</html>

@@ -1,33 +1,310 @@
 # Execution Context(실행 컨텍스트), EC
 
-scope, hoisting, this, function, closure 등의 동작원리를 담고 있는 자바스크립트의 핵심원리이다.  
+※ 여러글을 참조하고 직접 원문을 번역(의역)한 문서로 오류가 많을 수 있음(영어를 못함) 자세한 내용은 반드시 ECMA-262 원문이나 링크 걸린 참조 문서에서 확인 할 것
 
-실행 가능한 코드 블럭이 실행되는 환경이다.  
-**자바스크립트 코드가 실행되는 환경** 으로, 환경이란 자바스크립트 코드가 액세스 할 수 있는 변수, 객체 및 함수의 값이 환경을 구성한다는 것을 의미한다.
+[참조: 5.13 Javascript Execution Context - poiemaweb](http://poiemaweb.com/js-execution-context)  
+[참조: [번역] ECMA-262-3 in detail. Chapter 1. Execution Contexts. - 개발왕김코딩](http://wit.nts-corp.com/2013/09/10/120)  
+[참조: ECMA-262, 5.1](http://www.ecma-international.org/ecma-262/5.1/#sec-10.3)  
+[참조: ECMA-262, 8th](https://www.ecma-international.org/ecma-262/8.0/index.html#prod-TryStatement)
 
-자바스크립트 엔진은 코드를 실행하기 위해 실행에 필요한 여러가지 정보(실행 환경)를 실행 컨텍스트라는 객체로 관리한다.
+[참고: ECMA-262-5 in detail](http://dmitrysoshnikov.com/ecmascript/es5-chapter-3-2-lexical-environments-ecmascript-implementation/)
 
-**실행 가능한 코드**
-+ Global Code : 전역 영역에 존재하는 코드
-+ Eval Code : Eval 함수로 실행되는 코드
-+ Function Code : 함수 내에 존재하는 코드
+(※ scope, hoisting, this, function, closure 등의 동작원리를 담고 있는 자바스크립트의 핵심원리이다.) 
 
-> **eval(string)**  
+> 실행 컨텍스트는(Execution context, EC) ECMA-262 스펙이 __실행 가능한 코드의 유형을 나누고 구별하기 위해서 정의하고 있는 추상적 개념이다.__  
+ECMA 표준에서는 이에 대한 정확한 구조를 정의하지는 않는데, 이는 표준 스펙을 구현하는 ECMAScript 엔진이 처리해야할 문제이다.
+
+실행 컨텍스트는 실행 가능한 코드(Executable Code)가 실행되는 환경이라 할 수 있다.
+
+ECMASciprt 실행 코드(Executable Code)는 다음의 세가지 유형이 있다.
+
++ __Global Code__  
+  전역 영역에 존재하는 코드
++ __Eval Code__  
+  Eval 함수로 실행되는 코드
++ __Function Code__  
+  함수 내에 존재하는 코드
+
+※ 일반적으로 실행 가능한 코드는 전역코드와 함수 내 코드가 된다.
+
+> [**eval(string)**](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/eval)  
 문자열 파라미터로서 전달된 code 또는 표현식(expression)을 평가 또는 실행한다.  
-사용자로 부터 입력받은 Contents(untrusted data)를 eval()로 실행하는 것은 보안에 매우 취약하다. 불필요한 eval()의 사용은 금지되어야 한다.
+※ 사용자로 부터 입력받은 Contents(untrusted data)를 eval()로 실행하는 것은 보안에 매우 취약하다. 불필요한 eval()의 사용은 금지되어야 한다.
 
-※ 일반적으로 실행 가능한 코드는 전역코드와 함수(Function code)가 된다.
+자바스크립트 엔진은 코드를 실행하기 위해 필요한 아래와 같은 여러 정보들을 형상화하고 구분하기 위해 실행 컨텍스트를 물리적 객체의 형태로 관리한다.
 
-**실행에 필요한 정보**
 + 변수
+  - 전역변수
   - 함수 내부에서만 접근할 수 있는 지역변수
   - this를 통해 접근할 수 있는 객체의 프로퍼티
-+ 매개변수(parameter)
+  - 매개변수(parameter)
 + 함수 선언
 + 변수의 유효범위(scope)
 + this
 
-위 정보를 자바스크립트 엔진은 실행 컨텍스트<sup>Execution Context</sup>라는 또다른 객체 내에서 관리하게 된다.
+> 아래는 ECMA-262 5.1 번역
+
+컨트롤(Control, 제어)가 실행 코드로 진입하면(is transferred to ECMAScript executable code), 컨트롤은 실행 컨텍스트를 입력한다.(control is entering an execution context)  
+활성 실행 컨텍스트(Active EC)는 논리적으로 스택을 형성하는데, 이 논리 스택의 최상위 실행 컨텍스트는 실행중인 실행 컨텍스트(the running EC)이다.
+
+현재 실행중인 컨텍스트와 연결된 executable code에서 해당 실행 컨텍스트와 관련이 없는 executable code로 컨트롤이 전송될 때마다 새로운 실행 컨텍스트가 만들어진다.
+
+새로 생성된 실행 컨텍스트가 스택에 들어오고(pushed) 실행중인 실행 컨텍스트가 된다.(the runnig EC)  
+
+-> 스택은 다양한 종류의 실행 컨텍스트가 들어오고(push) 나가면서(pop) 변경된다.  
+스택의 바닥에는 항상 전역 컨텍스트(global context)가 위치하고,   
+꼭대기에는 현재(활성화되어 있는) 실행 컨텍스트(EC)가 위치한다.  
+
+## 1. 실행 컨텍스트 상태 구성 요소(Execution Context State Components)
+
+실행 컨텍스트에는 연관된 코드의 실행 과정(execution progress)을 추적하는 데 필요한 모든 상태(state)가 포함된다.   
+각 실행 컨텍스트는 다음 표에 나열된 상태 구성요소를 가진다. 
+
+<table>
+    <thead>
+        <tr>
+            <th>Component</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Variable object(VO/변수객체)</td>
+            <td>실행컨텍스트가 생성되면 엔진은 필요한 여러 정보들을 담을 객체를 생성하는데, 이를 Variable Object라 한다.<br>
+            Variable Object는 코드가 실행될 때 엔진에 의해 참조되며, 코드에서는 접근할 수 없다.(즉, 변경되지 않는다.)<br>
+            변수, 매개변수(parameter)와 인수정보(arguments), 함수 표현식을 제외한 함수 선언을 담는다.
+            </td>
+        </tr>
+        <tr>
+            <td>Scope chain</td>
+            <td>일종의 리스트로 중첩된 함수의 스코프의 참조를 차례로 저장하고 있는 개념이다. 엔진은 이를 통해 변수의 스코프를 파악한다.  
+            스코프 체인은[[scope]] 프로퍼티로 참조할 수 있다.
+            </td>
+        </tr>
+        <tr>
+            <td>thisValue</td>
+            <td>this값이 할당된다. this에 할당되는 값은 함수 호출 패턴에 의해 결정된다.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+※ ECMAScript 1~3은 변수객체(Vaiable Object), 활성화 객체(Activation Object)라는 개념을 이용해 자바스크립트 코드의 scope 처리 매커니즘을 설명했지만 ECMAScript 5에서는 LexicalEnvironment라는 새로운 개념이 등장했다.  
+아 머리야....
+
+[참고 : Lexical environment in ecma 262 5 - 슬라이드로 보기](https://www.slideshare.net/jeokrang/lexical-environment-in-ecma-262-5-36095103)  
+
+(아래 표는 ECMA-262 5.1 기준)
+<table>
+    <thead>
+        <tr>
+            <th>Component</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>LexicalEnvironment</td>
+            <td>실행 컨텍스트 내에서 코드로 작성된 식별자(변수, 함수등)들의 참조 값을 찾는 데 사용되는 어휘적 환경(구성환경이라고 번역한 사람도 있다.)을 말한다.<br>
+            (의역임 아래 원문 참고할 것)<br><br>
+            Identifies the Lexical Environment used to resolve identifier references made by code within this execution context.
+            </td>
+        </tr>
+        <tr>
+            <td>VariableEnvironment</td>
+            <td>환경 컨텍스트내에서 VariableStatements 와 FunctionDecaltion에 의해 생성된 바인딩을 보유하는 환경 레코드(environment record), 어휘적 환경을 말한다.<br>
+            즉, 내부에 선언된 변수, 함수선언, 함수의 매개변수를 저장하는 개념이라고 생각하면 된다.<br>
+            (의역임 아래 원문 참고할 것)<br><br>
+            Identifies the Lexical Environment whose environment record holds bindings created by VariableStatements and FunctionDeclarations within this execution context.
+            </td>
+        </tr>
+        <tr>
+            <td>ThisBinding</td>
+            <td>실행 컨텍스트와 연관된 ECMAScript 코드내에서 `this` 키워드와 연관되어 있는 값이다<br>
+            즉, 해당 컨텍스트의 this 키워드 반환 값을 저장한다.<br>
+            (의역임 아래 원문 참고할 것)<br><br>
+            The value associated with the this keyword within ECMAScript code associated with this execution context.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+실행 컨텍스트의 LexicalEnvironment 와 VariableEnvironment 구성 요소는 항상 어휘적 환경이다.(Lexical Environments)  
+실행 컨텍스트가 생성되면 LexicalEnvironment 와 VariableEnvironment의 구성요소 초기값은 동일하다.
+
+실행 환경 내에서 코드를 실행하는 동안 LexicalEnvironment 구성 요소의 값은 변경될 수 있지만 VariableEnvironment 구성요소의 값은 변경되지 않는다.
+
+위 3가지 속성 모두 객체 형식으로 구성되지만(실행 컨텍스트란 순전히 명세 메커니즘이며) ECMAScript의 자료형으로 저장되는 것이 아니므로 ECMASciprt 프로그램이 실행 컨텍스트에 접근하는 것은 불가능하다. 
+
+[참고: ES5 에서의 실행 컨텍스트](http://intellegibilisverum.tistory.com/entry/ES5-%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%A4%ED%96%89-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8)
+
+
+### 1.1 Lexical Environment 
+
+[참조: 자바스크립트 함수(3) - Lexical Environment](http://meetup.toast.com/posts/129)
+
+위 글에는 LexicalEnvironemnt와  VariableEnvironment라는 두 컴포넌트를 Lexical Environment에 대한 참조라고 한다.  
+(그리고 이 둘은 처음에는 같은 Lexical Environment를 참조한다!)
+
+```javascript
+executionContext.LexicalEnvironment = execurtionContext.VaribleEnvironment;
+```
+
+자바스크립트 코트에 따라 VariableEnvironment나 LexicalEnvironment의 참조가 바뀌기도 한다.
+
+Lexical Environment는 자바스크립트 코드에서 변수나 함수 등의 식별자를 정의하는 데 사용하는 객체로 생각하면 된다.
+
+Lexical Environment는 다음의 것들로 구성되어 있다.
++ `Environment Record` : 식별자와 참조 혹은 값을 기록한다
++ `outer`: 외부 Lexical Environment를 참조하는 포인터, 중첩된 자바스크립트 코드에서 탐색을 하기 위해 사용한다.
+
+개념적 이해를 위해 다음의 코드는 아래의 구조로 동작한다고 생각하면 된다.  
+(물론 실제와는 다르다.)
+
+```javascript
+function foo() {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    function bar() {
+        // 2. Running execution context
+    }
+}
+foo(); // 1. call
+```
+```javascript
+// Running execution context의 LexicalEnvironment
+{
+    environmentRecord: {
+        a: 1,
+        b: 2,
+        c: 3,
+        bar: `<function>` 
+    },
+    outer: foo.[[Environment]]
+}
+```
+단순히 함수 호출 하나에 하나의 Lexical Environment를 나타내고 있지만 실제로는  
+`FunctionDeclaration`, `BlockStatement`, `TryStatement`의 `catch` 절 등과 같은 ECAMScript 코드의 특정 구문 구조의 코드가 평가될 때마다 새로운 Lexicla Environment가 생성되거나 파괴된다.
+
+### 1.2 Environment Record(환경 레코드)
+
+식별자들의 바인딩을 기록하는 객체를 말한다. 즉, 변수, 함수등이 기록되는 곳이다.   
+명세에 사용되는 두가지 주요 Environment Record values는 Declarative Environment Records와 object Environment Records이다.
+
++  Declarative Environment Records : 식별자 바인딩을 ECMAScript 언어 값과 직접 연관시키는 `FunctionDeclarations`, `VariableDeclarations` 및 `Catch` 절과 같은 ECMAScript 언어 구문 요소의 영향을 정의하는 데 사용된다.  
+즉, 변수나 함수의 정보가 담겨있다.
+        + Function Environment Record: `new.target`, `this`, `super` 등에 대한 정보를 갖는다. 
+        + Module Environment Record
++ Object Environment Records : 식별자 바인딩과 객체의 속성을 연결하는 `WithStatement` 같은 ECMASciprt 요소의 효과를 정의하는 데 사용
++ Global Environment Record
+
+> ES5
+
+## 2. 실행 컨텍스트 설정, 실행 코드의 종류
+
+(아래부터는 ECMA-262 5.1 문서를 참조했다. ECMA-262 3 기준은 하단에 따로 정리)
+
+코드의 종류는 특정 순간의 실행 컨텍스트를 의미한다고 할 수 있다.  
+
+ECMAScript 코드 함수의 모든 호출은 함수가 재귀 적으로 호출하는 경우에도 새 실행 컨텍스트를 설정하고 입력한다.  
+eval 함수를 사용해 global code 또는 code를 평가(Evaluation)하는 경우도 마찬가지이다.
+
+모든 return은 실행 컨텍스트를 종료한다. throw된 예외는 하나 이상의 실행 컨텍스트를 종료할 수도 있다.
+
+컨트롤이 실행 컨텍스트에 들어가면 실행컨텍스트의 ThisBinding이 설정되고,  VaraibalEnvironment 및 초기 LexicalEnvironment가 정의되고, 선언 바인딩 인스터스화(declaration binding instantiation)가 수행된다.
+
+> __선언 바인딩 인스턴스화(객체화)(declaration binding instantiation)__  
+모든 실행 컨텍스트에는 연관된 VariabalEnvironment가 있는데, 실행 컨텍스트에서 평가된(evaluated) ECAMScript 코드에서 선언된 변수와 함수는 해당 VariableEnvironment의 환경 레코드에 바인딩으로 추가된다.  
+function code의 경우 매개변수도 해당 환경 레코드에 바인딩으로 추가된다.
+
+이러한 동작(초기화 과정)이 발생하는 정확한 방식은 입력되는 코드 유형에 따라 다르다.  
+(즉, 실행 코드의 종류에 따라 실행 컨텍스트의 성격이 결정된다고 볼 수 있다.)
+
+```javscript
+// 실행 컨텍스트 스택을 배열이라고 가정하면
+EC_Stack = [];
+```
+### 2.1 Global Code(전역코드)로의 진입
+
+컨트롤이 Global Code의 실행 컨텍스트에 진입할 때 다음 단계가 수행된다.
+
+1. 전역 코드를 사용하여 실행 컨텍스트를 초기화한다.  
+ECMAScript 코드 C에대한 __전역 실행 컨텍스트 초기화__ 를 위해 다음단계가 수행된다.  
+    1. Global Environment(전역 환경)의 VariableEnvironment를 설정한다.
+    1. Global Environment(전역 환경)의 LexicalEnvironment를 설정한다.
+    1. global object(전역 객체)의 ThisBinding을 설정한다.
+1. 전역 코드를 사용해 선언 바인딩 인스턴스화(Declaration Binding Instantiation)를 수행한다.
+
+(이해가 안되네;;;;)
+
+```javascript
+// 실행 컨텍스트 초기화 단계(프로그램 시작시)
+EC_Stack = [
+  globalContext
+];
+```
+
+### 2.2 Eval Code로의 진입
+
+컨트롤이 Eval Code의 실행 컨텍스트에 진입할 때 다음 단계가 수행된다.
+
+1. 호출하는 컨텍스트가 없거나, eval 코드가 eval 함수에대한 직접 호출에 의해 평가되지 않는 경우
+    1. 실행 컨텍스트를 마치 C로 eval 코드를 사용하는 전역 실행 컨텍스트인 것처럼 초기화한다.
+1. 그 외에는,  
+    1. ThisBinding을 호출 실행 컨텍스트의 ThisBinding과 동일한 값으로 설정한다.
+    1. LexicalEnvironment를 호출하는 실행 컨텍스트의 LexicalEnvironment와 동일한 값으로 설정한다.
+    1. VariableEnvironment를 호출하는 실행 컨텍스트의 VariableEnvironment와 동일한 값으로 설정한다.
+1. 만약 eval code가 strict code일 때, 
+    1. LexicalEnvironment를 인수로 전달하는 NewDeclarativeEnvironment를 호출 한 결과로 strictVarEnv를 보냅니다.
+    1. LexicalEnvironment를 strictVarEnv로 설정한다.
+    1. VariableEnvironment를 strictVarEnv로 설정한다.
+1.  eval 코드를 사용해 선언 바인딩을 수행한다.
+
+```javascript
+// 전역 컨텍스트에 영향을 준다.
+eval('var x = 10');
+
+(function foo() {
+  // 여기의 변수 y는 foo 함수의 지역 컨텍스트에 만들어진다.
+  eval('var y = 20');
+})();
+
+alert(x); // 10
+alert(y); // 'y'is not defined
+```
+
+위의 예제는 EC_Stack에서 아래와 같이 변경된다.
+```javascript
+EC_Stack = [
+  globalContext
+];
+
+// eval('var x = 10'); 
+EC_Stack.push({
+  context: evalContext,
+  callingContext: globalContext
+});
+
+// eval exited context
+ECStack.pop();
+
+// foo funciton call
+ECStack.push(foo functionContext);
+
+// eval('var y = 20');
+ECStack.push({
+  context: evalContext,
+  callingContext: foo functionContext
+});
+
+// return from eval 
+ECStack.pop();
+
+// return from foo
+ECStack.pop();
+```
+### 2.3 Function Code로의 진입
 
 ```javascript
 /////////// global context ////////////

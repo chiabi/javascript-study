@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>자바스크립트 ( Currying )</title>
+</head>
+<body>
+    <script>
+        // 여러 개의 인자를 받는 함수가 있을 때 일부의 인자만 받는 함수를 만드는 기법
+        // 함수형 프로그래밍 기법 중 하나
+        // 아직 많은 곳에 쓰이지 않는다. (함수형 프로그래밍이 많이 쓰이지 않기 때문에)
+        // 이전의 상태들이 저장된 새로운 함수를 만들 수 있다.
+        var plus = function(a, b, c) {
+            return a + b + c;
+        };
+
+        // currying을 위해 함수의 prototype에 특별한 메소드를 추가한다.
+        Function.prototype.curry = function(){
+            // Function.prototype.apply()
+            // fun.apply(thisArg, [argsArray])
+            // 주어진 this값과 arguments로 함수를 호출한다.
+            // call()은 함수에 전달될 여러 개의 인자를 받는 데 비해, apply()는 배열로 된 하나의 인자를 받는다.
+            var args = [].slice.apply(arguments);
+            // arguments 복사
+            
+            var self = this;
+            return function() {
+                // args는 클로저 형식으로 저장된다.
+                // 새로운 함수에 인자가 들어왔을 때 기존에 있던 args와 concat한다.
+                return self.apply(null, args.concat([].slice.apply(arguments)));
+            }
+        };
+
+        // 일부 인자만 받은 새로운 함수를 만들고, 나중에 새로운 함수에 인자를 넣어 완성
+        var plusa = plus.curry(1);
+        plusa(2, 3); // 6
+        var plusb = plusa.curry(2);
+        plusb(4); // 7
+        var plusab = plus.curry(1, 3);
+        plusab(5); // 9
+
+
+        // 위 의 curry 메소드를 prototype에 추가할 필요없이
+        // `bind` 함수를 쓰면 더 깔끔해진다.
+        var plusa = plus.bind(null, 1);
+        plusa(2, 3); // 6
+        var plusb = plusa.bind(null, 2);
+        plusb(4); // 7
+        var plusab = plus.bind(null, 1, 3);
+        plusab(5); // 9
+    </script>
+</body>
+</html>

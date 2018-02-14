@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 커맨드, command</title>
+</head>
+<body>
+    <script>
+    // ***커맨드(명령) 패턴 : 명령을 내리는 패턴, 명령이 독립적으로 있기때문에 얼마든지 새로운 명령을 추가할 수 있다.
+    // undo 메소드를 만들어 잘못된 명령을 내렸을 때 이전으로 되돌릴 수 있다.
+
+    // 오토는 갈바를 암살하고 황위에 오르나, 비텔리우스가 군단을 이끌로 로마로 진격하고 있었다.
+    // 비텔리우스는 휘하 군단에게 로마를 공격하라고 명령을 내린다.
+    // 직접 전술을 짜지 않고, 총사령관인 카이키나가 전술을 짜면 최종 승인만 내린다.
+
+    // 사용자
+    var Vitellius = (function(){
+        function Vitellius () {}
+        Vitellius.prototype.approve = function(commander) {
+            commander.execute();
+        };
+        return Vitellius;
+    })();
+
+    // 명령을 받거나 되돌리고, 최종적으로 비텔리우스의 승인을 받아 명령을 실행
+    // 보통의 명령 패턴은 한번에 몰아서 실행하지 않고 그 때 그 때 바로 실행한다.
+    // 실행 취소의 예를 위한 수정
+
+    // 명령을 총체적으로 관리하는 객체
+    var Commander = (function(){
+        function Commander () {
+            this.commands = [];
+        }
+        Commander.prototype.execute = function() {
+            this.commands.forEach(function(command) {
+                // commands에 배열로 밀어넣은 명령(함수)들을 각각 호출
+                command();
+            });
+        };
+        Commander.prototype.do = function(command, args) {
+            this.commands.push(function() {
+                // 함수를 빌려쓰는 함수
+                command.call(null, args);
+            });
+        };
+        Commander.prototype.undo = function() {
+            // array.pop() 배열에서 마지막 요소를 제거해 그 값을 호출자에게 반환한다.
+            this.commands.pop();
+        };
+        return Commander;
+    })();
+
+    // 명령을 더 추가하고 싶다면 strategy 객체에 추가
+
+    // 명령을 모아둔 객체
+    var strategy = {
+        ClimgApls: function() {
+            console.log('알프스를 오른다.');
+        },
+        prepareSupply: function(number) {
+            console.log('보급품을 ' + number + '만큼 준비한다.');
+        },
+        attackRome: function() {
+            console.log('로마를 공격한다.');
+        }
+    };
+
+    ///
+    var vitellius = new Vitellius();
+    var caecina = new Commander();
+    caecina.do(strategy.prepareSupply, 5000);
+    caecina.undo(); // prepareSupply 취소
+    caecina.do(strategy.prepareSupply, 10000);
+    caecina.do(strategy.ClimgApls);
+    caecina.do(startegy.attackRome);
+    vitellius.approve(caecina);
+    // 보급품을 10000만큼 준비한다.
+    // 알프스를 오른다.
+    // 로마를 공격한다.
+    </script>
+</body>
+</html>

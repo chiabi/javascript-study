@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>scope</title>
+</head>
+<body>
+    <script>
+    // _스코프 체인_ 
+    // 지역 스코프에서 변수를 찾지 못하면 꼬리를 물고 계속 범위를 넓히는 관계.
+    // 전역변수와 지역변수의 관계, 내부함수에서 외부함수의 변수에 접근이 가능하지만 그 반대는 불가능
+    var name = "chi";
+    function outer(){
+        console.log('외부', name);
+        function inner(){
+            var enemy = 'nero';
+            console.log('내부', name);
+        }
+        inner();
+    }
+    outer();
+    console.log(enemy); // undefined
+    </script>
+
+    <script>
+    // var name = 'chi';
+    // function log(){
+    //     console.log(name);
+    // }
+    // function wrapper() {
+    //     name = 'seon';
+    //     log();
+    // }
+    // wrapper(); // seon : log 호출 전 name을 'seon'으로 변경함
+
+    // 렉시컬 스코핑(lexical scoping)
+    // 스코프는 함수를 호출할 때가 아니라 선언할 때 생긴다.
+    var name = 'chi';
+    function log(){
+        console.log(name);
+    }
+    function wrapper() {
+        /**/ var name = 'seon';
+        log();
+    }
+    wrapper(); // chi : 스코프는 함수 선언 시 생기고, log 안의 name은 지역변수 name이 아니라 전역변수 name을 가리키므로
+    </script>
+    
+    <button type="button" id="target0">0</button>
+    <button type="button" id="target1">1</button>
+    <button type="button" id="target2">2</button>
+    <button type="button" id="target3">3</button>
+    <button type="button" id="target4">4</button>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script>
+    // for(var i = 0; i < 5; i++) {
+    //     $('#target' + i).on('click', function() {
+    //         alert(i);
+    //     });
+    // }
+    for(var i = 0; i < 5; i++) {
+        (function(j){
+            $('#target' + j).on('click', function(){
+                alert(j);
+            });
+        })(i);
+    } 
+    </script>
+</body>
+</html>

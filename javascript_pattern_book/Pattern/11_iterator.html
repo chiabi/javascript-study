@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>디자인패턴 : 반복자, iterator</title>
+</head>
+<body>
+    <script>
+    // ***반복자 패턴 : 순서가 있는 것들(수열, 배열 등)을 편리하게 탐색할 수 있는 패턴
+    // 순서대로 나열되어 있는 경우 유용하다.
+    
+    // 비텔리우스의 게으름과 홀대로 오토의 군단이 베스파시아누스를 새 황제로 추대하게 된다.
+
+    // 베스파시아누스는 네로 시절 유배를 간 적이 있는데 그곳에서 벌집에 꿀을 채집해야했다.
+
+    // 베스파시아누스를 도와 계속 꿀을 걷고, 그가 '다음'이라고 말하면 다음 벌집을 넘겨주도록 한다.(순서대로 꿀을 걷는다.)
+    var Beehives = (function(){
+        function Beehives(hiveList) {
+            this.hiveList = hiveList;
+            this.index = 0;
+        }
+        // 다음요소를 불러옴
+        Beehives.prototype.next = function() {
+            console.log(this.hiveList[this.index++] + '에서 꿀을 걷는다');
+        };
+        // 배열이 끝났는지 묻는 메소드 : true, false
+        Beehives.prototype.done = function() {
+            return this.hiveList.length === this.index;
+        };
+        return Beehives;
+    })();
+
+    var Beehives = new Beehives(['hive1', 'hive2', 'hive3', 'hive4', 'hive5', 'hive6', 'hive7', 'hive8', 'hive9'])
+    Beehives.next();                // hive1에서 꿀을 걷는다
+    Beehives.next();                // hive2에서 꿀을 걷는다
+    Beehives.next();                // hive3에서 꿀을 걷는다
+    console.log(Beehives.done());   // false
+    Beehives.next();                // hive4에서 꿀을 걷는다
+    Beehives.next();                // hive5에서 꿀을 걷는다
+    Beehives.next();                // hive6에서 꿀을 걷는다
+    Beehives.next();                // hive7에서 꿀을 걷는다
+    console.log(Beehives.done());   // false
+    Beehives.next();                // hive8에서 꿀을 걷는다
+    Beehives.next();                // hive9에서 꿀을 걷는다
+    console.log(Beehives.done());   // true
+
+    // *** done을 사용하면 반복문을 쉽게 만들 수 있다.
+    while(!beehives.done()) {
+        beehives.next();
+    }
+
+    /// ES2015에 추가되어 더 편하게 사용할 수 있다.
+    // https://www.zerocho.com/category/ES2015/post/579b34e3062e76a002648af5
+    </script>
+</body>
+</html>
